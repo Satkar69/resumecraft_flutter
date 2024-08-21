@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
+import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_request_model.dart';
+import 'package:resumecraft/utils/user_mixin.dart';
+import 'package:resumecraft/services/api_service.dart';
+
+import '../../config.dart';
+
 class PersonalDetail extends StatefulWidget {
   const PersonalDetail({super.key});
 
@@ -9,7 +15,7 @@ class PersonalDetail extends StatefulWidget {
   State<PersonalDetail> createState() => _PersonalDetailState();
 }
 
-class _PersonalDetailState extends State<PersonalDetail> {
+class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
@@ -77,7 +83,6 @@ class _PersonalDetailState extends State<PersonalDetail> {
                 address = onSavedVal;
               },
               initialValue: "",
-              maxLength: 3,
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -194,21 +199,50 @@ class _PersonalDetailState extends State<PersonalDetail> {
                       isApicallProcess = true;
                     });
 
-                    // Implement save logic here (e.g., API call)
+                    PersonalDetailRequestModel model =
+                        PersonalDetailRequestModel(
+                            user: userId,
+                            fullname: fullname!,
+                            address: address!,
+                            email: email!,
+                            contact: phone!);
 
-                    setState(() {
-                      isApicallProcess = false;
-                    });
-
-                    // Example of handling a successful save
-                    FormHelper.showSimpleAlertDialog(
-                      context,
-                      "Success",
-                      "Details saved successfully",
-                      "OK",
-                      () => Navigator.pop(context),
-                    );
+                    try {
+                      final response = await APIService.createPersonalDetail(
+                          model, userToken);
+                      setState(() {
+                        isApicallProcess = false;
+                      });
+                      if (response.statusCode == 200) {
+                        FormHelper.showSimpleAlertDialog(context,
+                            Config.appName, "Personal detail Saved!", "OK", () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(
+                              context, '/profile-section');
+                        });
+                      } else {
+                        FormHelper.showSimpleAlertDialog(
+                            context,
+                            Config.appName,
+                            "Failed to save personal detail. Please try again.",
+                            "OK",
+                            () => Navigator.pop(context));
+                      }
+                    } catch (e) {
+                      setState(() {
+                        isApicallProcess = false;
+                      });
+                      FormHelper.showSimpleAlertDialog(
+                          context,
+                          Config.appName,
+                          "An error occurred. Please try again.",
+                          "OK",
+                          () => Navigator.pop(context));
+                    }
                   }
+                  setState(() {
+                    isApicallProcess = false;
+                  });
                 },
                 btnColor: Colors.green,
                 borderColor: Colors.white,

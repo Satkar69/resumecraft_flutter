@@ -5,14 +5,14 @@ PersonalDetailResponseModel personalDetailModel(String str) =>
 
 class PersonalDetailResponseModel {
   String? status;
-  int? statuscode;
+  int? statusCode;
   Userdetail? userdetail;
 
-  PersonalDetailResponseModel({this.status, this.statuscode, this.userdetail});
+  PersonalDetailResponseModel({this.status, this.statusCode, this.userdetail});
 
   PersonalDetailResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    statuscode = json['statuscode'];
+    statusCode = json['statusCode'];
     userdetail = json['userdetail'] != null
         ? Userdetail.fromJson(json['userdetail'])
         : null;
@@ -21,7 +21,7 @@ class PersonalDetailResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    data['statuscode'] = statuscode;
+    data['statusCode'] = statusCode;
     if (userdetail != null) {
       data['userdetail'] = userdetail!.toJson();
     }

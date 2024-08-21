@@ -63,11 +63,14 @@ class APIService {
 //====================== profile-sections ===========================>
 
   static Future<PersonalDetailResponseModel> createPersonalDetail(
-      PersonalDetailRequestModel requestModel) async {
+      PersonalDetailRequestModel requestModel, String token) async {
     try {
-      final response = await _dio.post(
-          '${Config.apiUrl}${Config.createPersonalDetail}',
-          data: requestModel.toJson());
+      final response =
+          await _dio.post('${Config.apiUrl}${Config.createPersonalDetail}',
+              options: Options(
+                headers: {'Authorization': 'Bearer $token'},
+              ),
+              data: requestModel.toJson());
       return PersonalDetailResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create user personal detail: $e');

@@ -171,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     isApicallProcess = false;
                   });
                   if (response.statusCode == 201) {
-                    // Assuming 200 is success
+                    // Assuming 201 is success
                     FormHelper.showSimpleAlertDialog(context, Config.appName,
                         "Registration successful!", "OK", () {
                       Navigator.pop(context);

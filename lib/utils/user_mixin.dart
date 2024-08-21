@@ -4,9 +4,10 @@ import 'package:resumecraft/models/profile/profile_model.dart';
 import 'package:resumecraft/services/api_service.dart';
 
 mixin UserProfileMixin<T extends StatefulWidget> on State<T> {
-  String id = '';
+  String userToken = '';
+  String userId = '';
   String username = '';
-  String email = '';
+  String userEmail = '';
   String createdAt = '';
   String updatedAt = '';
 
@@ -24,9 +25,10 @@ mixin UserProfileMixin<T extends StatefulWidget> on State<T> {
         final profileData = await APIService.getUserProfile(token);
         final profile = ProfileModel.fromJson(profileData);
         setState(() {
-          id = profile.user?.id ?? 'Id';
+          userToken = prefs?.token ?? '';
+          userId = profile.user?.id ?? 'Id';
           username = profile.user?.username ?? 'User';
-          email = profile.user?.email ?? 'Email';
+          userEmail = profile.user?.email ?? 'Email';
           createdAt = profile.user?.createdAt ?? 'CreatedAt';
           updatedAt = profile.user?.updatedAt ?? 'UpdatedAt';
         });
