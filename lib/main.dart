@@ -32,23 +32,23 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        // =================default===================
+        // ================= default ===================
         '/': (context) => _defaultHome,
 
-        // =================auth===================
+        // ================= auth ===================
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
 
-        // =================home===================
+        // ================= home ===================
         '/home': (context) => const HomePage(),
 
-        // =================profiles===================
+        // ================= profiles ===================
         '/profiles': (context) => const ProfilePage(),
 
-        // =================profile-sections===================
+        // ================= profile-sections ===================
         '/profile-section': (context) => const ProfileSection(),
 
-        // =================create-section-detail===================
+        // ================= create-section-detail ===================
         '/create-personal-detail': (context) => const PersonalDetail(),
       },
     );

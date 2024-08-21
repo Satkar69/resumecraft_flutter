@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+PersonalDetailResponseModel personalDetailModel(String str) =>
+    PersonalDetailResponseModel.fromJson(json.decode(str));
+
 class PersonalDetailResponseModel {
   String? status;
   int? statuscode;

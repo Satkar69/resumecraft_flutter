@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/services/shared_service.dart';
-import 'package:resumecraft/models/profile/profile_model.dart';
-import 'package:resumecraft/services/api_service.dart';
+import 'package:resumecraft/utils/user_mixin.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,31 +11,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with UserProfileMixin {
   final Color primaryColor = HexColor('#283B71');
-  String username = '';
-  @override
-  void initState() {
-    super.initState();
-    _loadUserProfile();
-  }
-
-  Future<void> _loadUserProfile() async {
-    final prefs = await SharedService.getLoginResponse();
-    final token = prefs?.token ?? '';
-    if (token.isNotEmpty) {
-      try {
-        final profileData = await APIService.getUserProfile(token);
-        // Assuming profileData is a Map<String, dynamic>, convert it to your ProfileModel
-        final profile = ProfileModel.fromJson(profileData);
-        setState(() {
-          username = profile.user?.username ?? 'User';
-        });
-      } catch (e) {
-        print('Failed to load user profile: $e');
-      }
-    }
-  }
 
   Widget build(BuildContext context) {
     return Scaffold(
