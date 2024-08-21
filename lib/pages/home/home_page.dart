@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/shared_service.dart';
-import 'package:resumecraft/utils/user_mixin.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
+import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
           IconButton(
             icon: Icon(Icons.logout, color: Colors.white),
             onPressed: () async {
-              await SharedService.logout(context);
+              await UserSharedPrefs.logout(context);
             },
           ),
         ],

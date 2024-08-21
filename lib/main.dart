@@ -6,13 +6,13 @@ import 'package:resumecraft/pages/home/home_page.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
-import 'package:resumecraft/services/shared_service.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  bool _result = await SharedService.isLoggedIn();
+  bool _result = await UserSharedPrefs.isLoggedIn();
   if (_result) {
     _defaultHome = const HomePage();
   }

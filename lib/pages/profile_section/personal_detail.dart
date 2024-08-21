@@ -3,7 +3,7 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_request_model.dart';
-import 'package:resumecraft/utils/user_mixin.dart';
+import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:resumecraft/services/api_service.dart';
 
 import '../../config.dart';
@@ -23,6 +23,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
   String? address;
   String? email;
   String? phone;
+  String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -201,11 +202,12 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
 
                     PersonalDetailRequestModel model =
                         PersonalDetailRequestModel(
-                            user: userId,
-                            fullname: fullname!,
-                            address: address!,
-                            email: email!,
-                            contact: phone!);
+                      user: userId,
+                      fullname: fullname!,
+                      address: address!,
+                      email: email!,
+                      contact: phone!,
+                    );
 
                     try {
                       final response = await APIService.createPersonalDetail(

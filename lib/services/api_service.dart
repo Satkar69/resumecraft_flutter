@@ -77,10 +77,10 @@ class APIService {
     }
   }
 
-  static Future<dynamic> getPersonalDetail(String token) async {
+  static Future<dynamic> getPersonalDetails(String token) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.getPersonalDetail}',
+        '${Config.apiUrl}${Config.getPersonalDetails}',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

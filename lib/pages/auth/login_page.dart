@@ -7,7 +7,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/login/login_request_model.dart';
 import 'package:resumecraft/services/api_service.dart';
-import 'package:resumecraft/services/shared_service.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                     isApicallProcess = false;
                   });
                   if (loginResponse.token != null) {
-                    await SharedService.setLoginResponse(loginResponse);
+                    await UserSharedPrefs.setLoginResponse(loginResponse);
                     Navigator.pushNamedAndRemoveUntil(
                         context, '/home', (route) => false);
                   } else {

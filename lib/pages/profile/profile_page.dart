@@ -22,44 +22,74 @@ class _ProfilePageState extends State<ProfilePage> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.refresh, color: Colors.white),
-        //     onPressed: () {
-        //       // Implement refresh functionality
-        //       setState(() {
-        //         // Refresh logic here
-        //       });
-        //     },
-        //   ),
-        // ],
       ),
       body: Container(
-        color: Colors.white, // Set the background color to white
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: ElevatedButton(
-                  child: const Text('+ Create New Profile'),
-                  style: ElevatedButton.styleFrom(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Profile Card
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
                     backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
+                    child: Icon(Icons.account_circle, color: Colors.white),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/profile-section');
+                  title: Text('sdfsd'),
+                  subtitle: Text('asdas@gmail.com'),
+                  trailing: PopupMenuButton(
+                    icon: Icon(Icons.more_vert),
+                    itemBuilder: (BuildContext context) => [
+                      PopupMenuItem(
+                        child: Text('Edit'),
+                        value: 'edit',
+                      ),
+                      PopupMenuItem(
+                        child: Text('Delete'),
+                        value: 'delete',
+                      ),
+                    ],
+                    onSelected: (value) {
+                      // Handle actions
+                      if (value == 'edit') {
+                        // Edit action
+                      } else if (value == 'delete') {
+                        // Delete action
+                      }
+                    },
+                  ),
+                  onTap: () {
+                    // Handle view CV tap
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: ElevatedButton(
+                child: const Text('+ Create New Profile'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/profile-section');
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

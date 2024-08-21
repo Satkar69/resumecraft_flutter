@@ -107,7 +107,7 @@ class _ProfileSectionState extends State<ProfileSection> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
-          Navigator.pushNamed(context, '/create-personal-detail');
+          Navigator.pushNamed(context, route);
         }
       },
     );
