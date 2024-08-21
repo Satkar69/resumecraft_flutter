@@ -10,7 +10,6 @@ class ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<ProfileSection> {
   final Color primaryColor = HexColor('#283B71');
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
