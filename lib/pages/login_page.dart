@@ -94,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
           // FormHelper.inputFieldWidget(context, keyName, hintText, onValidate, onSaved)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-                context, "username", "Username or Email", (onValidateVal) {
+            child: FormHelper.inputFieldWidget(context, "username", "Username",
+                (onValidateVal) {
               if (onValidateVal.isEmpty) {
-                return 'Must input a username or an email';
+                return 'Must input a username';
               }
               return null;
             }, (onSavedVal) {
@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (loginResponse.token != null) {
                     await SharedService.setLoginResponse(loginResponse);
                     Navigator.pushNamedAndRemoveUntil(
-                        context, '/profile', (route) => false);
+                        context, '/home', (route) => false);
                   } else {
                     FormHelper.showSimpleAlertDialog(
                         context,
