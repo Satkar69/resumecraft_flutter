@@ -29,8 +29,6 @@ class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Profile Card
-            // if (personalDetails.isNotEmpty){};
             if (personalDetails.isNotEmpty)
               ...personalDetails.map((personalDetail) {
                 return Padding(
@@ -74,7 +72,15 @@ class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
                     ),
                   ),
                 );
-              }).toList(),
+              }).toList()
+            else
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'No profiles available. Please create a new profile.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ),
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
