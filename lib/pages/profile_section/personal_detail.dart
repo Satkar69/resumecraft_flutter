@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class PersonalDetail extends StatefulWidget {
@@ -10,10 +11,12 @@ class PersonalDetail extends StatefulWidget {
 
 class _PersonalDetailState extends State<PersonalDetail> {
   final Color primaryColor = HexColor('#283B71');
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  bool isApicallProcess = false;
+  String? fullname;
+  String? address;
+  String? email;
+  String? phone;
 
   @override
   Widget build(BuildContext context) {
@@ -27,41 +30,101 @@ class _PersonalDetailState extends State<PersonalDetail> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      body: _profileDetailUI(context),
+    );
+  }
+
+  Widget _profileDetailUI(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: globalFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                hintText: 'Your Name',
-              ),
+            FormHelper.inputFieldWidget(
+              context,
+              "fullname",
+              "FullName",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Name cannot be empty';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                fullname = onSavedVal;
+              },
+              initialValue: "",
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _addressController,
-              decoration: const InputDecoration(
-                labelText: 'Address',
-              ),
-              maxLines: 3,
+            FormHelper.inputFieldWidget(
+              context,
+              "address",
+              "Address",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Address cannot be empty';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                address = onSavedVal;
+              },
+              initialValue: "",
+              maxLength: 3,
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                hintText: 'myresume@gmail.com',
-              ),
+            FormHelper.inputFieldWidget(
+              context,
+              "email",
+              "Email",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Email cannot be empty';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                email = onSavedVal;
+              },
+              initialValue: "",
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _phoneController,
-              decoration: const InputDecoration(
-                labelText: 'Phone',
-                hintText: '9876543210',
-              ),
+            FormHelper.inputFieldWidget(
+              context,
+              "phone",
+              "Phone",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Phone number cannot be empty';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                phone = onSavedVal;
+              },
+              initialValue: "",
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -122,44 +185,50 @@ class _PersonalDetailState extends State<PersonalDetail> {
               ],
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle Add action
-                  },
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  label: const Text('Add'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle Save action
-                  },
-                  icon: const Icon(Icons.check, color: Colors.white),
-                  label: const Text('Save'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ],
+            Center(
+              child: FormHelper.submitButton(
+                "Save",
+                () async {
+                  if (validateAndSave()) {
+                    setState(() {
+                      isApicallProcess = true;
+                    });
+
+                    // Implement save logic here (e.g., API call)
+
+                    setState(() {
+                      isApicallProcess = false;
+                    });
+
+                    // Example of handling a successful save
+                    FormHelper.showSimpleAlertDialog(
+                      context,
+                      "Success",
+                      "Details saved successfully",
+                      "OK",
+                      () => Navigator.pop(context),
+                    );
+                  }
+                },
+                btnColor: Colors.green,
+                borderColor: Colors.white,
+                txtColor: Colors.white,
+                borderRadius: 10,
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
