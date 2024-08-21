@@ -60,7 +60,7 @@ class APIService {
 
 //====================== auth ===========================>
 
-//====================== profile-sections ===========================>
+//====================== profile-sections (authenticated) ===========================>
 
   static Future<PersonalDetailResponseModel> createPersonalDetail(
       PersonalDetailRequestModel requestModel, String token) async {
