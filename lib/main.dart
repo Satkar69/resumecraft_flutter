@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:resumecraft/pages/profile/profile_section.dart';
 import 'package:resumecraft/pages/auth/login_page.dart';
 import 'package:resumecraft/pages/home/home_page.dart';
-import 'package:resumecraft/pages/profile_sections/personal_detail.dart';
+import 'package:resumecraft/pages/profile_section/personal_detail.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
 import 'package:resumecraft/services/shared_service.dart';
