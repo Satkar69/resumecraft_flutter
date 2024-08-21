@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class CreateProfile extends StatefulWidget {
-  const CreateProfile({super.key});
+class ProfileSection extends StatefulWidget {
+  const ProfileSection({super.key});
 
   @override
-  State<CreateProfile> createState() => _CreateProfileState();
+  State<ProfileSection> createState() => _ProfileSectionState();
 }
 
-class _CreateProfileState extends State<CreateProfile> {
+class _ProfileSectionState extends State<ProfileSection> {
   final Color primaryColor = HexColor('#283B71');
 
   @override

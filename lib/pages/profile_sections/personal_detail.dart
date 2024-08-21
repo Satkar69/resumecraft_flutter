@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class CreatePersonalDetail extends StatefulWidget {
-  const CreatePersonalDetail({super.key});
+class PersonalDetail extends StatefulWidget {
+  const PersonalDetail({super.key});
 
   @override
-  State<CreatePersonalDetail> createState() => _CreatePersonalDetailState();
+  State<PersonalDetail> createState() => _PersonalDetailState();
 }
 
-class _CreatePersonalDetailState extends State<CreatePersonalDetail> {
+class _PersonalDetailState extends State<PersonalDetail> {
   final Color primaryColor = HexColor('#283B71');
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();

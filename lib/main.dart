@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:resumecraft/pages/create_profile.dart';
-import 'package:resumecraft/pages/login_page.dart';
-import 'package:resumecraft/pages/home_page.dart';
-import 'package:resumecraft/pages/create_personal_detail.dart';
-import 'package:resumecraft/pages/profile_page.dart';
-import 'package:resumecraft/pages/register_page.dart';
+import 'package:resumecraft/pages/profile/profile_section.dart';
+import 'package:resumecraft/pages/auth/login_page.dart';
+import 'package:resumecraft/pages/home/home_page.dart';
+import 'package:resumecraft/pages/profile_sections/personal_detail.dart';
+import 'package:resumecraft/pages/profile/profile_page.dart';
+import 'package:resumecraft/pages/auth/register_page.dart';
 import 'package:resumecraft/services/shared_service.dart';
 
 Widget _defaultHome = const LoginPage();
@@ -32,13 +32,24 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
+        // =================default===================
         '/': (context) => _defaultHome,
+
+        // =================auth===================
         '/login': (context) => const LoginPage(),
-        '/home': (context) => const HomePage(),
         '/register': (context) => const RegisterPage(),
+
+        // =================home===================
+        '/home': (context) => const HomePage(),
+
+        // =================profiles===================
         '/profiles': (context) => const ProfilePage(),
-        '/create-profile': (context) => const CreateProfile(),
-        '/create-personal-detail': (context) => const CreatePersonalDetail(),
+
+        // =================profile-sections===================
+        '/profile-section': (context) => const ProfileSection(),
+
+        // =================create-section-detail===================
+        '/create-personal-detail': (context) => const PersonalDetail(),
       },
     );
   }

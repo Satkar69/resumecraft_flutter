@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         horizontal: 50, vertical: 15),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/create-profile');
+                    Navigator.pushNamed(context, '/profile-section');
                   },
                 ),
               ),
