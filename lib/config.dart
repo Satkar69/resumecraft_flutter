@@ -11,4 +11,7 @@ class Config {
   // ===================== Auth Routes ===========================
   static const String login = "auth/login";
   static const String userProfile = "user/profile";
+  static const String getPersonalDetails =
+      "userdetail/userdetails-by-currentuser";
+  static const String createPersonalDetail = 'userdetail/create-userdetail';
 }

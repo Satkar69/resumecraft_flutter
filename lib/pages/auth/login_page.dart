@@ -7,7 +7,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/login/login_request_model.dart';
 import 'package:resumecraft/services/api_service.dart';
-import 'package:resumecraft/services/shared_service.dart';
+import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -94,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
           // FormHelper.inputFieldWidget(context, keyName, hintText, onValidate, onSaved)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-                context, "username", "Username or Email", (onValidateVal) {
+            child: FormHelper.inputFieldWidget(context, "username", "Username",
+                (onValidateVal) {
               if (onValidateVal.isEmpty) {
-                return 'Must input a username or an email';
+                return 'Must input a username';
               }
               return null;
             }, (onSavedVal) {
@@ -177,9 +177,9 @@ class _LoginPageState extends State<LoginPage> {
                     isApicallProcess = false;
                   });
                   if (loginResponse.token != null) {
-                    await SharedService.setLoginResponse(loginResponse);
+                    await UserSharedPrefs.setLoginResponse(loginResponse);
                     Navigator.pushNamedAndRemoveUntil(
-                        context, '/profile', (route) => false);
+                        context, '/home', (route) => false);
                   } else {
                     FormHelper.showSimpleAlertDialog(
                         context,
