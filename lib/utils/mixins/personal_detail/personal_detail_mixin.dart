@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
-import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/read/personal_detail_model.dart';
 
 mixin PersonalDetailMixin<T extends StatefulWidget> on State<T> {
   Userdetail? personalDetail;
