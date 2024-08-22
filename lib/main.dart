@@ -9,38 +9,48 @@ import 'package:resumecraft/pages/auth/register_page.dart';
 import 'package:resumecraft/utils/interceptors/dio_request_interceptor.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
-Widget _defaultHome = const LoginPage();
+Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Check if the user is logged in
   bool result = await UserSharedPrefs.isLoggedIn();
+
+  // Retrieve the token if available
   final prefs = await UserSharedPrefs.getLoginResponse();
   final token = prefs?.token ?? '';
+
+  // Initialize Dio with the token if present
   if (token.isNotEmpty) {
-    DioClient.initializeDio(
-        token); // initialize dio interceptor with token for authenticated requests
+    DioClient.initializeDio(token);
   }
+
+  // Set default home to HomePage if the user is logged in
   if (result) {
     _defaultHome = const HomePage();
   }
-  runApp(const MyApp());
+
+  // Pass the _defaultHome widget to MyApp
+  runApp(MyApp(defaultHome: _defaultHome));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Widget defaultHome;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, required this.defaultHome});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'RESUMECRAFT',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       routes: {
         // ================= default ===================
-        '/': (context) => _defaultHome,
+        '/': (context) => defaultHome,
 
         // ================= auth ===================
         '/login': (context) => const LoginPage(),

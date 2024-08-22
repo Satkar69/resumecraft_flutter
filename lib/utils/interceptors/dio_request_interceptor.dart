@@ -18,7 +18,7 @@ class DioClient {
         onError: (DioException e, handler) {
           // Handle errors like token expiration here
           if (e.response?.statusCode == 401) {
-            throw Exception('Unauthorized access, token missing: $e');
+            throw Exception('Unauthorized access, possily token exired: $e');
           }
           return handler.next(e); // Continue with the error handling
         },
