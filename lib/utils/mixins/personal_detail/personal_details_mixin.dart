@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:resumecraft/services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 import 'package:resumecraft/models/profile_section/personal_detail/personal_details_model.dart';
-import 'package:resumecraft/services/api_service.dart';
 
 mixin PersonalDetailsMixin<T extends StatefulWidget> on State<T> {
   List<Userdetails> personalDetails = [];
@@ -17,7 +18,7 @@ mixin PersonalDetailsMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {
       try {
-        final data = await APIService.getPersonalDetails(token);
+        final data = await PersonalDetailAPIService.getPersonalDetails(token);
         final details = PersonalDetailsModel.fromJson(data);
         setState(() {
           personalDetails = details.userdetails ?? [];

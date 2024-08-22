@@ -6,7 +6,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/register/register_request_model.dart';
-import 'package:resumecraft/services/api_service.dart';
+import 'package:resumecraft/services/user_api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -166,7 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 RegisterRequestModel model = RegisterRequestModel(
                     username: username!, email: email!, password: password!);
                 try {
-                  final response = await APIService.register(model);
+                  final response = await UserAPIService.register(model);
                   setState(() {
                     isApicallProcess = false;
                   });
