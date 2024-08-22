@@ -1,4 +1,5 @@
 class PersonalDetailRequestModel {
+  String? id;
   String? user;
   String? fullname;
   String? address;
@@ -8,6 +9,7 @@ class PersonalDetailRequestModel {
   List<String>? socials;
 
   PersonalDetailRequestModel({
+    this.id,
     this.user,
     this.fullname,
     this.address,
@@ -18,6 +20,7 @@ class PersonalDetailRequestModel {
   });
 
   PersonalDetailRequestModel.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     user = json['user'];
     fullname = json['fullname'];
     address = json['address'];
@@ -32,6 +35,7 @@ class PersonalDetailRequestModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = id;
     data['user'] = user;
     data['fullname'] = fullname;
     data['address'] = address;
