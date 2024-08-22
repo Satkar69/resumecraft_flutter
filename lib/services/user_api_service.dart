@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 
+//====================== dio request interceptor ===========================>
+import 'package:resumecraft/utils/interceptors/dio_request_interceptor.dart';
+
 //====================== api-endpoints ===========================>
 import 'package:resumecraft/config.dart';
 
@@ -42,7 +45,7 @@ class UserAPIService {
 
   static Future<dynamic> getUserProfile(String token) async {
     try {
-      final response = await _dio.get(
+      final response = await DioClient.dio.get(
         '${Config.apiUrl}${Config.userProfile}',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
