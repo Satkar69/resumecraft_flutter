@@ -1,16 +1,17 @@
 import 'dart:convert';
 
-PersonalDetailResponseModel personalDetailResponseModel(String str) =>
-    PersonalDetailResponseModel.fromJson(json.decode(str));
+PersonalDetailUpdateResponseModel personalDetailUpdateModel(String str) =>
+    PersonalDetailUpdateResponseModel.fromJson(json.decode(str));
 
-class PersonalDetailResponseModel {
+class PersonalDetailUpdateResponseModel {
   String? status;
   int? statusCode;
   Userdetail? userdetail;
 
-  PersonalDetailResponseModel({this.status, this.statusCode, this.userdetail});
+  PersonalDetailUpdateResponseModel(
+      {this.status, this.statusCode, this.userdetail});
 
-  PersonalDetailResponseModel.fromJson(Map<String, dynamic> json) {
+  PersonalDetailUpdateResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     statusCode = json['statusCode'];
     userdetail = json['userdetail'] != null

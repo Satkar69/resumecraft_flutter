@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:resumecraft/config.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/delete/personal_detail_delete_model.dart';
+import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/utils/mixins/personal_detail/personal_details_mixin.dart';
@@ -10,7 +15,8 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
+class _ProfilePageState extends State<ProfilePage>
+    with UserProfileMixin, PersonalDetailsMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
@@ -46,25 +52,71 @@ class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
                       ),
                       title: Text(personalDetail.fullname ?? 'No Name'),
                       subtitle: Text(personalDetail.email ?? 'No Email'),
-                      trailing: PopupMenuButton(
-                        icon: Icon(Icons.more_vert),
-                        itemBuilder: (BuildContext context) => [
-                          PopupMenuItem(
-                            child: Text('Edit'),
-                            value: 'edit',
-                          ),
-                          PopupMenuItem(
-                            child: Text('Delete'),
-                            value: 'delete',
-                          ),
-                        ],
-                        onSelected: (value) {
-                          // Handle actions
-                          if (value == 'edit') {
-                            // Edit action
-                          } else if (value == 'delete') {
-                            // Delete action
-                          }
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete,
+                            color: Colors
+                                .red), // You can adjust the color as needed
+                        onPressed: () {
+                          // Handle delete action here
+                          // For example, you might want to show a confirmation dialog before deleting
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Confirm Delete"),
+                                content: Text(
+                                    "Are you sure you want to delete this profile?"),
+                                actions: [
+                                  TextButton(
+                                    child: Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("Delete"),
+                                    onPressed: () async {
+                                      // Perform delete operation here
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      final response =
+                                          await PersonalDetailAPIService
+                                              .deletePersonalDetail(
+                                                  PersonalDetailDeleteModel(
+                                                      status: 'success',
+                                                      statusCode: 200,
+                                                      message:
+                                                          'profile delete success'),
+                                                  userToken,
+                                                  personalDetail.id);
+                                      if (response.statusCode == 200) {
+                                        FormHelper.showSimpleAlertDialog(
+                                            context,
+                                            Config.appName,
+                                            response.message!,
+                                            "OK", () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        });
+                                      } else {
+                                        FormHelper.showSimpleAlertDialog(
+                                            context,
+                                            Config.appName,
+                                            "unable to delete this profile",
+                                            "OK", () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        });
+                                      }
+                                      ;
+                                      // Add your delete logic here
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                       onTap: () {

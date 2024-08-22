@@ -9,6 +9,9 @@ import 'package:resumecraft/config.dart';
 //====================== profile-sections ===========================>
 import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_request_model.dart';
 import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_response_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/update/personal_detail_update_request_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/update/personal_detail_update_response_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/delete/personal_detail_delete_model.dart';
 
 class PersonalDetailAPIService {
   static final Dio _dio = DioClient.dio;
@@ -59,20 +62,40 @@ class PersonalDetailAPIService {
     }
   }
 
-  static Future<PersonalDetailResponseModel> updatePersonalDetail(
-      PersonalDetailRequestModel requestModel,
+  static Future<PersonalDetailUpdateResponseModel> updatePersonalDetail(
+      PersonalDetailUpdateRequestModel requestModel,
       String token,
       personalDetailId) async {
     try {
       final response = await _dio.put(
-          '${Config.apiUrl}${Config.personalDetailRUDbyID}$personalDetailId',
-          options: Options(
-            headers: {'Authorization': 'Bearer $token'},
-          ),
-          data: requestModel.toJson());
-      return PersonalDetailResponseModel.fromJson(response.data);
+        '${Config.apiUrl}${Config.personalDetailRUDbyID}$personalDetailId',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return PersonalDetailUpdateResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create user personal detail: $e');
+    }
+  }
+
+  static Future<PersonalDetailDeleteModel> deletePersonalDetail(
+      PersonalDetailDeleteModel requestModel,
+      String token,
+      personalDetailId) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.personalDetailRUDbyID}$personalDetailId',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return PersonalDetailDeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete user personal detail: $e');
     }
   }
 }

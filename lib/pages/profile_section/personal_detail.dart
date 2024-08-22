@@ -4,6 +4,7 @@ import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.d
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
+import 'package:resumecraft/models/profile_section/personal_detail/update/personal_detail_update_request_model.dart';
 import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
@@ -253,17 +254,26 @@ class _PersonalDetailState extends State<PersonalDetail>
                       isApicallProcess = true;
                     });
 
-                    PersonalDetailRequestModel model =
-                        PersonalDetailRequestModel(
-                      user: userId,
-                      fullname: fullname!,
-                      address: address!,
-                      email: email!,
-                      contact: phone!,
-                      socials: socials,
-                    );
+                    // PersonalDetailRequestModel model =
+                    //     PersonalDetailRequestModel(
+                    //   user: userId,
+                    //   fullname: fullname!,
+                    //   address: address!,
+                    //   email: email!,
+                    //   contact: phone!,
+                    //   socials: socials,
+                    // );
 
                     try {
+                      PersonalDetailUpdateRequestModel model =
+                          PersonalDetailUpdateRequestModel(
+                        user: userId,
+                        fullname: fullname!,
+                        address: address!,
+                        email: email!,
+                        contact: phone!,
+                        socials: socials,
+                      );
                       if (personalDetailId != null) {
                         final response =
                             await PersonalDetailAPIService.updatePersonalDetail(
@@ -290,6 +300,16 @@ class _PersonalDetailState extends State<PersonalDetail>
                               () => Navigator.pop(context));
                         }
                       } else {
+                        PersonalDetailRequestModel model =
+                            PersonalDetailRequestModel(
+                          user: userId,
+                          fullname: fullname!,
+                          address: address!,
+                          email: email!,
+                          contact: phone!,
+                          socials: socials,
+                        );
+
                         final response =
                             await PersonalDetailAPIService.createPersonalDetail(
                                 model, userToken);
