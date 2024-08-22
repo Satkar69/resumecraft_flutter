@@ -10,6 +10,8 @@ class DioClient {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           // Add the authorization header to every request
+          print(
+              'Interceptor triggered ----------------------- Adding Authorization header');
           if (_token != null) {
             options.headers['Authorization'] = 'Bearer $_token';
           }

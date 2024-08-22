@@ -6,7 +6,6 @@ import 'package:resumecraft/pages/home/home_page.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
-import 'package:resumecraft/utils/interceptors/dio_request_interceptor.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
@@ -16,15 +15,6 @@ void main() async {
 
   // Check if the user is logged in
   bool result = await UserSharedPrefs.isLoggedIn();
-
-  // Retrieve the token if available
-  final prefs = await UserSharedPrefs.getLoginResponse();
-  final token = prefs?.token ?? '';
-
-  // Initialize Dio with the token if present
-  if (token.isNotEmpty) {
-    DioClient.initializeDio(token);
-  }
 
   // Set default home to HomePage if the user is logged in
   if (result) {
