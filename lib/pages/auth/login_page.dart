@@ -6,7 +6,7 @@ import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/login/login_request_model.dart';
-import 'package:resumecraft/services/api_service.dart';
+import 'package:resumecraft/services/user_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 class LoginPage extends StatefulWidget {
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                 LoginRequestModel model =
                     LoginRequestModel(username: username!, password: password!);
                 try {
-                  final loginResponse = await APIService.login(model);
+                  final loginResponse = await UserAPIService.login(model);
                   setState(() {
                     isApicallProcess = false;
                   });

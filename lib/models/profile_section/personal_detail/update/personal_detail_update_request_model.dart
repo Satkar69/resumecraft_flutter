@@ -1,4 +1,4 @@
-class PersonalDetailRequestModel {
+class PersonalDetailUpdateRequestModel {
   String? user;
   String? fullname;
   String? address;
@@ -7,7 +7,7 @@ class PersonalDetailRequestModel {
   String? image;
   List<String>? socials;
 
-  PersonalDetailRequestModel({
+  PersonalDetailUpdateRequestModel({
     this.user,
     this.fullname,
     this.address,
@@ -17,7 +17,7 @@ class PersonalDetailRequestModel {
     this.socials,
   });
 
-  PersonalDetailRequestModel.fromJson(Map<String, dynamic> json) {
+  PersonalDetailUpdateRequestModel.fromJson(Map<String, dynamic> json) {
     user = json['user'];
     fullname = json['fullname'];
     address = json['address'];

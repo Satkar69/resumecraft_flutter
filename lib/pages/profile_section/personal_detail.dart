@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_request_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/update/personal_detail_update_request_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
-import 'package:resumecraft/services/api_service.dart';
 
 import '../../config.dart';
 
@@ -15,7 +17,8 @@ class PersonalDetail extends StatefulWidget {
   State<PersonalDetail> createState() => _PersonalDetailState();
 }
 
-class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
+class _PersonalDetailState extends State<PersonalDetail>
+    with UserProfileMixin, PersonalDetailMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
@@ -24,9 +27,19 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
   String? email;
   String? phone;
   String? image;
+  String? socialLinks;
+  List<String> socials = [];
 
-  @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final id = args?['personalDetailId'] as String?;
+
+    print('check source id profile-------------------->$id');
+
+    if (id != null) {
+      setPersonalDetailId(id);
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -49,31 +62,36 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "fullname",
               "FullName",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Name cannot be empty';
+                  return 'FullName cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
                 fullname = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.fullname ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "address",
               "Address",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Address cannot be empty';
@@ -83,18 +101,22 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 address = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.address ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "email",
               "Email",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Email cannot be empty';
@@ -104,18 +126,22 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 email = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.email ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "phone",
               "Phone",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Phone number cannot be empty';
@@ -125,12 +151,40 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 phone = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.contact ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
+            ),
+            FormHelper.inputFieldWidgetWithLabel(
+              context,
+              "socials",
+              "Socials",
+              "www.this.com, www.that.com, ...",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'At least one social link should be an input';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                socialLinks = onSavedVal;
+              },
+              initialValue:
+                  (personalDetail?.socials)?.join(',') ?? socials.join(','),
+              hintColor: Colors.black45,
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -200,35 +254,86 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
                       isApicallProcess = true;
                     });
 
-                    PersonalDetailRequestModel model =
-                        PersonalDetailRequestModel(
-                      user: userId,
-                      fullname: fullname!,
-                      address: address!,
-                      email: email!,
-                      contact: phone!,
-                    );
+                    // PersonalDetailRequestModel model =
+                    //     PersonalDetailRequestModel(
+                    //   user: userId,
+                    //   fullname: fullname!,
+                    //   address: address!,
+                    //   email: email!,
+                    //   contact: phone!,
+                    //   socials: socials,
+                    // );
 
                     try {
-                      final response = await APIService.createPersonalDetail(
-                          model, userToken);
-                      setState(() {
-                        isApicallProcess = false;
-                      });
-                      if (response.statusCode == 200) {
-                        FormHelper.showSimpleAlertDialog(context,
-                            Config.appName, "Personal detail Saved!", "OK", () {
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, '/profile-section');
+                      PersonalDetailUpdateRequestModel model =
+                          PersonalDetailUpdateRequestModel(
+                        user: userId,
+                        fullname: fullname!,
+                        address: address!,
+                        email: email!,
+                        contact: phone!,
+                        socials: socials,
+                      );
+                      if (personalDetailId != null) {
+                        final response =
+                            await PersonalDetailAPIService.updatePersonalDetail(
+                                model, userToken, personalDetailId);
+                        setState(() {
+                          isApicallProcess = false;
                         });
+                        if (response.statusCode == 200) {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Personal detail edited!",
+                              "OK", () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, '/profile-section');
+                          });
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Failed to edit personal detail. Please try again.",
+                              "OK",
+                              () => Navigator.pop(context));
+                        }
                       } else {
-                        FormHelper.showSimpleAlertDialog(
-                            context,
-                            Config.appName,
-                            "Failed to save personal detail. Please try again.",
-                            "OK",
-                            () => Navigator.pop(context));
+                        PersonalDetailRequestModel model =
+                            PersonalDetailRequestModel(
+                          user: userId,
+                          fullname: fullname!,
+                          address: address!,
+                          email: email!,
+                          contact: phone!,
+                          socials: socials,
+                        );
+
+                        final response =
+                            await PersonalDetailAPIService.createPersonalDetail(
+                                model, userToken);
+                        setState(() {
+                          isApicallProcess = false;
+                        });
+                        if (response.statusCode == 201) {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Personal detail Saved!",
+                              "OK", () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, '/profile-section');
+                          });
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Failed to save personal detail. Please try again.",
+                              "OK",
+                              () => Navigator.pop(context));
+                        }
                       }
                     } catch (e) {
                       setState(() {
@@ -262,6 +367,9 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
+      if (socialLinks?.isNotEmpty ?? false) {
+        socials = socialLinks!.split(',').map((link) => link.trim()).toList();
+      }
       return true;
     } else {
       return false;
