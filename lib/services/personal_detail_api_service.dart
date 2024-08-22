@@ -7,8 +7,8 @@ import 'package:resumecraft/utils/interceptors/dio_request_interceptor.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
-import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_request_model.dart';
-import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_response_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_request_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_response_model.dart';
 
 class PersonalDetailAPIService {
   static final Dio _dio = DioClient.dio;
@@ -59,7 +59,7 @@ class PersonalDetailAPIService {
     }
   }
 
-  static Future<PersonalDetailResponseModel> editPersonalDetail(
+  static Future<PersonalDetailResponseModel> updatePersonalDetail(
       PersonalDetailRequestModel requestModel,
       String token,
       personalDetailId) async {

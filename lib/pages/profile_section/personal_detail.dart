@@ -4,7 +4,7 @@ import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.d
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/models/profile_section/personal_detail/personal_detail_request_model.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/create/personal_detail_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
@@ -266,7 +266,7 @@ class _PersonalDetailState extends State<PersonalDetail>
                     try {
                       if (personalDetailId != null) {
                         final response =
-                            await PersonalDetailAPIService.editPersonalDetail(
+                            await PersonalDetailAPIService.updatePersonalDetail(
                                 model, userToken, personalDetailId);
                         setState(() {
                           isApicallProcess = false;
