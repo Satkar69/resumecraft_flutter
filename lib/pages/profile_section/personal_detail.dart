@@ -24,8 +24,9 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
   String? email;
   String? phone;
   String? image;
+  String? socialLinks;
+  List<String> socials = [];
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -49,13 +50,14 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "fullname",
               "FullName",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Name cannot be empty';
+                  return 'FullName cannot be empty';
                 }
                 return null;
               },
@@ -68,12 +70,16 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "address",
               "Address",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Address cannot be empty';
@@ -89,12 +95,16 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "email",
               "Email",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Email cannot be empty';
@@ -110,12 +120,16 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidget(
+            FormHelper.inputFieldWidgetWithLabel(
               context,
               "phone",
               "Phone",
+              "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'Phone number cannot be empty';
@@ -131,6 +145,33 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
               borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
+            ),
+            FormHelper.inputFieldWidgetWithLabel(
+              context,
+              "socials",
+              "Socials",
+              "www.this.com, www.that.com, ...",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'At least one social link should be an input';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                socialLinks = onSavedVal;
+              },
+              initialValue: "",
+              hintColor: Colors.black45,
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
             const Text(
@@ -207,6 +248,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
                       address: address!,
                       email: email!,
                       contact: phone!,
+                      socials: socials,
                     );
 
                     try {
@@ -263,6 +305,9 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
+      if (socialLinks?.isNotEmpty ?? false) {
+        socials = socialLinks!.split(',').map((link) => link.trim()).toList();
+      }
       return true;
     } else {
       return false;
