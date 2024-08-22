@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
@@ -15,7 +16,8 @@ class PersonalDetail extends StatefulWidget {
   State<PersonalDetail> createState() => _PersonalDetailState();
 }
 
-class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
+class _PersonalDetailState extends State<PersonalDetail>
+    with UserProfileMixin, PersonalDetailMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
@@ -28,6 +30,15 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
   List<String> socials = [];
 
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final id = args?['personalDetailId'] as String?;
+
+    print('check source id profile-------------------->$id');
+
+    if (id != null) {
+      setPersonalDetailId(id);
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -64,7 +75,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 fullname = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.fullname ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -89,7 +100,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 address = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.address ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -114,7 +125,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 email = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.email ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -139,7 +150,7 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 phone = onSavedVal;
               },
-              initialValue: "",
+              initialValue: personalDetail?.contact ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -163,7 +174,8 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
               (onSavedVal) {
                 socialLinks = onSavedVal;
               },
-              initialValue: "",
+              initialValue:
+                  (personalDetail?.socials)?.join(',') ?? socials.join(','),
               hintColor: Colors.black45,
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
@@ -252,26 +264,56 @@ class _PersonalDetailState extends State<PersonalDetail> with UserProfileMixin {
                     );
 
                     try {
-                      final response =
-                          await PersonalDetailAPIService.createPersonalDetail(
-                              model, userToken);
-                      setState(() {
-                        isApicallProcess = false;
-                      });
-                      if (response.statusCode == 200) {
-                        FormHelper.showSimpleAlertDialog(context,
-                            Config.appName, "Personal detail Saved!", "OK", () {
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, '/profile-section');
+                      if (personalDetailId != null) {
+                        final response =
+                            await PersonalDetailAPIService.editPersonalDetail(
+                                model, userToken, personalDetailId);
+                        setState(() {
+                          isApicallProcess = false;
                         });
+                        if (response.statusCode == 200) {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Personal detail edited!",
+                              "OK", () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, '/profile-section');
+                          });
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Failed to edit personal detail. Please try again.",
+                              "OK",
+                              () => Navigator.pop(context));
+                        }
                       } else {
-                        FormHelper.showSimpleAlertDialog(
-                            context,
-                            Config.appName,
-                            "Failed to save personal detail. Please try again.",
-                            "OK",
-                            () => Navigator.pop(context));
+                        final response =
+                            await PersonalDetailAPIService.createPersonalDetail(
+                                model, userToken);
+                        setState(() {
+                          isApicallProcess = false;
+                        });
+                        if (response.statusCode == 201) {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Personal detail Saved!",
+                              "OK", () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, '/profile-section');
+                          });
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Failed to save personal detail. Please try again.",
+                              "OK",
+                              () => Navigator.pop(context));
+                        }
                       }
                     } catch (e) {
                       setState(() {

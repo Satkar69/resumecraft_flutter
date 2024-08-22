@@ -12,6 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
   final Color primaryColor = HexColor('#283B71');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +68,13 @@ class _ProfilePageState extends State<ProfilePage> with PersonalDetailsMixin {
                         },
                       ),
                       onTap: () {
-                        // Handle view CV tap
+                        Navigator.pushNamed(
+                          context,
+                          '/profile-section',
+                          arguments: {
+                            'personalDetailId': personalDetail.id,
+                          },
+                        );
                       },
                     ),
                   ),

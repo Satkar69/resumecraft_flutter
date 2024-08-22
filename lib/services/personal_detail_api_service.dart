@@ -40,7 +40,39 @@ class PersonalDetailAPIService {
       );
       return response.data;
     } catch (e) {
-      throw Exception('Failed to get user personal detail: $e');
+      throw Exception('Failed to get all personal details: $e');
+    }
+  }
+
+  static Future<dynamic> getPersonalDetail(
+      String token, String personalDetailId) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.personalDetailRUDbyID}$personalDetailId',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get the selected personal detail: $e');
+    }
+  }
+
+  static Future<PersonalDetailResponseModel> editPersonalDetail(
+      PersonalDetailRequestModel requestModel,
+      String token,
+      personalDetailId) async {
+    try {
+      final response = await _dio.put(
+          '${Config.apiUrl}${Config.personalDetailRUDbyID}$personalDetailId',
+          options: Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ),
+          data: requestModel.toJson());
+      return PersonalDetailResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to create user personal detail: $e');
     }
   }
 }

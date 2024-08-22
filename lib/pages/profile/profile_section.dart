@@ -10,8 +10,15 @@ class ProfileSection extends StatefulWidget {
 
 class _ProfileSectionState extends State<ProfileSection> {
   final Color primaryColor = HexColor('#283B71');
+
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final id = args?['personalDetailId'] as String?;
+
+    print('check source id profile-------------------->$id');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
@@ -34,34 +41,12 @@ class _ProfileSectionState extends State<ProfileSection> {
             ),
           ),
           _buildSectionTile(context, Icons.person, 'Personal Details',
-              '/create-personal-detail'),
+              '/create-personal-detail', id),
           _buildSectionTile(context, Icons.school, 'Education'),
           _buildSectionTile(context, Icons.work, 'Experience'),
           _buildSectionTile(context, Icons.star, 'Skills'),
           _buildSectionTile(context, Icons.flag, 'Objective'),
           _buildSectionTile(context, Icons.build, 'Projects'),
-          // const Padding(
-          //   padding: EdgeInsets.all(16.0),
-          //   child: Text(
-          //     'More Sections',
-          //     style: TextStyle(
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
-          // _buildSectionTile(context, Icons.email, 'Cover Letter'),
-          // _buildSectionTile(context, Icons.add, 'Add More Section'),
-          // const Padding(
-          //   padding: EdgeInsets.all(16.0),
-          //   child: Text(
-          //     'Manage Sections',
-          //     style: TextStyle(
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -98,15 +83,26 @@ class _ProfileSectionState extends State<ProfileSection> {
     );
   }
 
-  ListTile _buildSectionTile(BuildContext context, IconData icon, String title,
-      [String? route]) {
+  ListTile _buildSectionTile(
+    BuildContext context,
+    IconData icon,
+    String title, [
+    String? route,
+    String? personalDetailId,
+  ]) {
     return ListTile(
       leading: Icon(icon, color: primaryColor),
       title: Text(title),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
-          Navigator.pushNamed(context, route);
+          Navigator.pushNamed(
+            context,
+            route,
+            arguments: personalDetailId != null
+                ? {'personalDetailId': personalDetailId}
+                : null,
+          );
         }
       },
     );
