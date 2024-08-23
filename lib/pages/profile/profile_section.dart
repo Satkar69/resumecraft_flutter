@@ -41,8 +41,9 @@ class _ProfileSectionState extends State<ProfileSection> {
             ),
           ),
           _buildSectionTile(context, Icons.person, 'Personal Details',
-              '/create-personal-detail', id),
-          _buildSectionTile(context, Icons.school, 'Education'),
+              '/personal-detail', id),
+          _buildSectionTile(
+              context, Icons.school, 'Education', '/education', id),
           _buildSectionTile(context, Icons.work, 'Experience'),
           _buildSectionTile(context, Icons.star, 'Skills'),
           _buildSectionTile(context, Icons.flag, 'Objective'),
@@ -96,6 +97,7 @@ class _ProfileSectionState extends State<ProfileSection> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
+          Navigator.of(context).pop();
           Navigator.pushNamed(
             context,
             route,

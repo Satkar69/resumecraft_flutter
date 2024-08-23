@@ -1,10 +1,10 @@
 // import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:resumecraft/utils/helpers/dialog_helper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/register/register_request_model.dart';
 import 'package:resumecraft/services/user_api_service.dart';
 
@@ -172,29 +172,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
                   if (response.statusCode == 201) {
                     // Assuming 201 is success
-                    FormHelper.showSimpleAlertDialog(context, Config.appName,
-                        "Registration successful!", "OK", () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacementNamed(context, '/login');
-                    });
+                    DialogHelper.displayDialog(
+                        context, "Registration successful!",
+                        routeName: '/login');
                   } else {
-                    FormHelper.showSimpleAlertDialog(
-                        context,
-                        Config.appName,
-                        "Registration failed. Please try again.",
-                        "OK",
-                        () => Navigator.pop(context));
+                    DialogHelper.displayDialog(
+                        context, "Registration failed. Please try again.");
                   }
                 } catch (e) {
                   setState(() {
                     isApicallProcess = false;
                   });
-                  FormHelper.showSimpleAlertDialog(
-                      context,
-                      Config.appName,
-                      "An error occurred. Please try again.",
-                      "OK",
-                      () => Navigator.pop(context));
+                  DialogHelper.displayDialog(
+                      context, "An error occurred. Please try again.");
                 }
               }
             },

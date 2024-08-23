@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:resumecraft/pages/profile/profile_section.dart';
 import 'package:resumecraft/pages/auth/login_page.dart';
 import 'package:resumecraft/pages/home/home_page.dart';
+import 'package:resumecraft/pages/profile_section/education.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
@@ -56,7 +57,8 @@ class MyApp extends StatelessWidget {
         '/profile-section': (context) => const ProfileSection(),
 
         // ================= create-section-detail ===================
-        '/create-personal-detail': (context) => const PersonalDetail(),
+        '/personal-detail': (context) => const PersonalDetail(),
+        '/education': (context) => const Education()
       },
     );
   }

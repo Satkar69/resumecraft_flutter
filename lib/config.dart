@@ -14,6 +14,7 @@ class Config {
   static const String getPersonalDetails =
       "userdetail/userdetails-by-currentuser";
   static const String createPersonalDetail = 'userdetail/create-userdetail';
-  static const String personalDetailRUDbyID =
+  static const String personalDetailByID =
       'userdetail/'; // RUD--> read, update, delete
+  static const String educationByPersonalDetail = "exp-by-userdetail/";
 }

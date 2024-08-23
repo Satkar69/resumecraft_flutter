@@ -155,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/profile-section');
+                  Navigator.pushNamed(context, '/personal-detail');
                 },
               ),
             ),

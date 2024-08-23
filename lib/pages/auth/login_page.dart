@@ -4,10 +4,10 @@ import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/login/login_request_model.dart';
 import 'package:resumecraft/services/user_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
+import 'package:resumecraft/utils/helpers/dialog_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -181,23 +181,15 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pushNamedAndRemoveUntil(
                         context, '/home', (route) => false);
                   } else {
-                    FormHelper.showSimpleAlertDialog(
-                        context,
-                        Config.appName,
-                        "Invalid username/password",
-                        "OK",
-                        () => Navigator.pop(context));
+                    DialogHelper.displayDialog(
+                        context, "Invalid username/password");
                   }
                 } catch (e) {
                   setState(() {
                     isApicallProcess = false;
                   });
-                  FormHelper.showSimpleAlertDialog(
-                      context,
-                      Config.appName,
-                      "An error occurred. Please try again.",
-                      "OK",
-                      () => Navigator.pop(context));
+                  DialogHelper.displayDialog(
+                      context, "An error occurred. Please try again.");
                 }
               }
             },
