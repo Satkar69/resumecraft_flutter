@@ -12,6 +12,21 @@ class EducationAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<bool> checkEducation(
+      String token, String personalDetailId) async {
+    final response = await _dio.get(
+      '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+      options: Options(
+        headers: {'Authorization': 'Bearer $token'},
+      ),
+    );
+    if (response.statusCode != 200) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   static Future<dynamic> getEducation(
       String token, String personalDetailId) async {
     try {
@@ -21,14 +36,30 @@ class EducationAPIService {
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
-      print('get education triggered--------------------------------->');
       return response.data;
     } catch (e) {
-      throw Exception('Failed to get the selected personal detail: $e');
+      print('Failed to get the selected education detail: $e');
     }
   }
 
-  static Future<EducationResponseModel> writeEducation(
+  static Future<EducationResponseModel> createEducation(
+      EducationRequestModel requestModel, String token) async {
+    try {
+      final response = await _dio.post(
+        '${Config.apiUrl}${Config.createEducation}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      print('raw response----------------------->${response.data}');
+      return EducationResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to create education detail: $e');
+    }
+  }
+
+  static Future<EducationResponseModel> updateEducation(
       EducationRequestModel requestModel,
       String token,
       personalDetailId) async {

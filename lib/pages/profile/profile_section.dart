@@ -17,8 +17,6 @@ class _ProfileSectionState extends State<ProfileSection> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailId'] as String?;
 
-    print('check source id profile-------------------->$id');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile', style: TextStyle(color: Colors.white)),

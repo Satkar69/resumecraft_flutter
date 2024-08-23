@@ -39,15 +39,15 @@ mixin PersonalDetailMixin<T extends StatefulWidget> on State<T> {
       try {
         final data = await PersonalDetailAPIService.getPersonalDetail(
             token, personalDetailId!);
-        final details = PersonalDetailModel.fromJson(data);
+        final detail = PersonalDetailModel.fromJson(data);
         if (mounted) {
           setState(() {
-            personalDetail = details.userdetail ?? Userdetail();
+            personalDetail = detail.userdetail ?? Userdetail();
             _detailsLoaded = true;
           });
         }
       } catch (e) {
-        print('Failed to set user profile: $e');
+        print('Failed to set personal detail: $e');
       }
     }
   }

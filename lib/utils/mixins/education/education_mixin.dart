@@ -25,11 +25,10 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
   // Method to set the personalDetailId and load details
   void setPersonalDetailId(String? id) {
     if (personalDetailId != id) {
-      print(
-          'set id for education triggered------------------------------------------->');
       personalDetailId = id;
-      _loadEducation();
     }
+    if (personalDetailId != null) {}
+    _loadEducation();
   }
 
   Future<void> _loadEducation() async {
@@ -39,18 +38,17 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailId != null) {
       try {
-        final response =
+        final data =
             await EducationAPIService.getEducation(token, personalDetailId!);
-        final data = EducationModel.fromJson(response);
+        final edu = EducationModel.fromJson(data);
         if (mounted) {
           setState(() {
-            education = data.education ?? Education();
+            education = edu.education ?? Education();
             _detailsLoaded = true;
           });
         }
-        print('education--uni----------->${education?.course}');
       } catch (e) {
-        print('Failed to set user profile: $e');
+        print('Failed to set education: $e');
       }
     }
   }

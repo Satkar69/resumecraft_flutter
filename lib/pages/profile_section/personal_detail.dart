@@ -34,8 +34,6 @@ class _PersonalDetailState extends State<PersonalDetail>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailId'] as String?;
 
-    print('check source id profile-------------------->$id');
-
     if (id != null) {
       setPersonalDetailId(id);
     }

@@ -167,6 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     username: username!, email: email!, password: password!);
                 try {
                   final response = await UserAPIService.register(model);
+                  print(response);
                   setState(() {
                     isApicallProcess = false;
                   });

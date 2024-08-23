@@ -29,12 +29,10 @@ class _EducationState extends State<Education>
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailId'] as String?;
-
-    print('check source id profile in education-------------------->$id');
-
     if (id != null) {
       setPersonalDetailId(id);
     }
+    print('this is a check--->$education');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -148,16 +146,21 @@ class _EducationState extends State<Education>
                         university: university!,
                         gpa: gpa!,
                       );
-                      if (personalDetailId != null) {
+                      if (education != null) {
                         final response =
-                            await EducationAPIService.writeEducation(
+                            await EducationAPIService.updateEducation(
                                 model, userToken, personalDetailId);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          FormHelper.showSimpleAlertDialog(context,
-                              Config.appName, "education edited!", "OK", () {
+                          print(
+                              'this is the update response here--------------------------->$response');
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "education detail edited!",
+                              "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profile-section');
@@ -166,30 +169,32 @@ class _EducationState extends State<Education>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to education. Please try again.",
+                              "Failed to edit education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
                         final response =
-                            await EducationAPIService.writeEducation(
-                                model, userToken, personalDetailId);
+                            await EducationAPIService.createEducation(
+                                model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "education Saved!", "OK",
+                              context, Config.appName, "Education Saved!", "OK",
                               () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                                context, '/profiles');
                           });
                         } else {
+                          print(
+                              'this is the response here--------------------------->$response');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save education. Please try again.",
+                              "Failed to save Education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -226,7 +231,6 @@ class _EducationState extends State<Education>
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
-
       return true;
     } else {
       return false;
