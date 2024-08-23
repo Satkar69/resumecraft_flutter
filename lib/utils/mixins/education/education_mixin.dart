@@ -25,7 +25,8 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
   // Method to set the personalDetailId and load details
   void setPersonalDetailId(String? id) {
     if (personalDetailId != id) {
-      print('set id for education triggered------------------------------------------->')
+      print(
+          'set id for education triggered------------------------------------------->');
       personalDetailId = id;
       _loadEducation();
     }
