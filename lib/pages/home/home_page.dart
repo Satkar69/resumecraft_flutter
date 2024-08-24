@@ -46,12 +46,16 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
                 ),
               ),
               SizedBox(height: 40),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _profileUI(Icons.description, 'Profiles', '/profiles'),
                   SizedBox(width: 20),
+                  SizedBox(height: 40),
                   _profileUI(Icons.download, 'Downloads', '/downloads'),
+                  SizedBox(height: 40),
+                  _profileUI(
+                      Icons.pending_actions_rounded, 'Sample', '/sample'),
                 ],
               ),
             ],

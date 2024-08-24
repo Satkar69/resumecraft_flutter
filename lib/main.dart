@@ -11,6 +11,7 @@ import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
 import 'package:resumecraft/pages/profile_section/project.dart';
 import 'package:resumecraft/pages/profile_section/skill.dart';
+import 'package:resumecraft/templates/sample1/sample_page.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
@@ -32,12 +33,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Widget defaultHome;
-
   const MyApp({super.key, required this.defaultHome});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'RESUMECRAFT',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -66,7 +67,8 @@ class MyApp extends StatelessWidget {
         '/experience': (context) => const Experience(),
         '/skill': (context) => const Skill(),
         '/project': (context) => const Project(),
-        '/objective': (context) => const Objective()
+        '/objective': (context) => const Objective(),
+        '/sample': (context) => ProfessionalResumeApp()
       },
     );
   }
