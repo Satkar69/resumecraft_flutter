@@ -130,34 +130,51 @@ class _EducationState extends State<Education>
               paddingLeft: 0,
               paddingRight: 0,
             ),
-            Text(
-              "Start Date",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black.withOpacity(0.7),
-              ),
+            const SizedBox(height: 16),
+            // Start Date
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Start Date",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _datePickerField(
+                    "Start Date", startDate ?? education?.startDate,
+                    (selectedDate) {
+                  setState(() {
+                    startDate = selectedDate;
+                  });
+                }),
+              ],
             ),
             const SizedBox(height: 16),
-            _datePickerField("Start Date", startDate ?? education?.startDate,
-                (selectedDate) {
-              setState(() {
-                startDate = selectedDate;
-              });
-            }),
-            Text(
-              "End Date/Expected",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black.withOpacity(0.7),
-              ),
+            // End Date/Expected
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "End Date/Expected",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _datePickerField("End Date", endDate ?? education?.endDate,
+                    (selectedDate) {
+                  setState(() {
+                    endDate = selectedDate;
+                  });
+                }),
+              ],
             ),
-            const SizedBox(height: 16),
-            _datePickerField("End Date", endDate ?? education?.endDate,
-                (selectedDate) {
-              setState(() {
-                endDate = selectedDate;
-              });
-            }),
             const SizedBox(height: 20),
             Center(
               child: FormHelper.submitButton(
@@ -257,6 +274,7 @@ class _EducationState extends State<Education>
     );
   }
 
+  // Date Picker Field Update
   Widget _datePickerField(
       String label, DateTime? date, Function(DateTime) onDateSelected) {
     return GestureDetector(
@@ -296,10 +314,21 @@ class _EducationState extends State<Education>
     );
   }
 
+// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
+
+      // Retain original start and end dates if not modified
+      if (startDate == null && education != null) {
+        startDate = education?.startDate;
+      }
+
+      if (endDate == null && education != null) {
+        endDate = education?.endDate;
+      }
+
       return true;
     } else {
       return false;

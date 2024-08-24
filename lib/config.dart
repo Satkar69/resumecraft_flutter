@@ -4,9 +4,10 @@ class Config {
   // static const String apiUrl =
   //     "10.0.0.7:4000/api/"; // for android emulator (not working for some reason)
   static const String apiUrl =
-      "http://192.168.18.9:3000/api/"; // for physical device || andriod emulator
+      "http://192.168.1.65:3000/api/"; // for physical device || andriod emulator
 
   // 192.168.18.9
+  // 192.168.1.65
 
   // ===================== public Routes ===========================
   static const String register = "user/register";
