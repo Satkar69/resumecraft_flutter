@@ -36,8 +36,7 @@ class _EducationState extends State<Education>
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal Details',
-            style: TextStyle(color: Colors.white)),
+        title: const Text('Education', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -63,7 +62,7 @@ class _EducationState extends State<Education>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'FullName cannot be empty';
+                  return 'Course cannot be empty';
                 }
                 return null;
               },
@@ -88,7 +87,7 @@ class _EducationState extends State<Education>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Address cannot be empty';
+                  return 'University cannot be empty';
                 }
                 return null;
               },
@@ -109,11 +108,11 @@ class _EducationState extends State<Education>
             FormHelper.inputFieldWidgetWithLabel(
               context,
               "gpa",
-              "Gpa",
+              "GPA",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Email cannot be empty';
+                  return 'GPA cannot be empty';
                 }
                 return null;
               },

@@ -4,60 +4,60 @@ import 'package:dio/dio.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
-import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
-import 'package:resumecraft/models/profile_section/education/write/education_response_model.dart';
+import 'package:resumecraft/models/profile_section/experience/write/experience_request_model.dart';
+import 'package:resumecraft/models/profile_section/experience/write/experience_response_model.dart';
 
-class EducationAPIService {
+class ExperienceAPIService {
   static final Dio _dio = Dio();
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getEducation(
+  static Future<dynamic> getExperience(
       String token, String personalDetailId) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailId',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
       return response.data;
     } catch (e) {
-      throw Exception('Failed to get the selected education: $e');
+      throw Exception('Failed to get the selected experience: $e');
     }
   }
 
-  static Future<EducationResponseModel> createEducation(
-      EducationRequestModel requestModel, String token) async {
+  static Future<ExperienceResponseModel> createExperience(
+      ExperienceRequestModel requestModel, String token) async {
     try {
       final response = await _dio.post(
-        '${Config.apiUrl}${Config.createEducation}',
+        '${Config.apiUrl}${Config.createExperience}',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
         data: requestModel.toJson(),
       );
-      return EducationResponseModel.fromJson(response.data);
+      return ExperienceResponseModel.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to create education: $e');
+      throw Exception('Failed to create experience: $e');
     }
   }
 
-  static Future<EducationResponseModel> updateEducation(
-      EducationRequestModel requestModel,
+  static Future<ExperienceResponseModel> updateExperience(
+      ExperienceRequestModel requestModel,
       String token,
       personalDetailId) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailId',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
         data: requestModel.toJson(),
       );
-      return EducationResponseModel.fromJson(response.data);
+      return ExperienceResponseModel.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to update education: $e');
+      throw Exception('Failed to create experience: $e');
     }
   }
 }

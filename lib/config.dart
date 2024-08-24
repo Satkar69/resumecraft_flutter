@@ -23,4 +23,7 @@ class Config {
   static const String createEducation = 'education/create-edu';
   static const String educationByPersonalDetail =
       "education/edu-by-userdetail/";
+  static const String createExperience = 'experience/create-exp';
+  static const String experienceByPersonalDetail =
+      'experience/exp-by-userdetail/';
 }

@@ -42,7 +42,8 @@ class _ProfileSectionState extends State<ProfileSection> {
               '/personal-detail', id),
           _buildSectionTile(
               context, Icons.school, 'Education', '/education', id),
-          _buildSectionTile(context, Icons.work, 'Experience'),
+          _buildSectionTile(
+              context, Icons.work, 'Experience', '/experience', id),
           _buildSectionTile(context, Icons.star, 'Skills'),
           _buildSectionTile(context, Icons.flag, 'Objective'),
           _buildSectionTile(context, Icons.build, 'Projects'),
