@@ -30,7 +30,7 @@ class Config {
   static const String experienceByPersonalDetail =
       'experience/exp-by-userdetail/';
 
-  static const String createSkill = 'skills/create-skills';
+  static const String createSkill = 'skills/create-skill';
   static const String skillByPersonalDetail = 'skills/skill-by-userdetail/';
 
   static const String createObjective = 'objective/create-obj';

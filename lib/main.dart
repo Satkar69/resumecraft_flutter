@@ -5,9 +5,12 @@ import 'package:resumecraft/pages/auth/login_page.dart';
 import 'package:resumecraft/pages/home/home_page.dart';
 import 'package:resumecraft/pages/profile_section/education.dart';
 import 'package:resumecraft/pages/profile_section/experience.dart';
+import 'package:resumecraft/pages/profile_section/objective.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
+import 'package:resumecraft/pages/profile_section/project.dart';
+import 'package:resumecraft/pages/profile_section/skill.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
@@ -60,7 +63,10 @@ class MyApp extends StatelessWidget {
         // ================= create-section-detail ===================
         '/personal-detail': (context) => const PersonalDetail(),
         '/education': (context) => const Education(),
-        '/experience': (context) => const Experience()
+        '/experience': (context) => const Experience(),
+        '/skill': (context) => const Skill(),
+        '/project': (context) => const Project(),
+        '/objective': (context) => const Objective()
       },
     );
   }
