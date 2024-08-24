@@ -17,8 +17,6 @@ class _ProfileSectionState extends State<ProfileSection> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailId'] as String?;
 
-    print('check source id profile-------------------->$id');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
@@ -41,12 +39,14 @@ class _ProfileSectionState extends State<ProfileSection> {
             ),
           ),
           _buildSectionTile(context, Icons.person, 'Personal Details',
-              '/create-personal-detail', id),
-          _buildSectionTile(context, Icons.school, 'Education'),
-          _buildSectionTile(context, Icons.work, 'Experience'),
-          _buildSectionTile(context, Icons.star, 'Skills'),
-          _buildSectionTile(context, Icons.flag, 'Objective'),
-          _buildSectionTile(context, Icons.build, 'Projects'),
+              '/personal-detail', id),
+          _buildSectionTile(
+              context, Icons.school, 'Education', '/education', id),
+          _buildSectionTile(
+              context, Icons.work, 'Experience', '/experience', id),
+          _buildSectionTile(context, Icons.star, 'Skills', '/skill', id),
+          _buildSectionTile(context, Icons.flag, 'Objective', '/objective', id),
+          _buildSectionTile(context, Icons.build, 'Projects', '/project', id),
         ],
       ),
       bottomNavigationBar: Container(
@@ -96,6 +96,7 @@ class _ProfileSectionState extends State<ProfileSection> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
+          Navigator.of(context).pop();
           Navigator.pushNamed(
             context,
             route,

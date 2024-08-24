@@ -24,7 +24,7 @@ mixin PersonalDetailsMixin<T extends StatefulWidget> on State<T> {
           personalDetails = details.userdetails ?? [];
         });
       } catch (e) {
-        print('Failed to set user profile: $e');
+        print('Failed to set personal details: $e');
       }
     }
   }

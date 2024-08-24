@@ -2,56 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/personal_detail_api_service.dart';
-import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.dart';
-import 'package:resumecraft/models/profile_section/personal_detail/write/personal_detail_request_model.dart';
+import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/utils/mixins/education/education_mixin.dart';
+import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class PersonalDetail extends StatefulWidget {
-  const PersonalDetail({super.key});
+class Education extends StatefulWidget {
+  const Education({super.key});
 
   @override
-  State<PersonalDetail> createState() => _PersonalDetailState();
+  State<Education> createState() => _EducationState();
 }
 
-class _PersonalDetailState extends State<PersonalDetail>
-    with UserProfileMixin, PersonalDetailMixin {
+class _EducationState extends State<Education>
+    with UserProfileMixin, EducationMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? fullname;
-  String? address;
-  String? email;
-  String? phone;
-  String? image;
-  String? socialLinks;
-  List<String> socials = [];
+  String? course;
+  String? university;
+  String? gpa;
+  DateTime? startDate;
+  DateTime? endDate;
 
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailId'] as String?;
-
     if (id != null) {
       setPersonalDetailId(id);
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal Details',
-            style: TextStyle(color: Colors.white)),
+        title: const Text('Education', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _profileDetailUI(context),
+      body: _educationUI(context),
     );
   }
 
-  Widget _profileDetailUI(BuildContext context) {
+  Widget _educationUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -61,19 +57,19 @@ class _PersonalDetailState extends State<PersonalDetail>
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "fullname",
-              "FullName",
+              "course",
+              "Course",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'FullName cannot be empty';
+                  return 'Course cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                fullname = onSavedVal;
+                course = onSavedVal;
               },
-              initialValue: personalDetail?.fullname ?? "",
+              initialValue: education?.course ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -86,19 +82,19 @@ class _PersonalDetailState extends State<PersonalDetail>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "address",
-              "Address",
+              "university",
+              "University",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Address cannot be empty';
+                  return 'University cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                address = onSavedVal;
+                university = onSavedVal;
               },
-              initialValue: personalDetail?.address ?? "",
+              initialValue: education?.university ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -111,19 +107,19 @@ class _PersonalDetailState extends State<PersonalDetail>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "email",
-              "Email",
+              "gpa",
+              "GPA",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Email cannot be empty';
+                  return 'GPA cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                email = onSavedVal;
+                gpa = onSavedVal;
               },
-              initialValue: personalDetail?.email ?? "",
+              initialValue: education?.gpa ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -134,111 +130,48 @@ class _PersonalDetailState extends State<PersonalDetail>
               paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "phone",
-              "Phone",
-              "",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Phone number cannot be empty';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                phone = onSavedVal;
-              },
-              initialValue: personalDetail?.contact ?? "",
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
-              hintColor: Colors.black.withOpacity(0.7),
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "socials",
-              "Socials",
-              "www.this.com, www.that.com, ...",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'At least one social link should be an input';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                socialLinks = onSavedVal;
-              },
-              initialValue:
-                  (personalDetail?.socials)?.join(',') ?? socials.join(','),
-              hintColor: Colors.black45,
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Photo (Optional)',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
+            // Start Date
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: primaryColor),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.person_outline,
-                    size: 50,
-                    color: Colors.blue,
+                const Text(
+                  "Start Date",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle Change Photo
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text(
-                        'Change',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle Remove Photo
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text('Remove'),
-                    ),
-                  ],
+                const SizedBox(height: 8),
+                _datePickerField(
+                    "Start Date", startDate ?? education?.startDate,
+                    (selectedDate) {
+                  setState(() {
+                    startDate = selectedDate;
+                  });
+                }),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // End Date/Expected
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "End Date/Expected",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
+                const SizedBox(height: 8),
+                _datePickerField("End Date", endDate ?? education?.endDate,
+                    (selectedDate) {
+                  setState(() {
+                    endDate = selectedDate;
+                  });
+                }),
               ],
             ),
             const SizedBox(height: 20),
@@ -252,27 +185,27 @@ class _PersonalDetailState extends State<PersonalDetail>
                     });
 
                     try {
-                      PersonalDetailRequestModel model =
-                          PersonalDetailRequestModel(
-                        user: userId,
-                        fullname: fullname!,
-                        address: address!,
-                        email: email!,
-                        contact: phone!,
-                        socials: socials,
-                      );
-                      if (personalDetailId != null) {
+                      EducationRequestModel model = EducationRequestModel(
+                          userdetail: personalDetailId,
+                          course: course!,
+                          university: university!,
+                          gpa: gpa!,
+                          startDate: startDate,
+                          endDate: endDate);
+                      if (education != null) {
                         final response =
-                            await PersonalDetailAPIService.updatePersonalDetail(
+                            await EducationAPIService.updateEducation(
                                 model, userToken, personalDetailId);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
+                          print(
+                              'this is the update response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Personal detail edited!",
+                              "education detail edited!",
                               "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
@@ -282,32 +215,32 @@ class _PersonalDetailState extends State<PersonalDetail>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit personal detail. Please try again.",
+                              "Failed to edit education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
                         final response =
-                            await PersonalDetailAPIService.createPersonalDetail(
+                            await EducationAPIService.createEducation(
                                 model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context,
-                              Config.appName,
-                              "Personal detail Saved!",
-                              "OK", () {
+                              context, Config.appName, "Education Saved!", "OK",
+                              () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profiles');
                           });
                         } else {
+                          print(
+                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save personal detail. Please try again.",
+                              "Failed to save Education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -340,13 +273,61 @@ class _PersonalDetailState extends State<PersonalDetail>
     );
   }
 
+  // Date Picker Field Update
+  Widget _datePickerField(
+      String label, DateTime? date, Function(DateTime) onDateSelected) {
+    return GestureDetector(
+      onTap: () async {
+        DateTime? selectedDate = await showDatePicker(
+          context: context,
+          initialDate: date ?? DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+        );
+        if (selectedDate != null) {
+          onDateSelected(selectedDate);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: primaryColor),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              date != null
+                  ? "${date.toLocal()}".split(' ')[0]
+                  : "Select $label",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+                fontSize: 16,
+              ),
+            ),
+            const Icon(Icons.calendar_today, color: Colors.black54),
+          ],
+        ),
+      ),
+    );
+  }
+
+// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
-      if (socialLinks?.isNotEmpty ?? false) {
-        socials = socialLinks!.split(',').map((link) => link.trim()).toList();
+
+      // Retain original start and end dates if not modified
+      if (startDate == null && education != null) {
+        startDate = education?.startDate;
       }
+
+      if (endDate == null && education != null) {
+        endDate = education?.endDate;
+      }
+
       return true;
     } else {
       return false;
