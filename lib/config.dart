@@ -10,10 +10,10 @@ class Config {
   // 192.168.1.65
 
   // ===================== public Routes ===========================
+  static const String login = "auth/login";
   static const String register = "user/register";
 
   // ===================== Auth Routes ===========================a
-  static const String login = "auth/login";
   static const String userProfile = "user/profile";
 
   static const String getPersonalDetails =
@@ -30,13 +30,13 @@ class Config {
   static const String experienceByPersonalDetail =
       'experience/exp-by-userdetail/';
 
-  static const String createProject = 'projects/create-proj';
-  static const String projectByPersonalDetail = 'projects/proj-by-userdetail/';
-
   static const String createSkill = 'skills/create-skills';
   static const String skillByPersonalDetail = 'skills/skill-by-userdetail/';
 
   static const String createObjective = 'objective/create-obj';
   static const String objectiveByPersonalDetail =
       'objective/obj-by-userdetail/';
+
+  static const String createProject = 'projects/create-proj';
+  static const String projectByPersonalDetail = 'projects/proj-by-userdetail/';
 }
