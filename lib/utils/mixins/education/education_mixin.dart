@@ -40,12 +40,14 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
       try {
         final data =
             await EducationAPIService.getEducation(token, personalDetailId!);
-        final edu = EducationModel.fromJson(data);
-        if (mounted) {
-          setState(() {
-            education = edu.education ?? Education();
-            _detailsLoaded = true;
-          });
+        if (data != null) {
+          final edu = EducationModel.fromJson(data);
+          if (mounted) {
+            setState(() {
+              education = edu.education ?? Education();
+              _detailsLoaded = true;
+            });
+          }
         }
       } catch (e) {
         print('Failed to set education: $e');

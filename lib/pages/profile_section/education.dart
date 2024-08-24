@@ -24,6 +24,8 @@ class _EducationState extends State<Education>
   String? course;
   String? university;
   String? gpa;
+  DateTime? startDate;
+  DateTime? endDate;
 
   Widget build(BuildContext context) {
     final args =
@@ -32,7 +34,6 @@ class _EducationState extends State<Education>
     if (id != null) {
       setPersonalDetailId(id);
     }
-    print('this is a check--->$education');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -129,6 +130,34 @@ class _EducationState extends State<Education>
               paddingLeft: 0,
               paddingRight: 0,
             ),
+            Text(
+              "Start Date",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _datePickerField("Start Date", startDate ?? education?.startDate,
+                (selectedDate) {
+              setState(() {
+                startDate = selectedDate;
+              });
+            }),
+            Text(
+              "End Date/Expected",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _datePickerField("End Date", endDate ?? education?.endDate,
+                (selectedDate) {
+              setState(() {
+                endDate = selectedDate;
+              });
+            }),
             const SizedBox(height: 20),
             Center(
               child: FormHelper.submitButton(
@@ -141,11 +170,12 @@ class _EducationState extends State<Education>
 
                     try {
                       EducationRequestModel model = EducationRequestModel(
-                        userdetail: personalDetailId,
-                        course: course!,
-                        university: university!,
-                        gpa: gpa!,
-                      );
+                          userdetail: personalDetailId,
+                          course: course!,
+                          university: university!,
+                          gpa: gpa!,
+                          startDate: startDate,
+                          endDate: endDate);
                       if (education != null) {
                         final response =
                             await EducationAPIService.updateEducation(
@@ -155,7 +185,7 @@ class _EducationState extends State<Education>
                         });
                         if (response.statusCode == 200) {
                           print(
-                              'this is the update response here--------------------------->$response');
+                              'this is the update response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
@@ -190,7 +220,7 @@ class _EducationState extends State<Education>
                           });
                         } else {
                           print(
-                              'this is the response here--------------------------->$response');
+                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
@@ -221,6 +251,45 @@ class _EducationState extends State<Education>
                 borderRadius: 10,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _datePickerField(
+      String label, DateTime? date, Function(DateTime) onDateSelected) {
+    return GestureDetector(
+      onTap: () async {
+        DateTime? selectedDate = await showDatePicker(
+          context: context,
+          initialDate: date ?? DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+        );
+        if (selectedDate != null) {
+          onDateSelected(selectedDate);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: primaryColor),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              date != null
+                  ? "${date.toLocal()}".split(' ')[0]
+                  : "Select $label",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.7),
+                fontSize: 16,
+              ),
+            ),
+            const Icon(Icons.calendar_today, color: Colors.black54),
           ],
         ),
       ),

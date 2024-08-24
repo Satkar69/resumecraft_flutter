@@ -52,7 +52,6 @@ class EducationAPIService {
         ),
         data: requestModel.toJson(),
       );
-      print('raw response----------------------->${response.data}');
       return EducationResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create education detail: $e');
