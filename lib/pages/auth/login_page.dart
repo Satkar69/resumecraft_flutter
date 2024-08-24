@@ -137,29 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         ? Icons.visibility_off
                         : Icons.visibility))),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 25, top: 10),
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(color: Colors.grey, fontSize: 14.0),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Forget Password ?',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            print("forgot password");
-                          }),
-                  ],
-                ),
-              ),
-            ),
-          ),
+
           SizedBox(
             height: 20,
           ),
@@ -225,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
+                          Navigator.pop(context);
                           Navigator.pushNamed(context, "/register");
                         }),
                 ],

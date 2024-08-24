@@ -1,4 +1,5 @@
 // import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:resumecraft/utils/helpers/dialog_helper.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -196,7 +197,38 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           SizedBox(
             height: 20,
-          )
+          ),
+          Center(
+            child: Text(
+              "OR",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(color: Colors.grey, fontSize: 14.0),
+                children: <TextSpan>[
+                  TextSpan(text: "Already have an account?"),
+                  TextSpan(
+                      text: 'Login',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/login");
+                        }),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
