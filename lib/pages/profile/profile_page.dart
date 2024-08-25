@@ -131,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage>
                     ),
                   ),
                 );
-              }).toList()
+              })
             else
               Padding(
                 padding: const EdgeInsets.all(16.0),

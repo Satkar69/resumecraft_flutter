@@ -29,9 +29,17 @@ class _EducationPageState extends State<EducationPage>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailID'] as String?;
-    if (id != null) {
-      setPersonalDetailId(id);
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final educationID = args?['educationID'] as String?;
+
+    print('education id is------------------------------------->$educationID');
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (educationID != null) {
+      setEducationlId(educationID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -192,9 +200,9 @@ class _EducationPageState extends State<EducationPage>
                           startDate: startDate,
                           endDate: endDate);
                       if (education != null) {
-                        final response = await EducationAPIService
-                            .updateEducationByPersonalDetail(
-                                model, userToken, personalDetailID);
+                        final response =
+                            await EducationAPIService.updateEducation(
+                                model, userToken, educationID!);
                         setState(() {
                           isApicallProcess = false;
                         });

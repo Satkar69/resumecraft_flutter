@@ -4,6 +4,7 @@ import 'package:resumecraft/pages/profile/profile_section_page.dart';
 import 'package:resumecraft/pages/auth/login_page.dart';
 import 'package:resumecraft/pages/home/home_page.dart';
 import 'package:resumecraft/pages/profile_section/education/education_page.dart';
+import 'package:resumecraft/pages/profile_section/education/educations_page.dart';
 import 'package:resumecraft/pages/profile_section/experience/experience_page.dart';
 import 'package:resumecraft/pages/profile_section/objective/objective_page.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail_page.dart';
@@ -62,10 +63,16 @@ class MyApp extends StatelessWidget {
 
         // ================= create-section-detail ===================
         '/personal-detail': (context) => const PersonalDetailPage(),
+
         '/education': (context) => const EducationPage(),
+        '/educations': (context) => const EducationsPage(),
+
         '/experience': (context) => const ExperiencePage(),
+
         '/skill': (context) => const SkillPage(),
+
         '/project': (context) => const ProjectPage(),
+
         '/objective': (context) => const ObjectivePage(),
       },
     );

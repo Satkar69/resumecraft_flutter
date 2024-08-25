@@ -5,6 +5,7 @@ import 'package:resumecraft/models/profile_section/education/read/education_mode
 
 mixin EducationMixin<T extends StatefulWidget> on State<T> {
   Education? education;
+  String? educationID;
   String? personalDetailID;
   bool _detailsLoaded = false;
 
@@ -15,19 +16,29 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      final id = args?['personalDetailID'] as String?;
-      if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+      final educationID = args?['educationID'] as String?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+
+      setPersonalDetailID(personalDetailID);
+      if (educationID != null && !_detailsLoaded) {
+        setEducationlId(educationID);
       }
     });
   }
 
   // Method to set the personalDetailID and load details
-  void setPersonalDetailId(String? id) {
+
+  void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
     }
-    if (personalDetailID != null) {}
+  }
+
+  void setEducationlId(String? id) {
+    if (educationID != id) {
+      educationID = id;
+    }
+    if (educationID != null) {}
     _loadEducation();
   }
 
@@ -36,10 +47,10 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
 
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
-    if (token.isNotEmpty && personalDetailID != null) {
+    if (token.isNotEmpty && educationID != null) {
       try {
-        final data = await EducationAPIService.getEducationByPersonalDetail(
-            token, personalDetailID!);
+        final data =
+            await EducationAPIService.getEducation(token, educationID!);
         if (data != null) {
           final edu = EducationModel.fromJson(data);
           if (mounted) {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/services/education_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/utils/mixins/personal_detail/personal_details_mixin.dart';
+import 'package:resumecraft/utils/mixins/education/educations_mixin.dart';
 
 class EducationsPage extends StatefulWidget {
   const EducationsPage({super.key});
@@ -16,11 +16,15 @@ class EducationsPage extends StatefulWidget {
 }
 
 class EducationsPageState extends State<EducationsPage>
-    with UserProfileMixin, PersonalDetailsMixin {
+    with UserProfileMixin, EducationsMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Educations', style: TextStyle(color: Colors.white)),
@@ -35,8 +39,8 @@ class EducationsPageState extends State<EducationsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (personalDetails.isNotEmpty)
-              ...personalDetails.map((personalDetail) {
+            if (educations.isNotEmpty)
+              ...educations.map((education) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -49,8 +53,8 @@ class EducationsPageState extends State<EducationsPage>
                         backgroundColor: primaryColor,
                         child: Icon(Icons.account_circle, color: Colors.white),
                       ),
-                      title: Text(personalDetail.fullname ?? 'No Name'),
-                      subtitle: Text(personalDetail.email ?? 'No Email'),
+                      title: Text(education.course ?? 'No course'),
+                      subtitle: Text(education.university ?? 'No university'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete,
                             color: Colors
@@ -79,16 +83,15 @@ class EducationsPageState extends State<EducationsPage>
                                       // Perform delete operation here
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
-                                      final response =
-                                          await PersonalDetailAPIService
-                                              .deletePersonalDetail(
-                                                  DeleteModel(
-                                                      status: 'success',
-                                                      statusCode: 200,
-                                                      message:
-                                                          'profile delete success'),
-                                                  userToken,
-                                                  personalDetail.id);
+                                      final response = await EducationAPIService
+                                          .deleteEducation(
+                                              DeleteModel(
+                                                  status: 'success',
+                                                  statusCode: 200,
+                                                  message:
+                                                      'education delete success'),
+                                              userToken,
+                                              education.id);
                                       if (response.statusCode == 200) {
                                         FormHelper.showSimpleAlertDialog(
                                             context,
@@ -102,10 +105,10 @@ class EducationsPageState extends State<EducationsPage>
                                         FormHelper.showSimpleAlertDialog(
                                             context,
                                             Config.appName,
-                                            "unable to delete this profile",
+                                            "unable to delete this education",
                                             "OK", () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
+                                          Navigator.pop(
+                                              context); // Close the dialog
                                         });
                                       }
                                       ;
@@ -121,16 +124,17 @@ class EducationsPageState extends State<EducationsPage>
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/profile-section',
+                          '/education',
                           arguments: {
-                            'personalDetailID': personalDetail.id,
+                            'educationID': education.id,
+                            'personalDetailID': personalDetailID
                           },
                         );
                       },
                     ),
                   ),
                 );
-              }).toList()
+              })
             else
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -143,7 +147,7 @@ class EducationsPageState extends State<EducationsPage>
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
-                child: const Text('+ Create New Profile'),
+                child: const Text('+ Add New Education'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
@@ -154,7 +158,7 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/personal-detail');
+                  Navigator.pushNamed(context, '/education');
                 },
               ),
             ),
