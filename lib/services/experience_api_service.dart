@@ -77,11 +77,11 @@ class ExperienceAPIService {
     }
   }
 
-  static Future<dynamic> getExperienceByPersonalDetail(
+  static Future<dynamic> getExperiencesByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailID',
+        '${Config.apiUrl}${Config.experiencesByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -97,24 +97,6 @@ class ExperienceAPIService {
     try {
       final response = await _dio.post(
         '${Config.apiUrl}${Config.createExperience}',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return ExperienceResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to create experience: $e');
-    }
-  }
-
-  static Future<ExperienceResponseModel> updateExperienceByPersonalDetail(
-      ExperienceRequestModel requestModel,
-      String token,
-      personalDetailID) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

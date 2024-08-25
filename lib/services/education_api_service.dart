@@ -76,11 +76,11 @@ class EducationAPIService {
     }
   }
 
-  static Future<dynamic> getEducationByPersonalDetail(
+  static Future<dynamic> getEducationsByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailID',
+        '${Config.apiUrl}${Config.educationsByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -104,24 +104,6 @@ class EducationAPIService {
       return EducationResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create education: $e');
-    }
-  }
-
-  static Future<EducationResponseModel> updateEducationByPersonalDetail(
-      EducationRequestModel requestModel,
-      String token,
-      personalDetailID) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailID',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return EducationResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update education: $e');
     }
   }
 }

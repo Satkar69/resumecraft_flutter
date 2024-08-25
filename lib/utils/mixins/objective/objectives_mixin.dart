@@ -6,19 +6,38 @@ import 'package:resumecraft/models/profile_section/objective/read/objectives_mod
 
 mixin ObjectivesMixin<T extends StatefulWidget> on State<T> {
   List<Objectives> objectives = [];
+  String? personalDetailID;
+  bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _loadObjectives();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+      if (personalDetailID != null && !_detailsLoaded) {
+        setPersonalDetailID(personalDetailID);
+      }
+    });
+  }
+
+  void setPersonalDetailID(String? id) {
+    if (personalDetailID != id) {
+      personalDetailID = id;
+      _loadObjectives();
+    }
   }
 
   Future<void> _loadObjectives() async {
+    if (_detailsLoaded) return;
+
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {
       try {
-        final data = await ObjectiveAPIService.getObjectives(token);
+        final data = await ObjectiveAPIService.getObjectivesByPersonalDetail(
+            token, personalDetailID!);
         final objs = ObjectivesModel.fromJson(data);
         setState(() {
           objectives = objs.objectives ?? [];

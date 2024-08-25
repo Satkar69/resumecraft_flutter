@@ -35,7 +35,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
     final id = args?['personalDetailID'] as String?;
 
     if (id != null) {
-      setPersonalDetailId(id);
+      setPersonalDetailID(id);
     }
     return Scaffold(
       appBar: AppBar(

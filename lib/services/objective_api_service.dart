@@ -76,11 +76,11 @@ class ObjectiveAPIService {
     }
   }
 
-  static Future<dynamic> getObjectiveByPersonalDetail(
+  static Future<dynamic> getObjectivesByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailID',
+        '${Config.apiUrl}${Config.objectivesByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -104,24 +104,6 @@ class ObjectiveAPIService {
       return ObjectiveResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create objective: $e');
-    }
-  }
-
-  static Future<ObjectiveResponseModel> updateObjectiveByPersonalDetail(
-      ObjectiveRequestModel requestModel,
-      String token,
-      personalDetailID) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailID',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return ObjectiveResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update objective: $e');
     }
   }
 }

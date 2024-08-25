@@ -25,6 +25,10 @@ class ExperiencesPageState extends State<ExperiencesPage>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final personalDetailID = args?['personalDetailID'] as String?;
 
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Experiences', style: TextStyle(color: Colors.white)),
@@ -158,7 +162,11 @@ class ExperiencesPageState extends State<ExperiencesPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/experience');
+                  Navigator.pushNamed(
+                    context,
+                    '/experience',
+                    arguments: {'personalDetailID': personalDetailID},
+                  );
                 },
               ),
             ),

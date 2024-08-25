@@ -74,11 +74,11 @@ class SkillAPIService {
     }
   }
 
-  static Future<dynamic> getSkillByPersonalDetail(
+  static Future<dynamic> getSkillsByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailID',
+        '${Config.apiUrl}${Config.skillsByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -102,22 +102,6 @@ class SkillAPIService {
       return SkillResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create skill: $e');
-    }
-  }
-
-  static Future<SkillResponseModel> updateSkillByPersonalDetail(
-      SkillRequestModel requestModel, String token, personalDetailID) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailID',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return SkillResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update skill: $e');
     }
   }
 }

@@ -74,11 +74,11 @@ class ProjectAPIService {
     }
   }
 
-  static Future<dynamic> getProjectByPersonalDetail(
+  static Future<dynamic> getProjectsByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailID',
+        '${Config.apiUrl}${Config.projectsByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -102,22 +102,6 @@ class ProjectAPIService {
       return ProjectResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create project: $e');
-    }
-  }
-
-  static Future<ProjectResponseModel> updateProjectByPersonalDetail(
-      ProjectRequestModel requestModel, String token, personalDetailID) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailID',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return ProjectResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update project: $e');
     }
   }
 }

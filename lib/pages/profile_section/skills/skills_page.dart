@@ -25,6 +25,10 @@ class SkillssPageState extends State<SkillssPage>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final personalDetailID = args?['personalDetailID'] as String?;
 
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Skills', style: TextStyle(color: Colors.white)),
@@ -159,7 +163,11 @@ class SkillssPageState extends State<SkillssPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/skill');
+                  Navigator.pushNamed(
+                    context,
+                    '/skill',
+                    arguments: {'personalDetailID': personalDetailID},
+                  );
                 },
               ),
             ),

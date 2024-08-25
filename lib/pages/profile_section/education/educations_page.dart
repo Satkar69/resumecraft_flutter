@@ -25,6 +25,12 @@ class EducationsPageState extends State<EducationsPage>
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final personalDetailID = args?['personalDetailID'] as String?;
 
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    print('educations here ------------------------------------->$educations');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Educations', style: TextStyle(color: Colors.white)),
@@ -139,7 +145,7 @@ class EducationsPageState extends State<EducationsPage>
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No objectives available. Please create a new education.',
+                  'No educations available. Please create a new education.',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
@@ -158,7 +164,11 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/education');
+                  Navigator.pushNamed(
+                    context,
+                    '/education',
+                    arguments: {'personalDetailID': personalDetailID},
+                  );
                 },
               ),
             ),

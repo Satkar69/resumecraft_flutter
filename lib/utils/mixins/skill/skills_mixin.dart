@@ -6,11 +6,27 @@ import 'package:resumecraft/models/profile_section/skills/read/skills_model.dart
 
 mixin SkillsMixin<T extends StatefulWidget> on State<T> {
   List<Skills> skills = [];
+  String? personalDetailID;
+  bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _loadSkills();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+      if (personalDetailID != null && !_detailsLoaded) {
+        setPersonalDetailID(personalDetailID);
+      }
+    });
+  }
+
+  void setPersonalDetailID(String? id) {
+    if (personalDetailID != id) {
+      personalDetailID = id;
+      _loadSkills();
+    }
   }
 
   Future<void> _loadSkills() async {
@@ -18,7 +34,8 @@ mixin SkillsMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {
       try {
-        final data = await SkillAPIService.getSkills(token);
+        final data = await SkillAPIService.getSkillsByPersonalDetail(
+            token, personalDetailID!);
         final sks = SkillsModel.fromJson(data);
         setState(() {
           skills = sks.skills ?? [];

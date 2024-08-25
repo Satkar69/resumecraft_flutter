@@ -6,11 +6,27 @@ import 'package:resumecraft/models/profile_section/projects/read/projects_model.
 
 mixin ProjectsMixin<T extends StatefulWidget> on State<T> {
   List<Projects> projects = [];
+  String? personalDetailID;
+  bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _loadProjects();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+      if (personalDetailID != null && !_detailsLoaded) {
+        setPersonalDetailID(personalDetailID);
+      }
+    });
+  }
+
+  void setPersonalDetailID(String? id) {
+    if (personalDetailID != id) {
+      personalDetailID = id;
+      _loadProjects();
+    }
   }
 
   Future<void> _loadProjects() async {
@@ -18,7 +34,8 @@ mixin ProjectsMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {
       try {
-        final data = await ProjectAPIService.getProjects(token);
+        final data = await ProjectAPIService.getProjectsByPersonalDetail(
+            token, personalDetailID!);
         final projs = ProjectsModel.fromJson(data);
         setState(() {
           projects = projs.projects ?? [];

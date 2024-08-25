@@ -36,6 +36,9 @@ class _EducationPageState extends State<EducationPage>
       setPersonalDetailID(personalDetailID);
     }
 
+    print(
+        'personal detail id here------------------------------------>$personalDetailID');
+
     if (educationID != null) {
       setEducationlID(educationID);
     }

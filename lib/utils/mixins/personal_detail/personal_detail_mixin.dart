@@ -17,13 +17,13 @@ mixin PersonalDetailMixin<T extends StatefulWidget> on State<T> {
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       final id = args?['personalDetailID'] as String?;
       if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+        setPersonalDetailID(id);
       }
     });
   }
 
   // Method to set the personalDetailID and load details
-  void setPersonalDetailId(String? id) {
+  void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
       _loadPersonalDetails();
