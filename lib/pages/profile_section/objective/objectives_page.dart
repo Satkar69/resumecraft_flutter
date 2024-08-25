@@ -26,7 +26,7 @@ class ObjectivesPageState extends State<ObjectivesPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-
+    loadObjectives();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Objectives', style: TextStyle(color: Colors.white)),

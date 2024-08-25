@@ -27,6 +27,7 @@ class EducationsPageState extends State<EducationsPage>
       setPersonalDetailID(personalDetailID);
     }
 
+    loadEducations();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Educations', style: TextStyle(color: Colors.white)),

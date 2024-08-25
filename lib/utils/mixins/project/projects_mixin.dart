@@ -25,11 +25,11 @@ mixin ProjectsMixin<T extends StatefulWidget> on State<T> {
   void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
-      _loadProjects();
+      loadProjects();
     }
   }
 
-  Future<void> _loadProjects() async {
+  Future<void> loadProjects() async {
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {

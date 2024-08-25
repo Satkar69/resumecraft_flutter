@@ -26,7 +26,7 @@ class ExperiencesPageState extends State<ExperiencesPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-
+    loadExperiences();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Experiences', style: TextStyle(color: Colors.white)),

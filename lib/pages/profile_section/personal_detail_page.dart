@@ -275,8 +275,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                               "Personal detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

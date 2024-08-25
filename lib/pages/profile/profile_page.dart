@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    loadPersonalDetails();
     return Scaffold(
       appBar: AppBar(
         title:

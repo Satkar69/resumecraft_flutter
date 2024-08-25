@@ -25,11 +25,11 @@ mixin ObjectivesMixin<T extends StatefulWidget> on State<T> {
   void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
-      _loadObjectives();
+      loadObjectives();
     }
   }
 
-  Future<void> _loadObjectives() async {
+  Future<void> loadObjectives() async {
     if (_detailsLoaded) return;
 
     final prefs = await UserSharedPrefs.getLoginResponse();

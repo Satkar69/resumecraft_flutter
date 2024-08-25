@@ -10,10 +10,10 @@ mixin PersonalDetailsMixin<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    _loadPersonalDetails();
+    loadPersonalDetails();
   }
 
-  Future<void> _loadPersonalDetails() async {
+  Future<void> loadPersonalDetails() async {
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {

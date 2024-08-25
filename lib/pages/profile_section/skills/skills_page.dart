@@ -26,7 +26,7 @@ class SkillssPageState extends State<SkillssPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-
+    loadSkills();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Skills', style: TextStyle(color: Colors.white)),

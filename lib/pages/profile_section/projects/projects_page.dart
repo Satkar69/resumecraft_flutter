@@ -26,7 +26,7 @@ class ProjectsPageState extends State<ProjectsPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-
+    loadProjects();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Projects', style: TextStyle(color: Colors.white)),

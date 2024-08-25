@@ -25,11 +25,11 @@ mixin SkillsMixin<T extends StatefulWidget> on State<T> {
   void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
-      _loadSkills();
+      loadSkills();
     }
   }
 
-  Future<void> _loadSkills() async {
+  Future<void> loadSkills() async {
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
     if (token.isNotEmpty) {
