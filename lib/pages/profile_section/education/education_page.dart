@@ -48,7 +48,7 @@ class _EducationPageState extends State<EducationPage>
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: _educationUI(context),
@@ -120,7 +120,12 @@ class _EducationPageState extends State<EducationPage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'GPA cannot be empty';
+                  return null;
+                }
+                if (double.tryParse(onValidateVal) == null ||
+                    double.parse(onValidateVal) < 1.0 ||
+                    double.parse(onValidateVal) > 4.0) {
+                  return 'Enter a valid GPA between 1.00 and 4.00';
                 }
                 return null;
               },
@@ -216,8 +221,7 @@ class _EducationPageState extends State<EducationPage>
                               "education detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -239,8 +243,7 @@ class _EducationPageState extends State<EducationPage>
                               context, Config.appName, "Education Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
                           });
                         } else {
                           print(

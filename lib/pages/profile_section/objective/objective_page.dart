@@ -108,8 +108,7 @@ class _ObjectivePageState extends State<ObjectivePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

@@ -44,7 +44,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: _profileDetailUI(context),
@@ -300,8 +300,9 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                               "Personal detail Saved!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
+                            // Navigator.pushReplacementNamed(
+                            //     context, '/profiles');
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

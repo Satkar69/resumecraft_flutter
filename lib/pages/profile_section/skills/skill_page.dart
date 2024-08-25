@@ -139,8 +139,7 @@ class _SkillPageState extends State<SkillPage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "skill detail edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -161,8 +160,7 @@ class _SkillPageState extends State<SkillPage>
                               context, Config.appName, "Skill Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
                           });
                         } else {
                           print(

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/services/education_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
-import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/utils/mixins/education/educations_mixin.dart';
@@ -55,68 +53,14 @@ class EducationsPageState extends State<EducationsPage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        child: Icon(Icons.school, color: Colors.white),
                       ),
                       title: Text(education.course ?? 'No education course'),
                       subtitle: Text(education.university ?? 'No university'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          // Handle delete action here
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Confirm Delete"),
-                                content: Text(
-                                    "Are you sure you want to delete this education?"),
-                                actions: [
-                                  TextButton(
-                                    child: Text("Cancel"),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text("Delete"),
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      final response = await EducationAPIService
-                                          .deleteEducation(
-                                              DeleteModel(
-                                                  status: 'success',
-                                                  statusCode: 200,
-                                                  message:
-                                                      'education delete success'),
-                                              userToken,
-                                              education.id);
-                                      if (response.statusCode == 200) {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            response.message!,
-                                            "OK", () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        });
-                                      } else {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            "Unable to delete this education",
-                                            "OK", () {
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          _showConfirmDeleteDialog(education.id!);
                         },
                       ),
                       onTap: () {
@@ -156,7 +100,7 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
+                  Navigator.pushNamed(
                     context,
                     '/education',
                     arguments: {'personalDetailID': personalDetailID},
@@ -167,6 +111,78 @@ class EducationsPageState extends State<EducationsPage>
           ],
         ),
       ),
+    );
+  }
+
+  void _showConfirmDeleteDialog(String educationId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Delete"),
+          content: Text("Are you sure you want to delete this education?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the confirmation dialog
+
+                // Perform delete operation
+                try {
+                  final response = await EducationAPIService.deleteEducation(
+                    DeleteModel(
+                      status: 'success',
+                      statusCode: 200,
+                      message: 'education delete success',
+                    ),
+                    userToken,
+                    educationId,
+                  );
+
+                  if (mounted) {
+                    if (response.statusCode == 200) {
+                      _showResultDialog(response.message!);
+                    } else {
+                      _showResultDialog("Unable to delete this education");
+                    }
+                  }
+                } catch (e) {
+                  // Handle error and show result dialog if widget is still mounted
+                  if (mounted) {
+                    _showResultDialog("An error occurred: ${e.toString()}");
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showResultDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Result"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the result dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

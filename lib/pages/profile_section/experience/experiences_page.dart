@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/services/experience_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
-import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/utils/mixins/experience/experiences_mixin.dart';
@@ -55,74 +53,14 @@ class ExperiencesPageState extends State<ExperiencesPage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        child: Icon(Icons.work, color: Colors.white),
                       ),
                       title: Text(experience.companyName ?? 'No company name'),
                       subtitle: Text(experience.jobTitle ?? 'No job title'),
                       trailing: IconButton(
-                        icon: Icon(Icons.delete,
-                            color: Colors
-                                .red), // You can adjust the color as needed
+                        icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          // Handle delete action here
-                          // For example, you might want to show a confirmation dialog before deleting
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Confirm Delete"),
-                                content: Text(
-                                    "Are you sure you want to delete this experience?"),
-                                actions: [
-                                  TextButton(
-                                    child: Text("Cancel"),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text("Delete"),
-                                    onPressed: () async {
-                                      // Perform delete operation here
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      final response = await ExperienceAPIService
-                                          .deleteExperience(
-                                              DeleteModel(
-                                                  status: 'success',
-                                                  statusCode: 200,
-                                                  message:
-                                                      'experience delete success'),
-                                              userToken,
-                                              experience.id);
-                                      if (response.statusCode == 200) {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            response.message!,
-                                            "OK", () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        });
-                                      } else {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            "unable to delete this experience",
-                                            "OK", () {
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        });
-                                      }
-                                      ;
-                                      // Add your delete logic here
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          _showConfirmDeleteDialog(experience.id!);
                         },
                       ),
                       onTap: () {
@@ -173,6 +111,78 @@ class ExperiencesPageState extends State<ExperiencesPage>
           ],
         ),
       ),
+    );
+  }
+
+  void _showConfirmDeleteDialog(String experienceId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Delete"),
+          content: Text("Are you sure you want to delete this experience?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the confirmation dialog
+
+                // Perform delete operation
+                try {
+                  final response = await ExperienceAPIService.deleteExperience(
+                    DeleteModel(
+                      status: 'success',
+                      statusCode: 200,
+                      message: 'experience delete success',
+                    ),
+                    userToken,
+                    experienceId,
+                  );
+
+                  if (mounted) {
+                    if (response.statusCode == 200) {
+                      _showResultDialog(response.message!);
+                    } else {
+                      _showResultDialog("Unable to delete this experience");
+                    }
+                  }
+                } catch (e) {
+                  // Handle error and show result dialog if widget is still mounted
+                  if (mounted) {
+                    _showResultDialog("An error occurred: ${e.toString()}");
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showResultDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Result"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the result dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

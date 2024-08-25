@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/services/project_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
-import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/utils/mixins/project/projects_mixin.dart';
@@ -55,75 +53,15 @@ class ProjectsPageState extends State<ProjectsPage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        child: Icon(Icons.build, color: Colors.white),
                       ),
-                      title: Text(project.projectTitle ?? 'No projoect title'),
+                      title: Text(project.projectTitle ?? 'No project title'),
                       subtitle:
                           Text(project.projectDesc ?? 'No project description'),
                       trailing: IconButton(
-                        icon: Icon(Icons.delete,
-                            color: Colors
-                                .red), // You can adjust the color as needed
+                        icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          // Handle delete action here
-                          // For example, you might want to show a confirmation dialog before deleting
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text("Confirm Delete"),
-                                content: Text(
-                                    "Are you sure you want to delete this project?"),
-                                actions: [
-                                  TextButton(
-                                    child: Text("Cancel"),
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text("Delete"),
-                                    onPressed: () async {
-                                      // Perform delete operation here
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      final response =
-                                          await ProjectAPIService.deleteProject(
-                                              DeleteModel(
-                                                  status: 'success',
-                                                  statusCode: 200,
-                                                  message:
-                                                      'project delete success'),
-                                              userToken,
-                                              project.id);
-                                      if (response.statusCode == 200) {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            response.message!,
-                                            "OK", () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        });
-                                      } else {
-                                        FormHelper.showSimpleAlertDialog(
-                                            context,
-                                            Config.appName,
-                                            "unable to delete this project",
-                                            "OK", () {
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        });
-                                      }
-                                      ;
-                                      // Add your delete logic here
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          _showConfirmDeleteDialog(project.id!);
                         },
                       ),
                       onTap: () {
@@ -174,6 +112,78 @@ class ProjectsPageState extends State<ProjectsPage>
           ],
         ),
       ),
+    );
+  }
+
+  void _showConfirmDeleteDialog(String projectId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Delete"),
+          content: Text("Are you sure you want to delete this project?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the confirmation dialog
+
+                // Perform delete operation
+                try {
+                  final response = await ProjectAPIService.deleteProject(
+                    DeleteModel(
+                      status: 'success',
+                      statusCode: 200,
+                      message: 'project delete success',
+                    ),
+                    userToken,
+                    projectId,
+                  );
+
+                  if (mounted) {
+                    if (response.statusCode == 200) {
+                      _showResultDialog(response.message!);
+                    } else {
+                      _showResultDialog("Unable to delete this project");
+                    }
+                  }
+                } catch (e) {
+                  // Handle error and show result dialog if widget is still mounted
+                  if (mounted) {
+                    _showResultDialog("An error occurred: ${e.toString()}");
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showResultDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Result"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the result dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

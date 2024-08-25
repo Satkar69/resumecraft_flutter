@@ -164,7 +164,7 @@ class _ExperiencePageState extends State<ExperiencePage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "End Date/Expected",
+                  "End Date",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -215,8 +215,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                               "experience detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -237,8 +236,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Experience Saved!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
                           });
                         } else {
                           print(

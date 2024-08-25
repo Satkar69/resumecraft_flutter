@@ -162,8 +162,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Project edited!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -184,8 +183,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Personal Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

@@ -97,7 +97,6 @@ class _ProfileSectionPageState extends State<ProfileSectionPage> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
-          Navigator.of(context).pop();
           Navigator.pushNamed(
             context,
             route,
