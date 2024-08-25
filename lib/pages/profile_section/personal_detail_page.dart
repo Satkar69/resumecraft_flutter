@@ -2,52 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/experience_api_service.dart';
-import 'package:resumecraft/utils/mixins/experience/experience_mixin.dart';
-import 'package:resumecraft/models/profile_section/experience/write/experience_request_model.dart';
+import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.dart';
+import 'package:resumecraft/models/profile_section/personal_detail/write/personal_detail_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class Experience extends StatefulWidget {
-  const Experience({super.key});
+class PersonalDetailPage extends StatefulWidget {
+  const PersonalDetailPage({super.key});
 
   @override
-  State<Experience> createState() => _ExperienceState();
+  State<PersonalDetailPage> createState() => _PersonalDetailPageState();
 }
 
-class _ExperienceState extends State<Experience>
-    with UserProfileMixin, ExperienceMixin {
+class _PersonalDetailPageState extends State<PersonalDetailPage>
+    with UserProfileMixin, PersonalDetailMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? companyName;
-  String? jobTitle;
-  String? details;
-  DateTime? startDate;
-  DateTime? endDate;
+  String? fullname;
+  String? address;
+  String? email;
+  String? phone;
+  String? image;
+  String? socialLinks;
+  List<String> socials = [];
 
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailID'] as String?;
+
     if (id != null) {
       setPersonalDetailId(id);
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Experience', style: TextStyle(color: Colors.white)),
+        title: const Text('Personal Details',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _experienceUI(context),
+      body: _profileDetailUI(context),
     );
   }
 
-  Widget _experienceUI(BuildContext context) {
+  Widget _profileDetailUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -57,8 +61,8 @@ class _ExperienceState extends State<Experience>
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "companyName",
-              "Company Name",
+              "fullname",
+              "FullName",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
@@ -67,9 +71,9 @@ class _ExperienceState extends State<Experience>
                 return null;
               },
               (onSavedVal) {
-                companyName = onSavedVal;
+                fullname = onSavedVal;
               },
-              initialValue: experience?.companyName ?? "",
+              initialValue: personalDetail?.fullname ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -82,19 +86,19 @@ class _ExperienceState extends State<Experience>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "jobTitle",
-              "Job Title",
+              "address",
+              "Address",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Job Title cannot be empty';
+                  return 'Address cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                jobTitle = onSavedVal;
+                address = onSavedVal;
               },
-              initialValue: experience?.jobTitle ?? "",
+              initialValue: personalDetail?.address ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -107,19 +111,19 @@ class _ExperienceState extends State<Experience>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "details",
-              "Details",
+              "email",
+              "Email",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Details cannot be empty';
+                  return 'Email cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                details = onSavedVal;
+                email = onSavedVal;
               },
-              initialValue: experience?.details ?? "",
+              initialValue: personalDetail?.email ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -130,48 +134,111 @@ class _ExperienceState extends State<Experience>
               paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            // Start Date
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Start Date",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _datePickerField(
-                    "Start Date", startDate ?? experience?.startDate,
-                    (selectedDate) {
-                  setState(() {
-                    startDate = selectedDate;
-                  });
-                }),
-              ],
+            FormHelper.inputFieldWidgetWithLabel(
+              context,
+              "phone",
+              "Phone",
+              "",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Phone number cannot be empty';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                phone = onSavedVal;
+              },
+              initialValue: personalDetail?.contact ?? "",
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
+            ),
+            FormHelper.inputFieldWidgetWithLabel(
+              context,
+              "socials",
+              "Socials",
+              "www.this.com, www.that.com, ...",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'At least one social link should be an input';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                socialLinks = onSavedVal;
+              },
+              initialValue:
+                  (personalDetail?.socials)?.join(',') ?? socials.join(','),
+              hintColor: Colors.black45,
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
+              borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
             ),
             const SizedBox(height: 16),
-            // End Date/Expected
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const Text(
+              'Photo (Optional)',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
               children: [
-                const Text(
-                  "End Date/Expected",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: primaryColor),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.person_outline,
+                    size: 50,
+                    color: Colors.blue,
                   ),
                 ),
-                const SizedBox(height: 8),
-                _datePickerField("End Date", endDate ?? experience?.endDate,
-                    (selectedDate) {
-                  setState(() {
-                    endDate = selectedDate;
-                  });
-                }),
+                const SizedBox(width: 16),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle Change Photo
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text(
+                        'Change',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle Remove Photo
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text('Remove'),
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -185,28 +252,27 @@ class _ExperienceState extends State<Experience>
                     });
 
                     try {
-                      ExperienceRequestModel model = ExperienceRequestModel(
-                        userdetail: personalDetailID,
-                        companyName: companyName!,
-                        jobTitle: jobTitle!,
-                        startDate: startDate,
-                        endDate: endDate,
-                        details: details!,
+                      PersonalDetailRequestModel model =
+                          PersonalDetailRequestModel(
+                        user: userId,
+                        fullname: fullname!,
+                        address: address!,
+                        email: email!,
+                        contact: phone!,
+                        socials: socials,
                       );
-                      if (experience != null) {
+                      if (personalDetailID != null) {
                         final response =
-                            await ExperienceAPIService.updateExperience(
+                            await PersonalDetailAPIService.updatePersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          print(
-                              'this is the update response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "experience detail edited!",
+                              "Personal detail edited!",
                               "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
@@ -216,31 +282,32 @@ class _ExperienceState extends State<Experience>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit experience. Please try again.",
+                              "Failed to edit personal detail. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
                         final response =
-                            await ExperienceAPIService.createExperience(
+                            await PersonalDetailAPIService.createPersonalDetail(
                                 model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
-                          FormHelper.showSimpleAlertDialog(context,
-                              Config.appName, "Experience Saved!", "OK", () {
+                          FormHelper.showSimpleAlertDialog(
+                              context,
+                              Config.appName,
+                              "Personal detail Saved!",
+                              "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profiles');
                           });
                         } else {
-                          print(
-                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save Experience. Please try again.",
+                              "Failed to save personal detail. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -273,61 +340,13 @@ class _ExperienceState extends State<Experience>
     );
   }
 
-  // Date Picker Field Update
-  Widget _datePickerField(
-      String label, DateTime? date, Function(DateTime) onDateSelected) {
-    return GestureDetector(
-      onTap: () async {
-        DateTime? selectedDate = await showDatePicker(
-          context: context,
-          initialDate: date ?? DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2100),
-        );
-        if (selectedDate != null) {
-          onDateSelected(selectedDate);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: primaryColor),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              date != null
-                  ? "${date.toLocal()}".split(' ')[0]
-                  : "Select $label",
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.7),
-                fontSize: 16,
-              ),
-            ),
-            const Icon(Icons.calendar_today, color: Colors.black54),
-          ],
-        ),
-      ),
-    );
-  }
-
-// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
-
-      // Retain original start and end dates if not modified
-      if (startDate == null && experience != null) {
-        startDate = experience?.startDate;
+      if (socialLinks?.isNotEmpty ?? false) {
+        socials = socialLinks!.split(',').map((link) => link.trim()).toList();
       }
-
-      if (endDate == null && experience != null) {
-        endDate = experience?.endDate;
-      }
-
       return true;
     } else {
       return false;

@@ -2,33 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/project_api_service.dart';
-import 'package:resumecraft/utils/mixins/project/project_mixin.dart';
-import 'package:resumecraft/models/profile_section/projects/write/project_request_model.dart';
+import 'package:resumecraft/services/objective_api_service.dart';
+import 'package:resumecraft/utils/mixins/Objective/objective_mixin.dart';
+import 'package:resumecraft/models/profile_section/objective/write/objective_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class Project extends StatefulWidget {
-  const Project({super.key});
+class ObjectivePage extends StatefulWidget {
+  const ObjectivePage({super.key});
 
   @override
-  State<Project> createState() => _ProjectState();
+  State<ObjectivePage> createState() => _ObjectivePageState();
 }
 
-class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
+class _ObjectivePageState extends State<ObjectivePage>
+    with UserProfileMixin, ObjectiveMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? projectTitle;
-  String? projectDesc;
-  String? projLinks;
-  List<String> links = [];
+  String? details;
 
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['ProjectId'] as String?;
+    final id = args?['personalDetailID'] as String?;
 
     if (id != null) {
       setPersonalDetailId(id);
@@ -57,72 +55,23 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "projectTitle",
-              "Project Title",
+              "details",
+              "Details",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Project Title cannot be empty';
+                  return 'Objective details cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                projectTitle = onSavedVal;
+                details = onSavedVal;
               },
-              initialValue: project?.projectTitle ?? "",
+              initialValue: objective?.details ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            const SizedBox(height: 16),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "projectDesc",
-              "Project Description",
-              "",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Project Description cannot be empty';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                projectDesc = onSavedVal;
-              },
-              initialValue: project?.projectDesc ?? "",
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
-              hintColor: Colors.black.withOpacity(0.7),
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "links",
-              "Links",
-              "www.this.com, www.that.com, ...",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'At least one project link should be an input';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                projLinks = onSavedVal;
-              },
-              initialValue: (project?.links)?.join(',') ?? links.join(','),
-              hintColor: Colors.black45,
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
               borderRadius: 10,
               labelFontSize: 16,
               paddingLeft: 0,
@@ -139,22 +88,20 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
                     });
 
                     try {
-                      ProjectRequestModel model = ProjectRequestModel(
+                      ObjectiveRequestModel model = ObjectiveRequestModel(
                         userdetail: personalDetailID,
-                        projectTitle: projectTitle!,
-                        projectDesc: projectDesc!,
-                        links: links,
+                        details: details,
                       );
-                      if (project != null) {
-                        final response = await ProjectAPIService.updateProject(
-                            model, userToken, personalDetailID);
+                      if (objective != null) {
+                        final response =
+                            await ObjectiveAPIService.updateObjective(
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Project edited!", "OK",
-                              () {
+                          FormHelper.showSimpleAlertDialog(context,
+                              Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profile-section');
@@ -163,13 +110,14 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit project. Please try again.",
+                              "Failed to edit Objective. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
-                        final response = await ProjectAPIService.createProject(
-                            model, userToken);
+                        final response =
+                            await ObjectiveAPIService.createObjective(
+                                model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
@@ -185,7 +133,7 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save project. Please try again.",
+                              "Failed to save Objective. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -222,9 +170,6 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
-      if (projLinks?.isNotEmpty ?? false) {
-        links = projLinks!.split(',').map((link) => link.trim()).toList();
-      }
       return true;
     } else {
       return false;

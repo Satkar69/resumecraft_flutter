@@ -9,14 +9,14 @@ import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class Education extends StatefulWidget {
-  const Education({super.key});
+class EducationPage extends StatefulWidget {
+  const EducationPage({super.key});
 
   @override
-  State<Education> createState() => _EducationState();
+  State<EducationPage> createState() => _EducationPageState();
 }
 
-class _EducationState extends State<Education>
+class _EducationPageState extends State<EducationPage>
     with UserProfileMixin, EducationMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();

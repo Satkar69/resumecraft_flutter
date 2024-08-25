@@ -9,14 +9,15 @@ import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class Skill extends StatefulWidget {
-  const Skill({super.key});
+class SkillPage extends StatefulWidget {
+  const SkillPage({super.key});
 
   @override
-  State<Skill> createState() => _SkillState();
+  State<SkillPage> createState() => _SkillPageState();
 }
 
-class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
+class _SkillPageState extends State<SkillPage>
+    with UserProfileMixin, SkillMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
