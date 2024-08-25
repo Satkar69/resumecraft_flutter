@@ -7,16 +7,16 @@ import 'package:resumecraft/utils/mixins/Objective/objective_mixin.dart';
 import 'package:resumecraft/models/profile_section/objective/write/objective_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
-import '../../config.dart';
+import '../../../config.dart';
 
-class Objective extends StatefulWidget {
-  const Objective({super.key});
+class ObjectivePage extends StatefulWidget {
+  const ObjectivePage({super.key});
 
   @override
-  State<Objective> createState() => _ObjectiveState();
+  State<ObjectivePage> createState() => _ObjectivePageState();
 }
 
-class _ObjectiveState extends State<Objective>
+class _ObjectivePageState extends State<ObjectivePage>
     with UserProfileMixin, ObjectiveMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
@@ -26,10 +26,15 @@ class _ObjectiveState extends State<Objective>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['ObjectiveId'] as String?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final objectiveID = args?['objectiveID'] as String?;
 
-    if (id != null) {
-      setPersonalDetailId(id);
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (objectiveID != null) {
+      setObjectiveID(objectiveID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -89,13 +94,13 @@ class _ObjectiveState extends State<Objective>
 
                     try {
                       ObjectiveRequestModel model = ObjectiveRequestModel(
-                        userdetail: personalDetailId,
+                        userdetail: personalDetailID,
                         details: details,
                       );
                       if (objective != null) {
                         final response =
                             await ObjectiveAPIService.updateObjective(
-                                model, userToken, personalDetailId);
+                                model, userToken, objectiveID!);
                         setState(() {
                           isApicallProcess = false;
                         });
@@ -103,8 +108,7 @@ class _ObjectiveState extends State<Objective>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

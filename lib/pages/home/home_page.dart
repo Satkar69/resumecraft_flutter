@@ -46,12 +46,15 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
                 ),
               ),
               SizedBox(height: 40),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _profileUI(Icons.description, 'Profiles', '/profiles'),
                   SizedBox(width: 20),
-                  _profileUI(Icons.download, 'Downloads', '/downloads'),
+                  SizedBox(height: 40),
+                  _profileUI(Icons.download, 'Downloads'),
+                  SizedBox(height: 40),
+                  _profileUI(Icons.pending_actions_rounded, 'Sample'),
                 ],
               ),
             ],
@@ -67,11 +70,6 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
         if (route != null) {
           Navigator.pushNamed(context, route);
         }
-        // if (label == 'Profiles') {
-        // } else if (label == 'Downloads') {
-        //   Navigator.pushNamed(context, '/downloads');
-        // }
-        // You can add an else if here for 'Downloads' if needed
       },
       child: Container(
         width: 150,

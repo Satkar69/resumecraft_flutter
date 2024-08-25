@@ -2,47 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/skill_api_service.dart';
-import 'package:resumecraft/utils/mixins/skill/skill_mixin.dart';
-import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
+import 'package:resumecraft/services/project_api_service.dart';
+import 'package:resumecraft/utils/mixins/project/project_mixin.dart';
+import 'package:resumecraft/models/profile_section/projects/write/project_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
-import '../../config.dart';
+import '../../../config.dart';
 
-class Skill extends StatefulWidget {
-  const Skill({super.key});
+class ProjectPage extends StatefulWidget {
+  const ProjectPage({super.key});
 
   @override
-  State<Skill> createState() => _SkillState();
+  State<ProjectPage> createState() => _ProjectPageState();
 }
 
-class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
+class _ProjectPageState extends State<ProjectPage>
+    with UserProfileMixin, ProjectMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? skillName;
-  String? skillPercentage;
+  String? projectTitle;
+  String? projectDesc;
+  String? projLinks;
+  List<String> links = [];
+
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
-    if (id != null) {
-      setPersonalDetailId(id);
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final projectID = args?['projectID'] as String?;
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (projectID != null) {
+      setProjectID(projectID);
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Skill', style: TextStyle(color: Colors.white)),
+        title: const Text('Personal Details',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _skillUI(context),
+      body: _profileDetailUI(context),
     );
   }
 
-  Widget _skillUI(BuildContext context) {
+  Widget _profileDetailUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -52,19 +63,19 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "skillName",
-              "Skill Name",
+              "projectTitle",
+              "Project Title",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Skill name cannot be empty';
+                  return 'Project Title cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                skillName = onSavedVal;
+                projectTitle = onSavedVal;
               },
-              initialValue: skill?.skillName ?? "",
+              initialValue: project?.projectTitle ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -77,28 +88,47 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "skillPercentage",
-              "Skill Percentage",
+              "projectDesc",
+              "Project Description",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Skill Percentage cannot be empty';
-                }
-                if (int.tryParse(onValidateVal) == null ||
-                    int.parse(onValidateVal) < 0 ||
-                    int.parse(onValidateVal) > 100) {
-                  return 'Enter a valid percentage between 0 and 100';
+                  return 'Project Description cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                skillPercentage = onSavedVal;
+                projectDesc = onSavedVal;
               },
-              initialValue: skill?.skillPercentage ?? "",
+              initialValue: project?.projectDesc ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
+              borderRadius: 10,
+              labelFontSize: 16,
+              paddingLeft: 0,
+              paddingRight: 0,
+            ),
+            FormHelper.inputFieldWidgetWithLabel(
+              context,
+              "links",
+              "Links",
+              "www.this.com, www.that.com, ...",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'At least one project link should be an input';
+                }
+                return null;
+              },
+              (onSavedVal) {
+                projLinks = onSavedVal;
+              },
+              initialValue: (project?.links)?.join(',') ?? links.join(','),
+              hintColor: Colors.black45,
+              borderFocusColor: primaryColor,
+              borderColor: primaryColor,
+              textColor: Colors.black,
               borderRadius: 10,
               labelFontSize: 16,
               paddingLeft: 0,
@@ -115,55 +145,51 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
                     });
 
                     try {
-                      SkillRequestModel model = SkillRequestModel(
-                        userdetail: personalDetailId,
-                        skillName: skillName!,
-                        skillPercentage: skillPercentage!,
+                      ProjectRequestModel model = ProjectRequestModel(
+                        userdetail: personalDetailID,
+                        projectTitle: projectTitle!,
+                        projectDesc: projectDesc!,
+                        links: links,
                       );
-                      if (skill != null) {
-                        final response = await SkillAPIService.updateSkill(
-                            model, userToken, personalDetailId);
+                      if (project != null) {
+                        final response = await ProjectAPIService.updateProject(
+                            model, userToken, projectID!);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          print(
-                              'this is the update response here--------------------------->${response.statusCode}');
-                          FormHelper.showSimpleAlertDialog(context,
-                              Config.appName, "skill detail edited!", "OK", () {
+                          FormHelper.showSimpleAlertDialog(
+                              context, Config.appName, "Project edited!", "OK",
+                              () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit skill. Please try again.",
+                              "Failed to edit project. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
-                        final response =
-                            await SkillAPIService.createSkill(model, userToken);
+                        final response = await ProjectAPIService.createProject(
+                            model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Skill Saved!", "OK",
+                              context, Config.appName, "Personal Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
                           });
                         } else {
-                          print(
-                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save Skill. Please try again.",
+                              "Failed to save project. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -196,11 +222,13 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
     );
   }
 
-// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
+      if (projLinks?.isNotEmpty ?? false) {
+        links = projLinks!.split(',').map((link) => link.trim()).toList();
+      }
       return true;
     } else {
       return false;

@@ -1,16 +1,15 @@
 import 'dart:convert';
 
-PersonalDetailDeleteModel personalDetailDeleteModel(String str) =>
-    PersonalDetailDeleteModel.fromJson(json.decode(str));
+DeleteModel deleteModel(String str) => DeleteModel.fromJson(json.decode(str));
 
-class PersonalDetailDeleteModel {
+class DeleteModel {
   String? status;
   int? statusCode;
   String? message;
 
-  PersonalDetailDeleteModel({this.status, this.statusCode, this.message});
+  DeleteModel({this.status, this.statusCode, this.message});
 
-  PersonalDetailDeleteModel.fromJson(Map<String, dynamic> json) {
+  DeleteModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     statusCode = json['statusCode'];
     message = json['message'];

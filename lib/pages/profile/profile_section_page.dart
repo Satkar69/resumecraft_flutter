@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class ProfileSection extends StatefulWidget {
-  const ProfileSection({super.key});
+class ProfileSectionPage extends StatefulWidget {
+  const ProfileSectionPage({super.key});
 
   @override
-  State<ProfileSection> createState() => _ProfileSectionState();
+  State<ProfileSectionPage> createState() => _ProfileSectionPageState();
 }
 
-class _ProfileSectionState extends State<ProfileSection> {
+class _ProfileSectionPageState extends State<ProfileSectionPage> {
   final Color primaryColor = HexColor('#283B71');
 
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,12 +41,13 @@ class _ProfileSectionState extends State<ProfileSection> {
           _buildSectionTile(context, Icons.person, 'Personal Details',
               '/personal-detail', id),
           _buildSectionTile(
-              context, Icons.school, 'Education', '/education', id),
+              context, Icons.school, 'Education', '/educations', id),
           _buildSectionTile(
-              context, Icons.work, 'Experience', '/experience', id),
-          _buildSectionTile(context, Icons.star, 'Skills', '/skill', id),
-          _buildSectionTile(context, Icons.flag, 'Objective', '/objective', id),
-          _buildSectionTile(context, Icons.build, 'Projects', '/project', id),
+              context, Icons.work, 'Experience', '/experiences', id),
+          _buildSectionTile(context, Icons.star, 'Skills', '/skills', id),
+          _buildSectionTile(
+              context, Icons.flag, 'Objective', '/objectives', id),
+          _buildSectionTile(context, Icons.build, 'Projects', '/projects', id),
         ],
       ),
       bottomNavigationBar: Container(
@@ -88,7 +89,7 @@ class _ProfileSectionState extends State<ProfileSection> {
     IconData icon,
     String title, [
     String? route,
-    String? personalDetailId,
+    String? personalDetailID,
   ]) {
     return ListTile(
       leading: Icon(icon, color: primaryColor),
@@ -96,12 +97,11 @@ class _ProfileSectionState extends State<ProfileSection> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         if (route != null) {
-          Navigator.of(context).pop();
           Navigator.pushNamed(
             context,
             route,
-            arguments: personalDetailId != null
-                ? {'personalDetailId': personalDetailId}
+            arguments: personalDetailID != null
+                ? {'personalDetailID': personalDetailID}
                 : null,
           );
         }

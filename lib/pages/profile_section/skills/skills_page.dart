@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/services/skill_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
-import 'package:resumecraft/utils/mixins/personal_detail/personal_details_mixin.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+import 'package:resumecraft/utils/mixins/skill/skills_mixin.dart';
+
+class SkillssPage extends StatefulWidget {
+  const SkillssPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<SkillssPage> createState() => SkillssPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with UserProfileMixin, PersonalDetailsMixin {
+class SkillssPageState extends State<SkillssPage>
+    with UserProfileMixin, SkillsMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
   Widget build(BuildContext context) {
-    loadPersonalDetails();
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+    loadSkills();
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Choose Profile', style: TextStyle(color: Colors.white)),
+        title: const Text('Skills', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -34,8 +41,8 @@ class _ProfilePageState extends State<ProfilePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (personalDetails.isNotEmpty)
-              ...personalDetails.map((personalDetail) {
+            if (skills.isNotEmpty)
+              ...skills.map((skill) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -46,22 +53,24 @@ class _ProfilePageState extends State<ProfilePage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        child: Icon(Icons.star, color: Colors.white),
                       ),
-                      title: Text(personalDetail.fullname ?? 'No Name'),
-                      subtitle: Text(personalDetail.email ?? 'No Email'),
+                      title: Text(skill.skillName ?? 'No skill name'),
+                      subtitle:
+                          Text(skill.skillPercentage ?? 'No skill percentage'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          _showConfirmDeleteDialog(personalDetail.id!);
+                          _showConfirmDeleteDialog(skill.id!);
                         },
                       ),
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/profile-section',
+                          '/skill',
                           arguments: {
-                            'personalDetailID': personalDetail.id,
+                            'skillID': skill.id,
+                            'personalDetailID': personalDetailID
                           },
                         );
                       },
@@ -73,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage>
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No profiles available. Please create a new profile.',
+                  'No skills available. Please create a new skill.',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
@@ -81,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage>
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
-                child: const Text('+ Create New Profile'),
+                child: const Text('+ Add New Skill'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
@@ -92,7 +101,11 @@ class _ProfilePageState extends State<ProfilePage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/personal-detail');
+                  Navigator.pushNamed(
+                    context,
+                    '/skill',
+                    arguments: {'personalDetailID': personalDetailID},
+                  );
                 },
               ),
             ),
@@ -102,13 +115,13 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  void _showConfirmDeleteDialog(String personalDetailId) {
+  void _showConfirmDeleteDialog(String skillId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Confirm Delete"),
-          content: Text("Are you sure you want to delete this profile?"),
+          content: Text("Are you sure you want to delete this skill?"),
           actions: [
             TextButton(
               child: Text("Cancel"),
@@ -123,22 +136,21 @@ class _ProfilePageState extends State<ProfilePage>
 
                 // Perform delete operation
                 try {
-                  final response =
-                      await PersonalDetailAPIService.deletePersonalDetail(
+                  final response = await SkillAPIService.deleteSkill(
                     DeleteModel(
                       status: 'success',
                       statusCode: 200,
-                      message: 'profile delete success',
+                      message: 'skill delete success',
                     ),
                     userToken,
-                    personalDetailId,
+                    skillId,
                   );
 
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
                     } else {
-                      _showResultDialog("Unable to delete this profile");
+                      _showResultDialog("Unable to delete this skill");
                     }
                   }
                 } catch (e) {

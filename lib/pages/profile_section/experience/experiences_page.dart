@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/services/experience_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
-import 'package:resumecraft/utils/mixins/personal_detail/personal_details_mixin.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+import 'package:resumecraft/utils/mixins/experience/experiences_mixin.dart';
+
+class ExperiencesPage extends StatefulWidget {
+  const ExperiencesPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ExperiencesPage> createState() => ExperiencesPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with UserProfileMixin, PersonalDetailsMixin {
+class ExperiencesPageState extends State<ExperiencesPage>
+    with UserProfileMixin, ExperiencesMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
   Widget build(BuildContext context) {
-    loadPersonalDetails();
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+    loadExperiences();
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Choose Profile', style: TextStyle(color: Colors.white)),
+        title: const Text('Experiences', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -34,8 +41,8 @@ class _ProfilePageState extends State<ProfilePage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (personalDetails.isNotEmpty)
-              ...personalDetails.map((personalDetail) {
+            if (experiences.isNotEmpty)
+              ...experiences.map((experience) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -46,22 +53,23 @@ class _ProfilePageState extends State<ProfilePage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        child: Icon(Icons.work, color: Colors.white),
                       ),
-                      title: Text(personalDetail.fullname ?? 'No Name'),
-                      subtitle: Text(personalDetail.email ?? 'No Email'),
+                      title: Text(experience.companyName ?? 'No company name'),
+                      subtitle: Text(experience.jobTitle ?? 'No job title'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          _showConfirmDeleteDialog(personalDetail.id!);
+                          _showConfirmDeleteDialog(experience.id!);
                         },
                       ),
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/profile-section',
+                          '/experience',
                           arguments: {
-                            'personalDetailID': personalDetail.id,
+                            'experienceID': experience.id,
+                            'personalDetailID': personalDetailID
                           },
                         );
                       },
@@ -73,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage>
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No profiles available. Please create a new profile.',
+                  'No experiences available. Please create a new experience.',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
@@ -81,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage>
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
-                child: const Text('+ Create New Profile'),
+                child: const Text('+ Add New Experience'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
@@ -92,7 +100,11 @@ class _ProfilePageState extends State<ProfilePage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/personal-detail');
+                  Navigator.pushNamed(
+                    context,
+                    '/experience',
+                    arguments: {'personalDetailID': personalDetailID},
+                  );
                 },
               ),
             ),
@@ -102,13 +114,13 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  void _showConfirmDeleteDialog(String personalDetailId) {
+  void _showConfirmDeleteDialog(String experienceId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Confirm Delete"),
-          content: Text("Are you sure you want to delete this profile?"),
+          content: Text("Are you sure you want to delete this experience?"),
           actions: [
             TextButton(
               child: Text("Cancel"),
@@ -123,22 +135,21 @@ class _ProfilePageState extends State<ProfilePage>
 
                 // Perform delete operation
                 try {
-                  final response =
-                      await PersonalDetailAPIService.deletePersonalDetail(
+                  final response = await ExperienceAPIService.deleteExperience(
                     DeleteModel(
                       status: 'success',
                       statusCode: 200,
-                      message: 'profile delete success',
+                      message: 'experience delete success',
                     ),
                     userToken,
-                    personalDetailId,
+                    experienceId,
                   );
 
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
                     } else {
-                      _showResultDialog("Unable to delete this profile");
+                      _showResultDialog("Unable to delete this experience");
                     }
                   }
                 } catch (e) {

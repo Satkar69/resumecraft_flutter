@@ -9,14 +9,14 @@ import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
 import '../../config.dart';
 
-class PersonalDetail extends StatefulWidget {
-  const PersonalDetail({super.key});
+class PersonalDetailPage extends StatefulWidget {
+  const PersonalDetailPage({super.key});
 
   @override
-  State<PersonalDetail> createState() => _PersonalDetailState();
+  State<PersonalDetailPage> createState() => _PersonalDetailPageState();
 }
 
-class _PersonalDetailState extends State<PersonalDetail>
+class _PersonalDetailPageState extends State<PersonalDetailPage>
     with UserProfileMixin, PersonalDetailMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
@@ -32,10 +32,10 @@ class _PersonalDetailState extends State<PersonalDetail>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
 
     if (id != null) {
-      setPersonalDetailId(id);
+      setPersonalDetailID(id);
     }
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +44,7 @@ class _PersonalDetailState extends State<PersonalDetail>
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: _profileDetailUI(context),
@@ -261,10 +261,10 @@ class _PersonalDetailState extends State<PersonalDetail>
                         contact: phone!,
                         socials: socials,
                       );
-                      if (personalDetailId != null) {
+                      if (personalDetailID != null) {
                         final response =
                             await PersonalDetailAPIService.updatePersonalDetail(
-                                model, userToken, personalDetailId);
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
@@ -275,8 +275,7 @@ class _PersonalDetailState extends State<PersonalDetail>
                               "Personal detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profile-section');
+                            Navigator.pop(context);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -300,8 +299,9 @@ class _PersonalDetailState extends State<PersonalDetail>
                               "Personal detail Saved!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context);
+                            // Navigator.pushReplacementNamed(
+                            //     context, '/profiles');
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

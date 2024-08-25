@@ -5,30 +5,43 @@ import 'package:resumecraft/models/profile_section/experience/read/experience_mo
 
 mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
   Experience? experience;
-  String? personalDetailId;
+  String? experienceID;
+  String? personalDetailID;
   bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    // Optionally, you might not call _loadExperience here if id is not set
+    // Optionally, you might not call _loadEducation here if id is not set
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      final id = args?['personalDetailId'] as String?;
-      if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+      final experienceID = args?['experienceID'] as String?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+
+      setPersonalDetailID(personalDetailID);
+
+      if (experienceID != null && !_detailsLoaded) {
+        setExperienceID(experienceID);
       }
     });
   }
 
-  // Method to set the personalDetailId and load details
-  void setPersonalDetailId(String? id) {
-    if (personalDetailId != id) {
-      personalDetailId = id;
+  // Method to set the personalDetailID and load details
+
+  void setPersonalDetailID(String? id) {
+    if (personalDetailID != id) {
+      personalDetailID = id;
     }
-    if (personalDetailId != null) {}
-    _loadExperience();
+  }
+
+  void setExperienceID(String? id) {
+    if (experienceID != id) {
+      experienceID = id;
+    }
+    if (experienceID != null) {
+      _loadExperience();
+    }
   }
 
   Future<void> _loadExperience() async {
@@ -36,10 +49,10 @@ mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
 
     final prefs = await UserSharedPrefs.getLoginResponse();
     final token = prefs?.token ?? '';
-    if (token.isNotEmpty && personalDetailId != null) {
+    if (token.isNotEmpty && personalDetailID != null) {
       try {
         final data =
-            await ExperienceAPIService.getExperience(token, personalDetailId!);
+            await ExperienceAPIService.getExperience(token, experienceID!);
         if (data != null) {
           final exp = ExperienceModel.fromJson(data);
           if (mounted) {

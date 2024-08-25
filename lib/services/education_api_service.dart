@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
+import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_response_model.dart';
 
@@ -12,11 +13,74 @@ class EducationAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getEducation(
-      String token, String personalDetailId) async {
+  static Future<dynamic> getEducation(String token, String educationID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected education');
+    }
+  }
+
+  static Future<dynamic> getEducations(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getEducations}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get educations: $e');
+    }
+  }
+
+  static Future<EducationResponseModel> updateEducation(
+      EducationRequestModel requestModel,
+      String token,
+      String educationID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return EducationResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the education: $e');
+    }
+  }
+
+  static Future<DeleteModel> deleteEducation(
+      DeleteModel requestModel, String token, educationID) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return DeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete education: $e');
+    }
+  }
+
+  static Future<dynamic> getEducationsByPersonalDetail(
+      String token, String personalDetailID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.educationsByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -40,24 +104,6 @@ class EducationAPIService {
       return EducationResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to create education: $e');
-    }
-  }
-
-  static Future<EducationResponseModel> updateEducation(
-      EducationRequestModel requestModel,
-      String token,
-      personalDetailId) async {
-    try {
-      final response = await _dio.put(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-        data: requestModel.toJson(),
-      );
-      return EducationResponseModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to update education: $e');
     }
   }
 }
