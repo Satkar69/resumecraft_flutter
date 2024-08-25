@@ -26,7 +26,7 @@ class ProjectAPIService {
     }
   }
 
-  static Future<dynamic> getprojects(String token) async {
+  static Future<dynamic> getProjects(String token) async {
     try {
       final response = await _dio.get(
         '${Config.apiUrl}${Config.getProjects}',
