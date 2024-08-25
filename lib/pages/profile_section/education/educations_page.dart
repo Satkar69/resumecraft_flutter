@@ -29,15 +29,13 @@ class EducationsPageState extends State<EducationsPage>
       setPersonalDetailID(personalDetailID);
     }
 
-    print('educations here ------------------------------------->$educations');
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Educations', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context), // This ensures one page back
         ),
       ),
       body: Container(
@@ -62,12 +60,9 @@ class EducationsPageState extends State<EducationsPage>
                       title: Text(education.course ?? 'No education course'),
                       subtitle: Text(education.university ?? 'No university'),
                       trailing: IconButton(
-                        icon: Icon(Icons.delete,
-                            color: Colors
-                                .red), // You can adjust the color as needed
+                        icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           // Handle delete action here
-                          // For example, you might want to show a confirmation dialog before deleting
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -86,7 +81,6 @@ class EducationsPageState extends State<EducationsPage>
                                   TextButton(
                                     child: Text("Delete"),
                                     onPressed: () async {
-                                      // Perform delete operation here
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                       final response = await EducationAPIService
@@ -111,14 +105,12 @@ class EducationsPageState extends State<EducationsPage>
                                         FormHelper.showSimpleAlertDialog(
                                             context,
                                             Config.appName,
-                                            "unable to delete this education",
+                                            "Unable to delete this education",
                                             "OK", () {
                                           Navigator.pop(
                                               context); // Close the dialog
                                         });
                                       }
-                                      ;
-                                      // Add your delete logic here
                                     },
                                   ),
                                 ],
@@ -164,7 +156,7 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(
+                  Navigator.pushReplacementNamed(
                     context,
                     '/education',
                     arguments: {'personalDetailID': personalDetailID},

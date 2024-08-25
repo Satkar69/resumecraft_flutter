@@ -70,11 +70,6 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
         if (route != null) {
           Navigator.pushNamed(context, route);
         }
-        // if (label == 'Profiles') {
-        // } else if (label == 'Downloads') {
-        //   Navigator.pushNamed(context, '/downloads');
-        // }
-        // You can add an else if here for 'Downloads' if needed
       },
       child: Container(
         width: 150,
