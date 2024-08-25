@@ -68,7 +68,7 @@ class _ExperiencePageState extends State<ExperiencePage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'FullName cannot be empty';
+                  return 'Company Name cannot be empty';
                 }
                 return null;
               },
@@ -118,9 +118,8 @@ class _ExperiencePageState extends State<ExperiencePage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Details cannot be empty';
+                  return null;
                 }
-                return null;
               },
               (onSavedVal) {
                 details = onSavedVal;

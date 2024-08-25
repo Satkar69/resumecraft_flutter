@@ -89,14 +89,13 @@ class _SkillPageState extends State<SkillPage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Skill Percentage cannot be empty';
+                  return null;
                 }
                 if (int.tryParse(onValidateVal) == null ||
                     int.parse(onValidateVal) < 0 ||
                     int.parse(onValidateVal) > 100) {
                   return 'Enter a valid percentage between 0 and 100';
                 }
-                return null;
               },
               (onSavedVal) {
                 skillPercentage = onSavedVal;
