@@ -12,6 +12,53 @@ class ExperienceAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<dynamic> getExperience(
+      String token, String experienceID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.experienceByID}$experienceID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected experience');
+    }
+  }
+
+  static Future<dynamic> getExperiences(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getExperiences}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get experiences: $e');
+    }
+  }
+
+  static Future<ExperienceResponseModel> updateExperience(
+      ExperienceRequestModel requestModel,
+      String token,
+      String experienceID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.experienceByID}$experienceID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return ExperienceResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the experience: $e');
+    }
+  }
+
   static Future<dynamic> getExperienceByPersonalDetail(
       String token, String personalDetailID) async {
     try {

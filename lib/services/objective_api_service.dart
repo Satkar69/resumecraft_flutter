@@ -12,6 +12,52 @@ class ObjectiveAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<dynamic> getObjective(String token, String objectiveID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.objectiveByID}$objectiveID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected objective');
+    }
+  }
+
+  static Future<dynamic> getObjectives(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getObjectives}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get objectives: $e');
+    }
+  }
+
+  static Future<ObjectiveResponseModel> updateObjective(
+      ObjectiveRequestModel requestModel,
+      String token,
+      String objectiveID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.objectiveByID}$objectiveID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return ObjectiveResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the objective: $e');
+    }
+  }
+
   static Future<dynamic> getObjectiveByPersonalDetail(
       String token, String personalDetailID) async {
     try {

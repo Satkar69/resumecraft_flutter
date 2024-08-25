@@ -12,6 +12,50 @@ class ProjectAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<dynamic> getProject(String token, String projectID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.projectByID}$projectID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected project');
+    }
+  }
+
+  static Future<dynamic> getprojects(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getProjects}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get projects: $e');
+    }
+  }
+
+  static Future<ProjectResponseModel> updateProject(
+      ProjectRequestModel requestModel, String token, String projectID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.projectByID}$projectID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return ProjectResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the education: $e');
+    }
+  }
+
   static Future<dynamic> getProjectByPersonalDetail(
       String token, String personalDetailID) async {
     try {

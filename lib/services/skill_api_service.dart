@@ -12,6 +12,50 @@ class SkillAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<dynamic> getSkill(String token, String skillID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.skillByID}$skillID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected skill');
+    }
+  }
+
+  static Future<dynamic> getSkills(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getSkills}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get skills: $e');
+    }
+  }
+
+  static Future<SkillResponseModel> updateSkill(
+      SkillRequestModel requestModel, String token, String skillID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.skillByID}$skillID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return SkillResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the skill: $e');
+    }
+  }
+
   static Future<dynamic> getSkillByPersonalDetail(
       String token, String personalDetailID) async {
     try {

@@ -12,6 +12,52 @@ class EducationAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
+  static Future<dynamic> getEducation(String token, String educationID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to the selected education');
+    }
+  }
+
+  static Future<dynamic> getEducations(String token) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.getEducations}',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get educations: $e');
+    }
+  }
+
+  static Future<EducationResponseModel> updateEducation(
+      EducationRequestModel requestModel,
+      String token,
+      String educationID) async {
+    try {
+      final response = await _dio.put(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+      return EducationResponseModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to update the education: $e');
+    }
+  }
+
   static Future<dynamic> getEducationByPersonalDetail(
       String token, String personalDetailID) async {
     try {
@@ -24,20 +70,6 @@ class EducationAPIService {
       return response.data;
     } catch (e) {
       throw Exception('Failed to get the selected education: $e');
-    }
-  }
-
-  static Future<dynamic> getEducations(String token, String educationID) async {
-    try {
-      final response = await _dio.get(
-        '${Config.apiUrl}${Config.educationByID}$educationID',
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-      return response.data;
-    } catch (e) {
-      throw Exception('Failed to get educations: $e');
     }
   }
 
