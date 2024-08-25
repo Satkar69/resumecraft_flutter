@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/personal_detail_api_service.dart';
+import 'package:resumecraft/api_services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:resumecraft/utils/mixins/personal_detail/personal_details_mixin.dart';

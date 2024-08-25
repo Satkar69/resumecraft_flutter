@@ -3,7 +3,7 @@ import 'package:resumecraft/config.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/api_services/education_api_service.dart';
 import 'package:resumecraft/utils/mixins/education/education_mixin.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';

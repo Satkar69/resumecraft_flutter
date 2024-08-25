@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/skill_api_service.dart';
+import 'package:resumecraft/api_services/skill_api_service.dart';
 import 'package:resumecraft/utils/mixins/skill/skill_mixin.dart';
 import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';

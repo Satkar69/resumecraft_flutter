@@ -7,7 +7,7 @@ import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 import 'package:resumecraft/models/register/register_request_model.dart';
-import 'package:resumecraft/services/user_api_service.dart';
+import 'package:resumecraft/api_services/user_api_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
