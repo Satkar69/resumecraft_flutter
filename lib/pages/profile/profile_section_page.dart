@@ -43,10 +43,11 @@ class _ProfileSectionPageState extends State<ProfileSectionPage> {
           _buildSectionTile(
               context, Icons.school, 'Education', '/educations', id),
           _buildSectionTile(
-              context, Icons.work, 'Experience', '/experience', id),
-          _buildSectionTile(context, Icons.star, 'Skills', '/skill', id),
-          _buildSectionTile(context, Icons.flag, 'Objective', '/objective', id),
-          _buildSectionTile(context, Icons.build, 'Projects', '/project', id),
+              context, Icons.work, 'Experience', '/experiences', id),
+          _buildSectionTile(context, Icons.star, 'Skills', '/skills', id),
+          _buildSectionTile(
+              context, Icons.flag, 'Objective', '/objectives', id),
+          _buildSectionTile(context, Icons.build, 'Projects', '/projects', id),
         ],
       ),
       bottomNavigationBar: Container(

@@ -32,8 +32,6 @@ class _EducationPageState extends State<EducationPage>
     final personalDetailID = args?['personalDetailID'] as String?;
     final educationID = args?['educationID'] as String?;
 
-    print('education id is------------------------------------->$educationID');
-
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }

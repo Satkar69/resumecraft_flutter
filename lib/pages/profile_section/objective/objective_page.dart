@@ -26,10 +26,15 @@ class _ObjectivePageState extends State<ObjectivePage>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailID'] as String?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final objectiveID = args?['objectiveID'] as String?;
 
-    if (id != null) {
-      setPersonalDetailId(id);
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (objectiveID != null) {
+      setObjectiveID(objectiveID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -93,9 +98,9 @@ class _ObjectivePageState extends State<ObjectivePage>
                         details: details,
                       );
                       if (objective != null) {
-                        final response = await ObjectiveAPIService
-                            .updateObjectiveByPersonalDetail(
-                                model, userToken, personalDetailID);
+                        final response =
+                            await ObjectiveAPIService.updateObjective(
+                                model, userToken, objectiveID!);
                         setState(() {
                           isApicallProcess = false;
                         });

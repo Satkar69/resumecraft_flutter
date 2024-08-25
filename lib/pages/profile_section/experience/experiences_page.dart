@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/services/experience_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/utils/mixins/education/educations_mixin.dart';
+import 'package:resumecraft/utils/mixins/experience/experiences_mixin.dart';
 
-class EducationsPage extends StatefulWidget {
-  const EducationsPage({super.key});
+class ExperiencesPage extends StatefulWidget {
+  const ExperiencesPage({super.key});
 
   @override
-  State<EducationsPage> createState() => EducationsPageState();
+  State<ExperiencesPage> createState() => ExperiencesPageState();
 }
 
-class EducationsPageState extends State<EducationsPage>
-    with UserProfileMixin, EducationsMixin {
+class ExperiencesPageState extends State<ExperiencesPage>
+    with UserProfileMixin, ExperiencesMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
@@ -27,7 +27,7 @@ class EducationsPageState extends State<EducationsPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Educations', style: TextStyle(color: Colors.white)),
+        title: const Text('Experiences', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -39,8 +39,8 @@ class EducationsPageState extends State<EducationsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (educations.isNotEmpty)
-              ...educations.map((education) {
+            if (experiences.isNotEmpty)
+              ...experiences.map((experience) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -53,8 +53,8 @@ class EducationsPageState extends State<EducationsPage>
                         backgroundColor: primaryColor,
                         child: Icon(Icons.account_circle, color: Colors.white),
                       ),
-                      title: Text(education.course ?? 'No education course'),
-                      subtitle: Text(education.university ?? 'No university'),
+                      title: Text(experience.companyName ?? 'No company name'),
+                      subtitle: Text(experience.jobTitle ?? 'No job title'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete,
                             color: Colors
@@ -68,7 +68,7 @@ class EducationsPageState extends State<EducationsPage>
                               return AlertDialog(
                                 title: Text("Confirm Delete"),
                                 content: Text(
-                                    "Are you sure you want to delete this education?"),
+                                    "Are you sure you want to delete this experience?"),
                                 actions: [
                                   TextButton(
                                     child: Text("Cancel"),
@@ -83,15 +83,15 @@ class EducationsPageState extends State<EducationsPage>
                                       // Perform delete operation here
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
-                                      final response = await EducationAPIService
-                                          .deleteEducation(
+                                      final response = await ExperienceAPIService
+                                          .deleteExperience(
                                               DeleteModel(
                                                   status: 'success',
                                                   statusCode: 200,
                                                   message:
-                                                      'education delete success'),
+                                                      'experience delete success'),
                                               userToken,
-                                              education.id);
+                                              experience.id);
                                       if (response.statusCode == 200) {
                                         FormHelper.showSimpleAlertDialog(
                                             context,
@@ -105,7 +105,7 @@ class EducationsPageState extends State<EducationsPage>
                                         FormHelper.showSimpleAlertDialog(
                                             context,
                                             Config.appName,
-                                            "unable to delete this education",
+                                            "unable to delete this experience",
                                             "OK", () {
                                           Navigator.pop(
                                               context); // Close the dialog
@@ -124,9 +124,9 @@ class EducationsPageState extends State<EducationsPage>
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/education',
+                          '/experience',
                           arguments: {
-                            'educationID': education.id,
+                            'experienceID': experience.id,
                             'personalDetailID': personalDetailID
                           },
                         );
@@ -139,7 +139,7 @@ class EducationsPageState extends State<EducationsPage>
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No objectives available. Please create a new education.',
+                  'No experiences available. Please create a new experience.',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
@@ -147,7 +147,7 @@ class EducationsPageState extends State<EducationsPage>
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
-                child: const Text('+ Add New Education'),
+                child: const Text('+ Add New Experience'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
@@ -158,7 +158,7 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/education');
+                  Navigator.pushNamed(context, '/experience');
                 },
               ),
             ),

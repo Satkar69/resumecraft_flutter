@@ -26,9 +26,15 @@ class _SkillPageState extends State<SkillPage>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailID'] as String?;
-    if (id != null) {
-      setPersonalDetailId(id);
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final skillID = args?['skillID'] as String?;
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (skillID != null) {
+      setSkillID(skillID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -122,9 +128,8 @@ class _SkillPageState extends State<SkillPage>
                         skillPercentage: skillPercentage!,
                       );
                       if (skill != null) {
-                        final response =
-                            await SkillAPIService.updateSkillByPersonalDetail(
-                                model, userToken, personalDetailID);
+                        final response = await SkillAPIService.updateSkill(
+                            model, userToken, skillID!);
                         setState(() {
                           isApicallProcess = false;
                         });

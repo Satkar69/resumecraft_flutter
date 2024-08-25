@@ -39,8 +39,9 @@ mixin ProjectMixin<T extends StatefulWidget> on State<T> {
     if (projectID != id) {
       projectID = id;
     }
-    if (projectID != null) {}
-    _loadProject();
+    if (projectID != null) {
+      _loadProject();
+    }
   }
 
   Future<void> _loadProject() async {
@@ -50,8 +51,7 @@ mixin ProjectMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data = await ProjectAPIService.getProjectByPersonalDetail(
-            token, personalDetailID!);
+        final data = await ProjectAPIService.getProject(token, projectID!);
         if (data != null) {
           final proj = ProjectModel.fromJson(data);
           if (mounted) {

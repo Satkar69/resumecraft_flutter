@@ -22,7 +22,7 @@ mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
       setPersonalDetailID(personalDetailID);
 
       if (experienceID != null && !_detailsLoaded) {
-        setEducationlId(experienceID);
+        setExperienceID(experienceID);
       }
     });
   }
@@ -35,12 +35,13 @@ mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void setEducationlId(String? id) {
+  void setExperienceID(String? id) {
     if (experienceID != id) {
       experienceID = id;
     }
-    if (experienceID != null) {}
-    _loadExperience();
+    if (experienceID != null) {
+      _loadExperience();
+    }
   }
 
   Future<void> _loadExperience() async {
@@ -50,8 +51,8 @@ mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data = await ExperienceAPIService.getExperienceByPersonalDetail(
-            token, personalDetailID!);
+        final data =
+            await ExperienceAPIService.getExperience(token, experienceID!);
         if (data != null) {
           final exp = ExperienceModel.fromJson(data);
           if (mounted) {

@@ -39,8 +39,9 @@ mixin ObjectiveMixin<T extends StatefulWidget> on State<T> {
     if (objectiveID != id) {
       objectiveID = id;
     }
-    if (objectiveID != null) {}
-    _loadObjective();
+    if (objectiveID != null) {
+      _loadObjective();
+    }
   }
 
   Future<void> _loadObjective() async {
@@ -50,8 +51,8 @@ mixin ObjectiveMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data = await ObjectiveAPIService.getObjectiveByPersonalDetail(
-            token, personalDetailID!);
+        final data =
+            await ObjectiveAPIService.getObjective(token, objectiveID!);
         if (data != null) {
           final obj = ObjectiveModel.fromJson(data);
           if (mounted) {

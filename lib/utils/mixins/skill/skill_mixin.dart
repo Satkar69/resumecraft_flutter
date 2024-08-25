@@ -22,7 +22,7 @@ mixin SkillMixin<T extends StatefulWidget> on State<T> {
       setPersonalDetailID(personalDetailID);
 
       if (skillID != null && !_detailsLoaded) {
-        setSkilllID(skillID);
+        setSkillID(skillID);
       }
     });
   }
@@ -35,12 +35,13 @@ mixin SkillMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void setSkilllID(String? id) {
+  void setSkillID(String? id) {
     if (skillID != id) {
       skillID = id;
     }
-    if (skillID != null) {}
-    _loadSkill();
+    if (skillID != null) {
+      _loadSkill();
+    }
   }
 
   Future<void> _loadSkill() async {
@@ -50,8 +51,7 @@ mixin SkillMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data = await SkillAPIService.getSkillByPersonalDetail(
-            token, personalDetailID!);
+        final data = await SkillAPIService.getSkill(token, skillID!);
         if (data != null) {
           final sk = SkillModel.fromJson(data);
           if (mounted) {

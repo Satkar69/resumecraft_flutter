@@ -29,10 +29,15 @@ class _ProjectPageState extends State<ProjectPage>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['ProjectId'] as String?;
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final projectID = args?['projectID'] as String?;
 
-    if (id != null) {
-      setPersonalDetailId(id);
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (projectID != null) {
+      setProjectID(projectID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -147,9 +152,8 @@ class _ProjectPageState extends State<ProjectPage>
                         links: links,
                       );
                       if (project != null) {
-                        final response = await ProjectAPIService
-                            .updateProjectByPersonalDetail(
-                                model, userToken, personalDetailID);
+                        final response = await ProjectAPIService.updateProject(
+                            model, userToken, projectID!);
                         setState(() {
                           isApicallProcess = false;
                         });

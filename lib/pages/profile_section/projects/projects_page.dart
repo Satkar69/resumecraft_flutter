@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/services/project_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/utils/mixins/education/educations_mixin.dart';
+import 'package:resumecraft/utils/mixins/project/projects_mixin.dart';
 
-class EducationsPage extends StatefulWidget {
-  const EducationsPage({super.key});
+class ProjectsPage extends StatefulWidget {
+  const ProjectsPage({super.key});
 
   @override
-  State<EducationsPage> createState() => EducationsPageState();
+  State<ProjectsPage> createState() => ProjectsPageState();
 }
 
-class EducationsPageState extends State<EducationsPage>
-    with UserProfileMixin, EducationsMixin {
+class ProjectsPageState extends State<ProjectsPage>
+    with UserProfileMixin, ProjectsMixin {
   final Color primaryColor = HexColor('#283B71');
 
   @override
@@ -27,7 +27,7 @@ class EducationsPageState extends State<EducationsPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Educations', style: TextStyle(color: Colors.white)),
+        title: const Text('Projects', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -39,8 +39,8 @@ class EducationsPageState extends State<EducationsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (educations.isNotEmpty)
-              ...educations.map((education) {
+            if (projects.isNotEmpty)
+              ...projects.map((project) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -53,8 +53,9 @@ class EducationsPageState extends State<EducationsPage>
                         backgroundColor: primaryColor,
                         child: Icon(Icons.account_circle, color: Colors.white),
                       ),
-                      title: Text(education.course ?? 'No education course'),
-                      subtitle: Text(education.university ?? 'No university'),
+                      title: Text(project.projectTitle ?? 'No projoect title'),
+                      subtitle:
+                          Text(project.projectDesc ?? 'No project description'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete,
                             color: Colors
@@ -68,7 +69,7 @@ class EducationsPageState extends State<EducationsPage>
                               return AlertDialog(
                                 title: Text("Confirm Delete"),
                                 content: Text(
-                                    "Are you sure you want to delete this education?"),
+                                    "Are you sure you want to delete this project?"),
                                 actions: [
                                   TextButton(
                                     child: Text("Cancel"),
@@ -83,15 +84,15 @@ class EducationsPageState extends State<EducationsPage>
                                       // Perform delete operation here
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
-                                      final response = await EducationAPIService
-                                          .deleteEducation(
+                                      final response =
+                                          await ProjectAPIService.deleteProject(
                                               DeleteModel(
                                                   status: 'success',
                                                   statusCode: 200,
                                                   message:
-                                                      'education delete success'),
+                                                      'project delete success'),
                                               userToken,
-                                              education.id);
+                                              project.id);
                                       if (response.statusCode == 200) {
                                         FormHelper.showSimpleAlertDialog(
                                             context,
@@ -105,7 +106,7 @@ class EducationsPageState extends State<EducationsPage>
                                         FormHelper.showSimpleAlertDialog(
                                             context,
                                             Config.appName,
-                                            "unable to delete this education",
+                                            "unable to delete this project",
                                             "OK", () {
                                           Navigator.pop(
                                               context); // Close the dialog
@@ -124,9 +125,9 @@ class EducationsPageState extends State<EducationsPage>
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/education',
+                          '/project',
                           arguments: {
-                            'educationID': education.id,
+                            'projectID': project.id,
                             'personalDetailID': personalDetailID
                           },
                         );
@@ -139,7 +140,7 @@ class EducationsPageState extends State<EducationsPage>
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No objectives available. Please create a new education.',
+                  'No projects available. Please create a new project.',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
@@ -147,7 +148,7 @@ class EducationsPageState extends State<EducationsPage>
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: ElevatedButton(
-                child: const Text('+ Add New Education'),
+                child: const Text('+ Add New Project'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   foregroundColor: Colors.white,
@@ -158,7 +159,7 @@ class EducationsPageState extends State<EducationsPage>
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/education');
+                  Navigator.pushNamed(context, '/project');
                 },
               ),
             ),

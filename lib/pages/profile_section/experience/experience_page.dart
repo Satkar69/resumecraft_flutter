@@ -30,9 +30,15 @@ class _ExperiencePageState extends State<ExperiencePage>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailID'] as String?;
-    if (id != null) {
-      setPersonalDetailId(id);
+    final personalDetailID = args?['personalDetailID'] as String?;
+    final experienceID = args?['experienceID'] as String?;
+
+    if (personalDetailID != null) {
+      setPersonalDetailID(personalDetailID);
+    }
+
+    if (experienceID != null) {
+      setExperienceID(experienceID);
     }
     return Scaffold(
       appBar: AppBar(
@@ -194,9 +200,9 @@ class _ExperiencePageState extends State<ExperiencePage>
                         details: details!,
                       );
                       if (experience != null) {
-                        final response = await ExperienceAPIService
-                            .updateExperienceByPersonalDetail(
-                                model, userToken, personalDetailID);
+                        final response =
+                            await ExperienceAPIService.updateExperience(
+                                model, userToken, experienceID!);
                         setState(() {
                           isApicallProcess = false;
                         });

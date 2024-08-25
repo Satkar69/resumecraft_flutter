@@ -39,8 +39,9 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
     if (educationID != id) {
       educationID = id;
     }
-    if (educationID != null) {}
-    _loadEducation();
+    if (educationID != null) {
+      _loadEducation();
+    }
   }
 
   Future<void> _loadEducation() async {
