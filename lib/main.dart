@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:resumecraft/pages/profile/profile_section_page.dart';
 import 'package:resumecraft/pages/auth/login_page.dart';
 import 'package:resumecraft/pages/home/home_page.dart';
-import 'package:resumecraft/pages/profile_section/education_page.dart';
-import 'package:resumecraft/pages/profile_section/experience_page.dart';
-import 'package:resumecraft/pages/profile_section/objective_page.dart';
+import 'package:resumecraft/pages/profile_section/education/education_page.dart';
+import 'package:resumecraft/pages/profile_section/experience/experience_page.dart';
+import 'package:resumecraft/pages/profile_section/objective/objective_page.dart';
 import 'package:resumecraft/pages/profile_section/personal_detail_page.dart';
 import 'package:resumecraft/pages/profile/profile_page.dart';
 import 'package:resumecraft/pages/auth/register_page.dart';
-import 'package:resumecraft/pages/profile_section/project_page.dart';
-import 'package:resumecraft/pages/profile_section/skill_page.dart';
+import 'package:resumecraft/pages/profile_section/projects/project_page.dart';
+import 'package:resumecraft/pages/profile_section/skills/skill_page.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage(); // Default to LoginPage initially

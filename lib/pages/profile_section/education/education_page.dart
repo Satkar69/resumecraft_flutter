@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:resumecraft/config.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/experience_api_service.dart';
-import 'package:resumecraft/utils/mixins/experience/experience_mixin.dart';
-import 'package:resumecraft/models/profile_section/experience/write/experience_request_model.dart';
+import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/utils/mixins/education/education_mixin.dart';
+import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
-import '../../config.dart';
-
-class ExperiencePage extends StatefulWidget {
-  const ExperiencePage({super.key});
+class EducationPage extends StatefulWidget {
+  const EducationPage({super.key});
 
   @override
-  State<ExperiencePage> createState() => _ExperiencePageState();
+  State<EducationPage> createState() => _EducationPageState();
 }
 
-class _ExperiencePageState extends State<ExperiencePage>
-    with UserProfileMixin, ExperienceMixin {
+class _EducationPageState extends State<EducationPage>
+    with UserProfileMixin, EducationMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? companyName;
-  String? jobTitle;
-  String? details;
+  String? course;
+  String? university;
+  String? gpa;
   DateTime? startDate;
   DateTime? endDate;
 
@@ -36,18 +35,18 @@ class _ExperiencePageState extends State<ExperiencePage>
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Experience', style: TextStyle(color: Colors.white)),
+        title: const Text('Education', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _experienceUI(context),
+      body: _educationUI(context),
     );
   }
 
-  Widget _experienceUI(BuildContext context) {
+  Widget _educationUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -57,19 +56,19 @@ class _ExperiencePageState extends State<ExperiencePage>
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "companyName",
-              "Company Name",
+              "course",
+              "Course",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'FullName cannot be empty';
+                  return 'Course cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                companyName = onSavedVal;
+                course = onSavedVal;
               },
-              initialValue: experience?.companyName ?? "",
+              initialValue: education?.course ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -82,19 +81,19 @@ class _ExperiencePageState extends State<ExperiencePage>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "jobTitle",
-              "Job Title",
+              "university",
+              "University",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Job Title cannot be empty';
+                  return 'University cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                jobTitle = onSavedVal;
+                university = onSavedVal;
               },
-              initialValue: experience?.jobTitle ?? "",
+              initialValue: education?.university ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -107,19 +106,19 @@ class _ExperiencePageState extends State<ExperiencePage>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "details",
-              "Details",
+              "gpa",
+              "GPA",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Details cannot be empty';
+                  return 'GPA cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                details = onSavedVal;
+                gpa = onSavedVal;
               },
-              initialValue: experience?.details ?? "",
+              initialValue: education?.gpa ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -144,7 +143,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                 ),
                 const SizedBox(height: 8),
                 _datePickerField(
-                    "Start Date", startDate ?? experience?.startDate,
+                    "Start Date", startDate ?? education?.startDate,
                     (selectedDate) {
                   setState(() {
                     startDate = selectedDate;
@@ -166,7 +165,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                   ),
                 ),
                 const SizedBox(height: 8),
-                _datePickerField("End Date", endDate ?? experience?.endDate,
+                _datePickerField("End Date", endDate ?? education?.endDate,
                     (selectedDate) {
                   setState(() {
                     endDate = selectedDate;
@@ -185,17 +184,16 @@ class _ExperiencePageState extends State<ExperiencePage>
                     });
 
                     try {
-                      ExperienceRequestModel model = ExperienceRequestModel(
-                        userdetail: personalDetailID,
-                        companyName: companyName!,
-                        jobTitle: jobTitle!,
-                        startDate: startDate,
-                        endDate: endDate,
-                        details: details!,
-                      );
-                      if (experience != null) {
-                        final response = await ExperienceAPIService
-                            .updateExperienceByPersonalDetail(
+                      EducationRequestModel model = EducationRequestModel(
+                          userdetail: personalDetailID,
+                          course: course!,
+                          university: university!,
+                          gpa: gpa!,
+                          startDate: startDate,
+                          endDate: endDate);
+                      if (education != null) {
+                        final response = await EducationAPIService
+                            .updateEducationByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
@@ -206,7 +204,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "experience detail edited!",
+                              "education detail edited!",
                               "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
@@ -216,20 +214,21 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit experience. Please try again.",
+                              "Failed to edit education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
                         final response =
-                            await ExperienceAPIService.createExperience(
+                            await EducationAPIService.createEducation(
                                 model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
-                          FormHelper.showSimpleAlertDialog(context,
-                              Config.appName, "Experience Saved!", "OK", () {
+                          FormHelper.showSimpleAlertDialog(
+                              context, Config.appName, "Education Saved!", "OK",
+                              () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profiles');
@@ -240,7 +239,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save Experience. Please try again.",
+                              "Failed to save Education. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -320,12 +319,12 @@ class _ExperiencePageState extends State<ExperiencePage>
       form.save();
 
       // Retain original start and end dates if not modified
-      if (startDate == null && experience != null) {
-        startDate = experience?.startDate;
+      if (startDate == null && education != null) {
+        startDate = education?.startDate;
       }
 
-      if (endDate == null && experience != null) {
-        endDate = experience?.endDate;
+      if (endDate == null && education != null) {
+        endDate = education?.endDate;
       }
 
       return true;

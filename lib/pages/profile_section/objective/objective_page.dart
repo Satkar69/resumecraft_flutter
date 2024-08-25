@@ -2,48 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/skill_api_service.dart';
-import 'package:resumecraft/utils/mixins/skill/skill_mixin.dart';
-import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
+import 'package:resumecraft/services/objective_api_service.dart';
+import 'package:resumecraft/utils/mixins/Objective/objective_mixin.dart';
+import 'package:resumecraft/models/profile_section/objective/write/objective_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
-import '../../config.dart';
+import '../../../config.dart';
 
-class SkillPage extends StatefulWidget {
-  const SkillPage({super.key});
+class ObjectivePage extends StatefulWidget {
+  const ObjectivePage({super.key});
 
   @override
-  State<SkillPage> createState() => _SkillPageState();
+  State<ObjectivePage> createState() => _ObjectivePageState();
 }
 
-class _SkillPageState extends State<SkillPage>
-    with UserProfileMixin, SkillMixin {
+class _ObjectivePageState extends State<ObjectivePage>
+    with UserProfileMixin, ObjectiveMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? skillName;
-  String? skillPercentage;
+  String? details;
+
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final id = args?['personalDetailID'] as String?;
+
     if (id != null) {
       setPersonalDetailId(id);
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Skill', style: TextStyle(color: Colors.white)),
+        title: const Text('Personal Details',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _skillUI(context),
+      body: _profileDetailUI(context),
     );
   }
 
-  Widget _skillUI(BuildContext context) {
+  Widget _profileDetailUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -53,49 +55,19 @@ class _SkillPageState extends State<SkillPage>
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "skillName",
-              "Skill Name",
+              "details",
+              "Details",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Skill name cannot be empty';
+                  return 'Objective details cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                skillName = onSavedVal;
+                details = onSavedVal;
               },
-              initialValue: skill?.skillName ?? "",
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
-              hintColor: Colors.black.withOpacity(0.7),
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            const SizedBox(height: 16),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "skillPercentage",
-              "Skill Percentage",
-              "",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Skill Percentage cannot be empty';
-                }
-                if (int.tryParse(onValidateVal) == null ||
-                    int.parse(onValidateVal) < 0 ||
-                    int.parse(onValidateVal) > 100) {
-                  return 'Enter a valid percentage between 0 and 100';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                skillPercentage = onSavedVal;
-              },
-              initialValue: skill?.skillPercentage ?? "",
+              initialValue: objective?.details ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -116,23 +88,20 @@ class _SkillPageState extends State<SkillPage>
                     });
 
                     try {
-                      SkillRequestModel model = SkillRequestModel(
+                      ObjectiveRequestModel model = ObjectiveRequestModel(
                         userdetail: personalDetailID,
-                        skillName: skillName!,
-                        skillPercentage: skillPercentage!,
+                        details: details,
                       );
-                      if (skill != null) {
-                        final response =
-                            await SkillAPIService.updateSkillByPersonalDetail(
+                      if (objective != null) {
+                        final response = await ObjectiveAPIService
+                            .updateObjectiveByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          print(
-                              'this is the update response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(context,
-                              Config.appName, "skill detail edited!", "OK", () {
+                              Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profile-section');
@@ -141,31 +110,30 @@ class _SkillPageState extends State<SkillPage>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit skill. Please try again.",
+                              "Failed to edit Objective. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
                         final response =
-                            await SkillAPIService.createSkill(model, userToken);
+                            await ObjectiveAPIService.createObjective(
+                                model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Skill Saved!", "OK",
+                              context, Config.appName, "Personal Saved!", "OK",
                               () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profiles');
                           });
                         } else {
-                          print(
-                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save Skill. Please try again.",
+                              "Failed to save Objective. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -198,7 +166,6 @@ class _SkillPageState extends State<SkillPage>
     );
   }
 
-// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {

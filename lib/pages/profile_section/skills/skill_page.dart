@@ -2,53 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/project_api_service.dart';
-import 'package:resumecraft/utils/mixins/project/project_mixin.dart';
-import 'package:resumecraft/models/profile_section/projects/write/project_request_model.dart';
+import 'package:resumecraft/services/skill_api_service.dart';
+import 'package:resumecraft/utils/mixins/skill/skill_mixin.dart';
+import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 
-import '../../config.dart';
+import '../../../config.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({super.key});
+class SkillPage extends StatefulWidget {
+  const SkillPage({super.key});
 
   @override
-  State<ProjectPage> createState() => _ProjectPageState();
+  State<SkillPage> createState() => _SkillPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage>
-    with UserProfileMixin, ProjectMixin {
+class _SkillPageState extends State<SkillPage>
+    with UserProfileMixin, SkillMixin {
   final Color primaryColor = HexColor('#283B71');
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   bool isApicallProcess = false;
-  String? projectTitle;
-  String? projectDesc;
-  String? projLinks;
-  List<String> links = [];
-
+  String? skillName;
+  String? skillPercentage;
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['ProjectId'] as String?;
-
+    final id = args?['personalDetailID'] as String?;
     if (id != null) {
       setPersonalDetailId(id);
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal Details',
-            style: TextStyle(color: Colors.white)),
+        title: const Text('Skill', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: _profileDetailUI(context),
+      body: _skillUI(context),
     );
   }
 
-  Widget _profileDetailUI(BuildContext context) {
+  Widget _skillUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -58,19 +53,19 @@ class _ProjectPageState extends State<ProjectPage>
           children: [
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "projectTitle",
-              "Project Title",
+              "skillName",
+              "Skill Name",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Project Title cannot be empty';
+                  return 'Skill name cannot be empty';
                 }
                 return null;
               },
               (onSavedVal) {
-                projectTitle = onSavedVal;
+                skillName = onSavedVal;
               },
-              initialValue: project?.projectTitle ?? "",
+              initialValue: skill?.skillName ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
@@ -83,47 +78,28 @@ class _ProjectPageState extends State<ProjectPage>
             const SizedBox(height: 16),
             FormHelper.inputFieldWidgetWithLabel(
               context,
-              "projectDesc",
-              "Project Description",
+              "skillPercentage",
+              "Skill Percentage",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Project Description cannot be empty';
+                  return 'Skill Percentage cannot be empty';
+                }
+                if (int.tryParse(onValidateVal) == null ||
+                    int.parse(onValidateVal) < 0 ||
+                    int.parse(onValidateVal) > 100) {
+                  return 'Enter a valid percentage between 0 and 100';
                 }
                 return null;
               },
               (onSavedVal) {
-                projectDesc = onSavedVal;
+                skillPercentage = onSavedVal;
               },
-              initialValue: project?.projectDesc ?? "",
+              initialValue: skill?.skillPercentage ?? "",
               borderFocusColor: primaryColor,
               borderColor: primaryColor,
               textColor: Colors.black,
               hintColor: Colors.black.withOpacity(0.7),
-              borderRadius: 10,
-              labelFontSize: 16,
-              paddingLeft: 0,
-              paddingRight: 0,
-            ),
-            FormHelper.inputFieldWidgetWithLabel(
-              context,
-              "links",
-              "Links",
-              "www.this.com, www.that.com, ...",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'At least one project link should be an input';
-                }
-                return null;
-              },
-              (onSavedVal) {
-                projLinks = onSavedVal;
-              },
-              initialValue: (project?.links)?.join(',') ?? links.join(','),
-              hintColor: Colors.black45,
-              borderFocusColor: primaryColor,
-              borderColor: primaryColor,
-              textColor: Colors.black,
               borderRadius: 10,
               labelFontSize: 16,
               paddingLeft: 0,
@@ -140,23 +116,23 @@ class _ProjectPageState extends State<ProjectPage>
                     });
 
                     try {
-                      ProjectRequestModel model = ProjectRequestModel(
+                      SkillRequestModel model = SkillRequestModel(
                         userdetail: personalDetailID,
-                        projectTitle: projectTitle!,
-                        projectDesc: projectDesc!,
-                        links: links,
+                        skillName: skillName!,
+                        skillPercentage: skillPercentage!,
                       );
-                      if (project != null) {
-                        final response = await ProjectAPIService
-                            .updateProjectByPersonalDetail(
+                      if (skill != null) {
+                        final response =
+                            await SkillAPIService.updateSkillByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 200) {
-                          FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Project edited!", "OK",
-                              () {
+                          print(
+                              'this is the update response here--------------------------->${response.statusCode}');
+                          FormHelper.showSimpleAlertDialog(context,
+                              Config.appName, "skill detail edited!", "OK", () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profile-section');
@@ -165,29 +141,31 @@ class _ProjectPageState extends State<ProjectPage>
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to edit project. Please try again.",
+                              "Failed to edit skill. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
                       } else {
-                        final response = await ProjectAPIService.createProject(
-                            model, userToken);
+                        final response =
+                            await SkillAPIService.createSkill(model, userToken);
                         setState(() {
                           isApicallProcess = false;
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Personal Saved!", "OK",
+                              context, Config.appName, "Skill Saved!", "OK",
                               () {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(
                                 context, '/profiles');
                           });
                         } else {
+                          print(
+                              'this is the create response here--------------------------->${response.statusCode}');
                           FormHelper.showSimpleAlertDialog(
                               context,
                               Config.appName,
-                              "Failed to save project. Please try again.",
+                              "Failed to save Skill. Please try again.",
                               "OK",
                               () => Navigator.pop(context));
                         }
@@ -220,13 +198,11 @@ class _ProjectPageState extends State<ProjectPage>
     );
   }
 
+// Save Function Adjustment
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form!.validate()) {
       form.save();
-      if (projLinks?.isNotEmpty ?? false) {
-        links = projLinks!.split(',').map((link) => link.trim()).toList();
-      }
       return true;
     } else {
       return false;

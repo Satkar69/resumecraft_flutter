@@ -6,7 +6,7 @@ import 'package:resumecraft/config.dart';
 //====================== profile-sections ===========================>
 import 'package:resumecraft/models/profile_section/personal_detail/write/personal_detail_request_model.dart';
 import 'package:resumecraft/models/profile_section/personal_detail/write/personal_detail_response_model.dart';
-import 'package:resumecraft/models/profile_section/personal_detail/delete/personal_detail_delete_model.dart';
+import 'package:resumecraft/models/delete/delete_model.dart';
 
 class PersonalDetailAPIService {
   static final Dio _dio = Dio();
@@ -75,10 +75,8 @@ class PersonalDetailAPIService {
     }
   }
 
-  static Future<PersonalDetailDeleteModel> deletePersonalDetail(
-      PersonalDetailDeleteModel requestModel,
-      String token,
-      personalDetailID) async {
+  static Future<DeleteModel> deletePersonalDetail(
+      DeleteModel requestModel, String token, personalDetailID) async {
     try {
       final response = await _dio.delete(
         '${Config.apiUrl}${Config.personalDetailByID}$personalDetailID',
@@ -88,7 +86,7 @@ class PersonalDetailAPIService {
         data: requestModel.toJson(),
       );
 
-      return PersonalDetailDeleteModel.fromJson(response.data);
+      return DeleteModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to delete user personal detail: $e');
     }

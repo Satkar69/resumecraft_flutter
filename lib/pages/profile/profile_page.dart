@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/config.dart';
-import 'package:resumecraft/models/profile_section/personal_detail/delete/personal_detail_delete_model.dart';
+import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       final response =
                                           await PersonalDetailAPIService
                                               .deletePersonalDetail(
-                                                  PersonalDetailDeleteModel(
+                                                  DeleteModel(
                                                       status: 'success',
                                                       statusCode: 200,
                                                       message:
