@@ -147,8 +147,9 @@ class _ProjectPageState extends State<ProjectPage>
                         links: links,
                       );
                       if (project != null) {
-                        final response = await ProjectAPIService.updateProject(
-                            model, userToken, personalDetailID);
+                        final response = await ProjectAPIService
+                            .updateProjectByPersonalDetail(
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

@@ -12,7 +12,8 @@ class SkillAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getSkill(String token, String personalDetailID) async {
+  static Future<dynamic> getSkillByPersonalDetail(
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
         '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailID',
@@ -42,7 +43,7 @@ class SkillAPIService {
     }
   }
 
-  static Future<SkillResponseModel> updateSkill(
+  static Future<SkillResponseModel> updateSkillByPersonalDetail(
       SkillRequestModel requestModel, String token, personalDetailID) async {
     try {
       final response = await _dio.put(

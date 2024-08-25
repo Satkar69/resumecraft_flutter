@@ -193,8 +193,8 @@ class _EducationPageState extends State<EducationPage>
                           startDate: startDate,
                           endDate: endDate);
                       if (education != null) {
-                        final response =
-                            await EducationAPIService.updateEducation(
+                        final response = await EducationAPIService
+                            .updateEducationByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;

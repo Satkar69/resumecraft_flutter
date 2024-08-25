@@ -93,8 +93,8 @@ class _ObjectivePageState extends State<ObjectivePage>
                         details: details,
                       );
                       if (objective != null) {
-                        final response =
-                            await ObjectiveAPIService.updateObjective(
+                        final response = await ObjectiveAPIService
+                            .updateObjectiveByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;

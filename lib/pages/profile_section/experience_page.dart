@@ -194,8 +194,8 @@ class _ExperiencePageState extends State<ExperiencePage>
                         details: details!,
                       );
                       if (experience != null) {
-                        final response =
-                            await ExperienceAPIService.updateExperience(
+                        final response = await ExperienceAPIService
+                            .updateExperienceByPersonalDetail(
                                 model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;

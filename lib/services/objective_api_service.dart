@@ -12,7 +12,7 @@ class ObjectiveAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getObjective(
+  static Future<dynamic> getObjectiveByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
@@ -43,7 +43,7 @@ class ObjectiveAPIService {
     }
   }
 
-  static Future<ObjectiveResponseModel> updateObjective(
+  static Future<ObjectiveResponseModel> updateObjectiveByPersonalDetail(
       ObjectiveRequestModel requestModel,
       String token,
       personalDetailID) async {

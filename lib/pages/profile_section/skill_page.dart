@@ -122,8 +122,9 @@ class _SkillPageState extends State<SkillPage>
                         skillPercentage: skillPercentage!,
                       );
                       if (skill != null) {
-                        final response = await SkillAPIService.updateSkill(
-                            model, userToken, personalDetailID);
+                        final response =
+                            await SkillAPIService.updateSkillByPersonalDetail(
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

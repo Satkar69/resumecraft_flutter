@@ -12,7 +12,7 @@ class ExperienceAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getExperience(
+  static Future<dynamic> getExperienceByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
@@ -43,7 +43,7 @@ class ExperienceAPIService {
     }
   }
 
-  static Future<ExperienceResponseModel> updateExperience(
+  static Future<ExperienceResponseModel> updateExperienceByPersonalDetail(
       ExperienceRequestModel requestModel,
       String token,
       personalDetailID) async {

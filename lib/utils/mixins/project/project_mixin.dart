@@ -38,8 +38,8 @@ mixin ProjectMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data =
-            await ProjectAPIService.getProject(token, personalDetailID!);
+        final data = await ProjectAPIService.getProjectByPersonalDetail(
+            token, personalDetailID!);
         if (data != null) {
           final proj = ProjectModel.fromJson(data);
           if (mounted) {

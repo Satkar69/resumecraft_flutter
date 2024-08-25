@@ -38,8 +38,8 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data =
-            await EducationAPIService.getEducation(token, personalDetailID!);
+        final data = await EducationAPIService.getEducationByPersonalDetail(
+            token, personalDetailID!);
         if (data != null) {
           final edu = EducationModel.fromJson(data);
           if (mounted) {

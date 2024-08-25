@@ -12,7 +12,7 @@ class ProjectAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getProject(
+  static Future<dynamic> getProjectByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
@@ -43,7 +43,7 @@ class ProjectAPIService {
     }
   }
 
-  static Future<ProjectResponseModel> updateProject(
+  static Future<ProjectResponseModel> updateProjectByPersonalDetail(
       ProjectRequestModel requestModel, String token, personalDetailID) async {
     try {
       final response = await _dio.put(

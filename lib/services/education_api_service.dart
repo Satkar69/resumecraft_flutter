@@ -12,7 +12,7 @@ class EducationAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getEducation(
+  static Future<dynamic> getEducationByPersonalDetail(
       String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
@@ -57,7 +57,7 @@ class EducationAPIService {
     }
   }
 
-  static Future<EducationResponseModel> updateEducation(
+  static Future<EducationResponseModel> updateEducationByPersonalDetail(
       EducationRequestModel requestModel,
       String token,
       personalDetailID) async {

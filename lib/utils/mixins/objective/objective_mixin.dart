@@ -38,8 +38,8 @@ mixin ObjectiveMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data =
-            await ObjectiveAPIService.getObjective(token, personalDetailID!);
+        final data = await ObjectiveAPIService.getObjectiveByPersonalDetail(
+            token, personalDetailID!);
         if (data != null) {
           final obj = ObjectiveModel.fromJson(data);
           if (mounted) {

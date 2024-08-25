@@ -38,8 +38,8 @@ mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
     final token = prefs?.token ?? '';
     if (token.isNotEmpty && personalDetailID != null) {
       try {
-        final data =
-            await ExperienceAPIService.getExperience(token, personalDetailID!);
+        final data = await ExperienceAPIService.getExperienceByPersonalDetail(
+            token, personalDetailID!);
         if (data != null) {
           final exp = ExperienceModel.fromJson(data);
           if (mounted) {
