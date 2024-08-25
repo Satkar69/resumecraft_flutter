@@ -32,7 +32,7 @@ class _PersonalDetailState extends State<PersonalDetail>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
 
     if (id != null) {
       setPersonalDetailId(id);
@@ -261,10 +261,10 @@ class _PersonalDetailState extends State<PersonalDetail>
                         contact: phone!,
                         socials: socials,
                       );
-                      if (personalDetailId != null) {
+                      if (personalDetailID != null) {
                         final response =
                             await PersonalDetailAPIService.updatePersonalDetail(
-                                model, userToken, personalDetailId);
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

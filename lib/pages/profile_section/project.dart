@@ -140,14 +140,14 @@ class _ProjectState extends State<Project> with UserProfileMixin, ProjectMixin {
 
                     try {
                       ProjectRequestModel model = ProjectRequestModel(
-                        userdetail: personalDetailId,
+                        userdetail: personalDetailID,
                         projectTitle: projectTitle!,
                         projectDesc: projectDesc!,
                         links: links,
                       );
                       if (project != null) {
                         final response = await ProjectAPIService.updateProject(
-                            model, userToken, personalDetailId);
+                            model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

@@ -13,10 +13,10 @@ class ObjectiveAPIService {
   //====================== profile-sections (authenticated) ===========================>
 
   static Future<dynamic> getObjective(
-      String token, String personalDetailId) async {
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -46,10 +46,10 @@ class ObjectiveAPIService {
   static Future<ObjectiveResponseModel> updateObjective(
       ObjectiveRequestModel requestModel,
       String token,
-      personalDetailId) async {
+      personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.objectiveByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

@@ -13,10 +13,10 @@ class EducationAPIService {
   //====================== profile-sections (authenticated) ===========================>
 
   static Future<dynamic> getEducation(
-      String token, String personalDetailId) async {
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -24,6 +24,20 @@ class EducationAPIService {
       return response.data;
     } catch (e) {
       throw Exception('Failed to get the selected education: $e');
+    }
+  }
+
+  static Future<dynamic> getEducations(String token, String educationID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get educations: $e');
     }
   }
 
@@ -46,10 +60,10 @@ class EducationAPIService {
   static Future<EducationResponseModel> updateEducation(
       EducationRequestModel requestModel,
       String token,
-      personalDetailId) async {
+      personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.educationByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

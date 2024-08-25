@@ -13,10 +13,10 @@ class ExperienceAPIService {
   //====================== profile-sections (authenticated) ===========================>
 
   static Future<dynamic> getExperience(
-      String token, String personalDetailId) async {
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -46,10 +46,10 @@ class ExperienceAPIService {
   static Future<ExperienceResponseModel> updateExperience(
       ExperienceRequestModel requestModel,
       String token,
-      personalDetailId) async {
+      personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.experienceByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

@@ -30,7 +30,7 @@ class _ExperienceState extends State<Experience>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
     if (id != null) {
       setPersonalDetailId(id);
     }
@@ -186,7 +186,7 @@ class _ExperienceState extends State<Experience>
 
                     try {
                       ExperienceRequestModel model = ExperienceRequestModel(
-                        userdetail: personalDetailId,
+                        userdetail: personalDetailID,
                         companyName: companyName!,
                         jobTitle: jobTitle!,
                         startDate: startDate,
@@ -196,7 +196,7 @@ class _ExperienceState extends State<Experience>
                       if (experience != null) {
                         final response =
                             await ExperienceAPIService.updateExperience(
-                                model, userToken, personalDetailId);
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

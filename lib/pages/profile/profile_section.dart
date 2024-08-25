@@ -15,7 +15,7 @@ class _ProfileSectionState extends State<ProfileSection> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
 
     return Scaffold(
       appBar: AppBar(
@@ -88,7 +88,7 @@ class _ProfileSectionState extends State<ProfileSection> {
     IconData icon,
     String title, [
     String? route,
-    String? personalDetailId,
+    String? personalDetailID,
   ]) {
     return ListTile(
       leading: Icon(icon, color: primaryColor),
@@ -100,8 +100,8 @@ class _ProfileSectionState extends State<ProfileSection> {
           Navigator.pushNamed(
             context,
             route,
-            arguments: personalDetailId != null
-                ? {'personalDetailId': personalDetailId}
+            arguments: personalDetailID != null
+                ? {'personalDetailID': personalDetailID}
                 : null,
           );
         }

@@ -43,10 +43,10 @@ class PersonalDetailAPIService {
   }
 
   static Future<dynamic> getPersonalDetail(
-      String token, String personalDetailId) async {
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailId',
+        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -60,10 +60,10 @@ class PersonalDetailAPIService {
   static Future<PersonalDetailResponseModel> updatePersonalDetail(
       PersonalDetailRequestModel requestModel,
       String token,
-      personalDetailId) async {
+      personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailId',
+        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -78,10 +78,10 @@ class PersonalDetailAPIService {
   static Future<PersonalDetailDeleteModel> deletePersonalDetail(
       PersonalDetailDeleteModel requestModel,
       String token,
-      personalDetailId) async {
+      personalDetailID) async {
     try {
       final response = await _dio.delete(
-        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailId',
+        '${Config.apiUrl}${Config.personalDetailByID}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

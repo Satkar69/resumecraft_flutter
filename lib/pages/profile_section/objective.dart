@@ -89,13 +89,13 @@ class _ObjectiveState extends State<Objective>
 
                     try {
                       ObjectiveRequestModel model = ObjectiveRequestModel(
-                        userdetail: personalDetailId,
+                        userdetail: personalDetailID,
                         details: details,
                       );
                       if (objective != null) {
                         final response =
                             await ObjectiveAPIService.updateObjective(
-                                model, userToken, personalDetailId);
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

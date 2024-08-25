@@ -30,7 +30,7 @@ class _EducationState extends State<Education>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
     if (id != null) {
       setPersonalDetailId(id);
     }
@@ -186,7 +186,7 @@ class _EducationState extends State<Education>
 
                     try {
                       EducationRequestModel model = EducationRequestModel(
-                          userdetail: personalDetailId,
+                          userdetail: personalDetailID,
                           course: course!,
                           university: university!,
                           gpa: gpa!,
@@ -195,7 +195,7 @@ class _EducationState extends State<Education>
                       if (education != null) {
                         final response =
                             await EducationAPIService.updateEducation(
-                                model, userToken, personalDetailId);
+                                model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });

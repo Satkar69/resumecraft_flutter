@@ -12,10 +12,10 @@ class SkillAPIService {
 
   //====================== profile-sections (authenticated) ===========================>
 
-  static Future<dynamic> getSkill(String token, String personalDetailId) async {
+  static Future<dynamic> getSkill(String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -43,10 +43,10 @@ class SkillAPIService {
   }
 
   static Future<SkillResponseModel> updateSkill(
-      SkillRequestModel requestModel, String token, personalDetailId) async {
+      SkillRequestModel requestModel, String token, personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.skillByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

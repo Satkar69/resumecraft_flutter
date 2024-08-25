@@ -124,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage>
                           context,
                           '/profile-section',
                           arguments: {
-                            'personalDetailId': personalDetail.id,
+                            'personalDetailID': personalDetail.id,
                           },
                         );
                       },

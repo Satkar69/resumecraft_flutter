@@ -13,10 +13,10 @@ class ProjectAPIService {
   //====================== profile-sections (authenticated) ===========================>
 
   static Future<dynamic> getProject(
-      String token, String personalDetailId) async {
+      String token, String personalDetailID) async {
     try {
       final response = await _dio.get(
-        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
@@ -44,10 +44,10 @@ class ProjectAPIService {
   }
 
   static Future<ProjectResponseModel> updateProject(
-      ProjectRequestModel requestModel, String token, personalDetailId) async {
+      ProjectRequestModel requestModel, String token, personalDetailID) async {
     try {
       final response = await _dio.put(
-        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailId',
+        '${Config.apiUrl}${Config.projectByPersonalDetail}$personalDetailID',
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

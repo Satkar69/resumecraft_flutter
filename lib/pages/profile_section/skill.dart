@@ -25,7 +25,7 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final id = args?['personalDetailId'] as String?;
+    final id = args?['personalDetailID'] as String?;
     if (id != null) {
       setPersonalDetailId(id);
     }
@@ -116,13 +116,13 @@ class _SkillState extends State<Skill> with UserProfileMixin, SkillMixin {
 
                     try {
                       SkillRequestModel model = SkillRequestModel(
-                        userdetail: personalDetailId,
+                        userdetail: personalDetailID,
                         skillName: skillName!,
                         skillPercentage: skillPercentage!,
                       );
                       if (skill != null) {
                         final response = await SkillAPIService.updateSkill(
-                            model, userToken, personalDetailId);
+                            model, userToken, personalDetailID);
                         setState(() {
                           isApicallProcess = false;
                         });
