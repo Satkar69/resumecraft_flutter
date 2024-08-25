@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
+import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_response_model.dart';
 
@@ -55,6 +56,23 @@ class EducationAPIService {
       return EducationResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update the education: $e');
+    }
+  }
+
+  static Future<DeleteModel> deleteEducation(
+      DeleteModel requestModel, String token, educationID) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.educationByID}$educationID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return DeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete education: $e');
     }
   }
 

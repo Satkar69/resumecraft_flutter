@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
+import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/models/profile_section/objective/write/objective_request_model.dart';
 import 'package:resumecraft/models/profile_section/objective/write/objective_response_model.dart';
 
@@ -55,6 +56,23 @@ class ObjectiveAPIService {
       return ObjectiveResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update the objective: $e');
+    }
+  }
+
+  static Future<DeleteModel> deleteObjective(
+      DeleteModel requestModel, String token, objectiveID) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.objectiveByID}$objectiveID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return DeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete objective: $e');
     }
   }
 

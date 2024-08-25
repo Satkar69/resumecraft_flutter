@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:resumecraft/config.dart';
 
 //====================== profile-sections ===========================>
+import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/models/profile_section/experience/write/experience_request_model.dart';
 import 'package:resumecraft/models/profile_section/experience/write/experience_response_model.dart';
 
@@ -56,6 +57,23 @@ class ExperienceAPIService {
       return ExperienceResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update the experience: $e');
+    }
+  }
+
+  static Future<DeleteModel> deleteExperience(
+      DeleteModel requestModel, String token, experienceID) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.experienceByID}$experienceID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return DeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete experience: $e');
     }
   }
 

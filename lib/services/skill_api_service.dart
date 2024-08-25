@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 //====================== api-endpoints ===========================>
 import 'package:resumecraft/config.dart';
+import 'package:resumecraft/models/delete/delete_model.dart';
 
 //====================== profile-sections ===========================>
 import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
@@ -53,6 +54,23 @@ class SkillAPIService {
       return SkillResponseModel.fromJson(response.data);
     } catch (e) {
       throw Exception('Failed to update the skill: $e');
+    }
+  }
+
+  static Future<DeleteModel> deleteSkill(
+      DeleteModel requestModel, String token, skillID) async {
+    try {
+      final response = await _dio.delete(
+        '${Config.apiUrl}${Config.skillByID}$skillID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+        data: requestModel.toJson(),
+      );
+
+      return DeleteModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to delete skill: $e');
     }
   }
 
