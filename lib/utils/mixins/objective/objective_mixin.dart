@@ -5,29 +5,41 @@ import 'package:resumecraft/models/profile_section/objective/read/objective_mode
 
 mixin ObjectiveMixin<T extends StatefulWidget> on State<T> {
   Objective? objective;
+  String? objectiveID;
   String? personalDetailID;
   bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    // Optionally, you might not call _loadExperience here if id is not set
+    // Optionally, you might not call _loadEducation here if id is not set
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      final id = args?['personalDetailID'] as String?;
-      if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+      final objectiveID = args?['objectiveID'] as String?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+
+      setPersonalDetailID(personalDetailID);
+
+      if (objectiveID != null && !_detailsLoaded) {
+        setObjectiveID(objectiveID);
       }
     });
   }
 
   // Method to set the personalDetailID and load details
-  void setPersonalDetailId(String? id) {
+
+  void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
     }
-    if (personalDetailID != null) {}
+  }
+
+  void setObjectiveID(String? id) {
+    if (objectiveID != id) {
+      objectiveID = id;
+    }
+    if (objectiveID != null) {}
     _loadObjective();
   }
 

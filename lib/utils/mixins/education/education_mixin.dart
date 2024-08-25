@@ -20,8 +20,9 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
       final personalDetailID = args?['personalDetailID'] as String?;
 
       setPersonalDetailID(personalDetailID);
+
       if (educationID != null && !_detailsLoaded) {
-        setEducationlId(educationID);
+        setEducationlID(educationID);
       }
     });
   }
@@ -34,7 +35,7 @@ mixin EducationMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void setEducationlId(String? id) {
+  void setEducationlID(String? id) {
     if (educationID != id) {
       educationID = id;
     }

@@ -5,29 +5,41 @@ import 'package:resumecraft/models/profile_section/experience/read/experience_mo
 
 mixin ExperienceMixin<T extends StatefulWidget> on State<T> {
   Experience? experience;
+  String? experienceID;
   String? personalDetailID;
   bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    // Optionally, you might not call _loadExperience here if id is not set
+    // Optionally, you might not call _loadEducation here if id is not set
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      final id = args?['personalDetailID'] as String?;
-      if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+      final experienceID = args?['experienceID'] as String?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+
+      setPersonalDetailID(personalDetailID);
+
+      if (experienceID != null && !_detailsLoaded) {
+        setEducationlId(experienceID);
       }
     });
   }
 
   // Method to set the personalDetailID and load details
-  void setPersonalDetailId(String? id) {
+
+  void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
     }
-    if (personalDetailID != null) {}
+  }
+
+  void setEducationlId(String? id) {
+    if (experienceID != id) {
+      experienceID = id;
+    }
+    if (experienceID != null) {}
     _loadExperience();
   }
 

@@ -5,29 +5,41 @@ import 'package:resumecraft/models/profile_section/skills/read/skill_model.dart'
 
 mixin SkillMixin<T extends StatefulWidget> on State<T> {
   Skill? skill;
+  String? skillID;
   String? personalDetailID;
   bool _detailsLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    // Optionally, you might not call _loadExperience here if id is not set
+    // Optionally, you might not call _loadEducation here if id is not set
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      final id = args?['personalDetailID'] as String?;
-      if (id != null && !_detailsLoaded) {
-        setPersonalDetailId(id);
+      final skillID = args?['skillID'] as String?;
+      final personalDetailID = args?['personalDetailID'] as String?;
+
+      setPersonalDetailID(personalDetailID);
+
+      if (skillID != null && !_detailsLoaded) {
+        setSkilllID(skillID);
       }
     });
   }
 
   // Method to set the personalDetailID and load details
-  void setPersonalDetailId(String? id) {
+
+  void setPersonalDetailID(String? id) {
     if (personalDetailID != id) {
       personalDetailID = id;
     }
-    if (personalDetailID != null) {}
+  }
+
+  void setSkilllID(String? id) {
+    if (skillID != id) {
+      skillID = id;
+    }
+    if (skillID != null) {}
     _loadSkill();
   }
 

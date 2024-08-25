@@ -39,7 +39,7 @@ class _EducationPageState extends State<EducationPage>
     }
 
     if (educationID != null) {
-      setEducationlId(educationID);
+      setEducationlID(educationID);
     }
     return Scaffold(
       appBar: AppBar(
