@@ -162,7 +162,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Project edited!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -183,7 +183,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Personal Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
