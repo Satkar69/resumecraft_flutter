@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resumecraft/config.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
 import 'package:resumecraft/api_services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -45,7 +46,16 @@ class _ProfilePageState extends State<ProfilePage>
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: primaryColor,
-                        child: Icon(Icons.account_circle, color: Colors.white),
+                        backgroundImage: personalDetail.image != null &&
+                                personalDetail.image!.isNotEmpty
+                            ? NetworkImage(
+                                '${Config.getProfileImage}${personalDetail.image}')
+                            : null,
+                        child: personalDetail.image == null ||
+                                personalDetail.image!.isEmpty
+                            ? const Icon(Icons.account_circle,
+                                color: Colors.white)
+                            : null,
                       ),
                       title: Text(personalDetail.fullname ?? 'No Name'),
                       subtitle: Text(personalDetail.email ?? 'No Email'),
