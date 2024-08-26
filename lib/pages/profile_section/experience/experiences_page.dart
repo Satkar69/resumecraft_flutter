@@ -26,7 +26,6 @@ class ExperiencesPageState extends State<ExperiencesPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-    loadExperiences();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Experiences', style: TextStyle(color: Colors.white)),
@@ -63,8 +62,8 @@ class ExperiencesPageState extends State<ExperiencesPage>
                           _showConfirmDeleteDialog(experience.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/experience',
                           arguments: {
@@ -72,6 +71,11 @@ class ExperiencesPageState extends State<ExperiencesPage>
                             'personalDetailID': personalDetailID
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadExperiences();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -99,12 +103,17 @@ class ExperiencesPageState extends State<ExperiencesPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(
                     context,
                     '/experience',
                     arguments: {'personalDetailID': personalDetailID},
                   );
+                  if (result == true) {
+                    setState(() {
+                      loadExperiences();
+                    });
+                  }
                 },
               ),
             ),
@@ -148,6 +157,9 @@ class ExperiencesPageState extends State<ExperiencesPage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      setState(() {
+                        loadExperiences();
+                      });
                     } else {
                       _showResultDialog("Unable to delete this experience");
                     }

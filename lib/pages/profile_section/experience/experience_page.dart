@@ -214,7 +214,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                               "experience detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -235,7 +235,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Experience Saved!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           print(
