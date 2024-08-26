@@ -26,7 +26,6 @@ class ObjectivesPageState extends State<ObjectivesPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-    loadObjectives();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Objectives', style: TextStyle(color: Colors.white)),
@@ -64,8 +63,8 @@ class ObjectivesPageState extends State<ObjectivesPage>
                           _showConfirmDeleteDialog(objective.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/objective',
                           arguments: {
@@ -73,6 +72,11 @@ class ObjectivesPageState extends State<ObjectivesPage>
                             'personalDetailID': personalDetailID
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadObjectives();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -100,12 +104,17 @@ class ObjectivesPageState extends State<ObjectivesPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(
                     context,
                     '/objective',
                     arguments: {'personalDetailID': personalDetailID},
                   );
+                  if (result == true) {
+                    setState(() {
+                      loadObjectives();
+                    });
+                  }
                 },
               ),
             ),
@@ -149,6 +158,7 @@ class ObjectivesPageState extends State<ObjectivesPage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      loadObjectives();
                     } else {
                       _showResultDialog("Unable to delete this objective");
                     }

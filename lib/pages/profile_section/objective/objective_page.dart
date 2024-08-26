@@ -108,7 +108,7 @@ class _ObjectivePageState extends State<ObjectivePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -127,11 +127,10 @@ class _ObjectivePageState extends State<ObjectivePage>
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Personal Saved!", "OK",
+                              context, Config.appName, "Objective Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
