@@ -9,6 +9,9 @@ class Config {
   // 192.168.18.9
   // 192.168.1.65
 
+  static const String getProfileImage =
+      'http://192.168.1.65:3000/public/images/';
+
   // ===================== public Routes ===========================
   static const String login = "auth/login";
   static const String register = "user/register";
@@ -21,6 +24,7 @@ class Config {
   static const String createPersonalDetail = 'userdetail/create-userdetail';
   static const String personalDetailByID =
       'userdetail/'; // RUD--> read, update, delete
+  static const String uploadProfileImage = 'userdetail/upload-image/';
 
   static const String createEducation = 'education/create-edu';
   static const String educationsByPersonalDetail =

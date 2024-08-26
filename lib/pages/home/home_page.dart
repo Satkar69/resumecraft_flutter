@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
                   SizedBox(height: 40),
                   _profileUI(Icons.download, 'Downloads'),
                   SizedBox(height: 40),
-                  _profileUI(Icons.pending_actions_rounded, 'Sample'),
+                  _profileUI(Icons.pending_actions_rounded, 'Sample', '/image'),
                 ],
               ),
             ],

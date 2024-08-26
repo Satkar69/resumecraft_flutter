@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 import 'package:resumecraft/api_services/personal_detail_api_service.dart';
 import 'package:resumecraft/utils/mixins/personal_detail/personal_detail_mixin.dart';
@@ -28,6 +31,19 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
   String? image;
   String? socialLinks;
   List<String> socials = [];
+  File? selectedImage;
+  String? imageExtension;
+
+  Future<void> pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        selectedImage = File(pickedFile.path);
+        image = path.basename(pickedFile.path);
+        imageExtension = path.extension(pickedFile.path);
+      });
+    }
+  }
 
   Widget build(BuildContext context) {
     final args =
@@ -37,6 +53,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
     if (id != null) {
       setPersonalDetailID(id);
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -197,29 +214,33 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    border: Border.all(color: primaryColor),
+                    border: Border.all(color: HexColor('#283B71')),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
-                    Icons.person_outline,
-                    size: 50,
-                    color: Colors.blue,
-                  ),
+                  child: selectedImage != null
+                      ? Image.file(selectedImage!, fit: BoxFit.cover)
+                      : (personalDetail?.image != null &&
+                              personalDetail!.image!.isNotEmpty)
+                          ? Image.network(
+                              '${Config.getProfileImage}${personalDetail!.image}',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.person_outline,
+                                    size: 50, color: Colors.blue);
+                              },
+                            )
+                          : const Icon(Icons.person_outline,
+                              size: 50, color: Colors.blue),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 80),
                 Column(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle Change Photo
-                      },
+                      onPressed: () => pickImage(ImageSource.gallery),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text(
+                          backgroundColor:
+                              const Color.fromARGB(255, 120, 93, 211)),
+                      child: Text(
                         'Change',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -227,15 +248,20 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                     const SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle Remove Photo
+                        setState(() {
+                          selectedImage = null;
+                          image = null;
+                          personalDetail?.image =
+                              null; // Clear the existing image as well
+                          imageExtension = null;
+                        });
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      child: const Text(
+                        'Remove',
+                        style: TextStyle(color: Colors.white),
                       ),
-                      child: const Text('Remove'),
                     ),
                   ],
                 ),
@@ -258,9 +284,15 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                         fullname: fullname!,
                         address: address!,
                         email: email!,
+                        image: image,
                         contact: phone!,
                         socials: socials,
                       );
+                      if (selectedImage != null) {
+                        await PersonalDetailAPIService.uploadProfileImage(
+                            selectedImage, userToken);
+                      }
+
                       if (personalDetailID != null) {
                         final response =
                             await PersonalDetailAPIService.updatePersonalDetail(
