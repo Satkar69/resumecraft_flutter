@@ -221,7 +221,7 @@ class _EducationPageState extends State<EducationPage>
                               "education detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -243,7 +243,7 @@ class _EducationPageState extends State<EducationPage>
                               context, Config.appName, "Education Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           print(
