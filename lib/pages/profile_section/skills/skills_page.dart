@@ -26,7 +26,6 @@ class SkillssPageState extends State<SkillssPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-    loadSkills();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Skills', style: TextStyle(color: Colors.white)),
@@ -64,8 +63,8 @@ class SkillssPageState extends State<SkillssPage>
                           _showConfirmDeleteDialog(skill.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/skill',
                           arguments: {
@@ -73,6 +72,11 @@ class SkillssPageState extends State<SkillssPage>
                             'personalDetailID': personalDetailID
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadSkills();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -100,12 +104,17 @@ class SkillssPageState extends State<SkillssPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(
                     context,
                     '/skill',
                     arguments: {'personalDetailID': personalDetailID},
                   );
+                  if (result == true) {
+                    setState(() {
+                      loadSkills();
+                    });
+                  }
                 },
               ),
             ),
@@ -149,6 +158,9 @@ class SkillssPageState extends State<SkillssPage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      setState(() {
+                        loadSkills();
+                      });
                     } else {
                       _showResultDialog("Unable to delete this skill");
                     }
