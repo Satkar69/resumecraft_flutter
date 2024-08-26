@@ -10,7 +10,7 @@ class ProfileSectionPage extends StatefulWidget {
 
 class _ProfileSectionPageState extends State<ProfileSectionPage> {
   final Color primaryColor = HexColor('#283B71');
-
+  final result = false;
   @override
   Widget build(BuildContext context) {
     final args =
@@ -23,7 +23,7 @@ class _ProfileSectionPageState extends State<ProfileSectionPage> {
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context, true),
         ),
       ),
       body: ListView(

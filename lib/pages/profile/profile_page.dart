@@ -18,7 +18,6 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    loadPersonalDetails();
     return Scaffold(
       appBar: AppBar(
         title:
@@ -56,14 +55,19 @@ class _ProfilePageState extends State<ProfilePage>
                           _showConfirmDeleteDialog(personalDetail.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/profile-section',
                           arguments: {
                             'personalDetailID': personalDetail.id,
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadPersonalDetails();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -91,8 +95,14 @@ class _ProfilePageState extends State<ProfilePage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/personal-detail');
+                onPressed: () async {
+                  final result =
+                      await Navigator.pushNamed(context, '/personal-detail');
+                  if (result == true) {
+                    setState(() {
+                      loadPersonalDetails();
+                    });
+                  }
                 },
               ),
             ),
@@ -137,6 +147,9 @@ class _ProfilePageState extends State<ProfilePage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      setState(() {
+                        loadPersonalDetails();
+                      });
                     } else {
                       _showResultDialog("Unable to delete this profile");
                     }

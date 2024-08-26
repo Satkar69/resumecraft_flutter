@@ -299,7 +299,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                               "Personal detail Saved!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                             // Navigator.pushReplacementNamed(
                             //     context, '/profiles');
                           });
