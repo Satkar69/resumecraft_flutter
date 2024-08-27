@@ -54,5 +54,20 @@ class UserAPIService {
     }
   }
 
+  static Future<dynamic> generateResume(
+      String token, String personalDetailID) async {
+    try {
+      final response = await _dio.get(
+        '${Config.apiUrl}${Config.generateResume}$personalDetailID',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to generate resume');
+    }
+  }
+
 //====================== auth ===========================>
 }

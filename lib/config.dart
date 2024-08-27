@@ -33,6 +33,7 @@ class Config {
   static const String personalDetailByID =
       'userdetail/'; // RUD--> read, update, delete
   static const String uploadProfileImage = 'userdetail/upload-image/';
+  static const String generateResume = 'userdetail/generate-resume/';
 
   static const String createEducation = 'education/create-edu';
   static const String educationsByPersonalDetail =

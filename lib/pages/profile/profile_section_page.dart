@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:resumecraft/api_services/user_api_service.dart';
+import 'package:resumecraft/config.dart';
+import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class ProfileSectionPage extends StatefulWidget {
@@ -8,9 +12,13 @@ class ProfileSectionPage extends StatefulWidget {
   State<ProfileSectionPage> createState() => _ProfileSectionPageState();
 }
 
-class _ProfileSectionPageState extends State<ProfileSectionPage> {
+class _ProfileSectionPageState extends State<ProfileSectionPage>
+    with UserProfileMixin {
   final Color primaryColor = HexColor('#283B71');
   final result = false;
+  bool _isLoading = false;
+  String? _errorMessage;
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -54,8 +62,39 @@ class _ProfileSectionPageState extends State<ProfileSectionPage> {
         padding: const EdgeInsets.all(8.0),
         color: primaryColor,
         child: GestureDetector(
-          onTap: () {
-            // Handle View CV action
+          onTap: () async {
+            setState(() {
+              _isLoading = true; // Start loading
+              _errorMessage = null; // Reset error message
+            });
+
+            try {
+              await UserAPIService.generateResume(userToken, id!);
+
+              FormHelper.showSimpleAlertDialog(
+                context,
+                Config.appName,
+                "Resume generated! You can check it in the downloads",
+                "OK",
+                () {
+                  Navigator.pop(context);
+                },
+              );
+            } catch (error) {
+              FormHelper.showSimpleAlertDialog(
+                context,
+                Config.appName,
+                "Error generating Resume! please try again",
+                "OK",
+                () {
+                  Navigator.pop(context);
+                },
+              );
+            } finally {
+              setState(() {
+                _isLoading = false; // Stop loading
+              });
+            }
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -66,10 +105,10 @@ class _ProfileSectionPageState extends State<ProfileSectionPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(Icons.remove_red_eye, color: Colors.white),
+                Icon(Icons.fast_forward, color: Colors.white),
                 SizedBox(width: 8.0),
                 Text(
-                  'View CV',
+                  'Generate Resume',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
