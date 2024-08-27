@@ -16,7 +16,7 @@ import 'package:resumecraft/pages/profile_section/projects/project_page.dart';
 import 'package:resumecraft/pages/profile_section/projects/projects_page.dart';
 import 'package:resumecraft/pages/profile_section/skills/skill_page.dart';
 import 'package:resumecraft/pages/profile_section/skills/skills_page.dart';
-import 'package:resumecraft/pages/test_image_page.dart';
+import 'package:resumecraft/pages/pdf_preview_page.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 
 Widget _defaultHome = const LoginPage(); // Default to LoginPage initially
@@ -84,7 +84,9 @@ class MyApp extends StatelessWidget {
         '/objective': (context) => const ObjectivePage(),
         '/objectives': (context) => const ObjectivesPage(),
 
-        '/image': (constext) => const TestImagePage()
+        '/downloads': (constext) => PDFPreviewPage(pdfPaths: const [
+              'http://192.168.1.65:3000/public/pdfs/generated-resume-66cdbe95d5a8d04df0248461.pdf'
+            ])
       },
     );
   }

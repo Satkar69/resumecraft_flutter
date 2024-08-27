@@ -120,7 +120,7 @@ class _EducationPageState extends State<EducationPage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return null;
+                  return "GPA cannot be empty";
                 }
                 if (double.tryParse(onValidateVal) == null ||
                     double.parse(onValidateVal) < 1.0 ||

@@ -118,8 +118,9 @@ class _ExperiencePageState extends State<ExperiencePage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return null;
+                  return "Details cannot be empty";
                 }
+                return null;
               },
               (onSavedVal) {
                 details = onSavedVal;

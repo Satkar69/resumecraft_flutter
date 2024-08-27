@@ -54,6 +54,9 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
       setPersonalDetailID(id);
     }
 
+    print(
+        'the personal detail image is---------------------------->${personalDetail?.image}');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Details',
@@ -284,7 +287,7 @@ class _PersonalDetailPageState extends State<PersonalDetailPage>
                         fullname: fullname!,
                         address: address!,
                         email: email!,
-                        image: image,
+                        image: image ?? personalDetail?.image,
                         contact: phone!,
                         socials: socials,
                       );
