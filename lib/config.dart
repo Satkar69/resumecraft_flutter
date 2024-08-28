@@ -14,6 +14,7 @@ class Config {
       "http://192.168.1.65:3000/api/"; // for physical device || andriod emulator
   static const String getProfileImage =
       'http://192.168.1.65:3000/public/images/';
+  static const String getPdfs = 'http://192.168.1.65:3000/public';
 
   //hosted
   // static const String apiUrl = "https://resumecraft-backend.vercel.app/api/";

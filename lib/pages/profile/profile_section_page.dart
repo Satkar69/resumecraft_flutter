@@ -16,8 +16,6 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
     with UserProfileMixin {
   final Color primaryColor = HexColor('#283B71');
   final result = false;
-  bool _isLoading = false;
-  String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +61,22 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
         color: primaryColor,
         child: GestureDetector(
           onTap: () async {
-            setState(() {
-              _isLoading = true; // Start loading
-              _errorMessage = null; // Reset error message
-            });
+            // Show the loader
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            );
 
             try {
               await UserAPIService.generateResume(userToken, id!);
+
+              // Hide the loader
+              Navigator.pop(context);
 
               FormHelper.showSimpleAlertDialog(
                 context,
@@ -81,6 +88,9 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
                 },
               );
             } catch (error) {
+              // Hide the loader
+              Navigator.pop(context);
+
               FormHelper.showSimpleAlertDialog(
                 context,
                 Config.appName,
@@ -90,10 +100,6 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
                   Navigator.pop(context);
                 },
               );
-            } finally {
-              setState(() {
-                _isLoading = false; // Stop loading
-              });
             }
           },
           child: Container(

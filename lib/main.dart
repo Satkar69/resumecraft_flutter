@@ -84,9 +84,7 @@ class MyApp extends StatelessWidget {
         '/objective': (context) => const ObjectivePage(),
         '/objectives': (context) => const ObjectivesPage(),
 
-        '/downloads': (constext) => PDFPreviewPage(pdfPaths: const [
-              'http://192.168.1.65:3000/public/pdfs/generated-resume-66cdbe95d5a8d04df0248461.pdf'
-            ])
+        '/downloads': (constext) => PDFPreviewPage()
       },
     );
   }

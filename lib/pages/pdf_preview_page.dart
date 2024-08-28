@@ -4,31 +4,41 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
+import 'package:resumecraft/config.dart';
+import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class PDFPreviewPage extends StatefulWidget {
-  final List<String> pdfPaths;
-  const PDFPreviewPage({Key? key, required this.pdfPaths}) : super(key: key);
-
   @override
   _PDFPreviewPageState createState() => _PDFPreviewPageState();
 }
 
-class _PDFPreviewPageState extends State<PDFPreviewPage> {
+class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
   List<String> _localPdfPaths = [];
   bool _isLoading = true;
+  bool _isProfileLoaded = false;
 
   @override
   void initState() {
     super.initState();
+    _loadUserProfileAndDownloadPdfs();
+  }
+
+  Future<void> _loadUserProfileAndDownloadPdfs() async {
+    await loadUserProfile();
+    setState(() {
+      _isProfileLoaded = true; // Mark profile as loaded
+      loadUserProfile();
+    });
     _downloadPdfs();
   }
 
+  // '${Config.getPdfs}$pdfUrl'
   Future<void> _downloadPdfs() async {
     try {
       List<String> paths = [];
-      for (String pdfUrl in widget.pdfPaths) {
-        String localPath = await _downloadFile(pdfUrl);
+      for (String pdfUrl in resume) {
+        String localPath = await _downloadFile('${Config.getPdfs}$pdfUrl');
         if (localPath.isNotEmpty) {
           paths.add(localPath);
         }
