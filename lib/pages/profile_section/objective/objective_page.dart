@@ -38,8 +38,7 @@ class _ObjectivePageState extends State<ObjectivePage>
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal Details',
-            style: TextStyle(color: Colors.white)),
+        title: const Text('Objective', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),

@@ -41,8 +41,7 @@ class _ProjectPageState extends State<ProjectPage>
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Personal Details',
-            style: TextStyle(color: Colors.white)),
+        title: const Text('Project', style: TextStyle(color: Colors.white)),
         backgroundColor: primaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
