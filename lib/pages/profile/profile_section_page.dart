@@ -33,17 +33,16 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
         ),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(16.0),
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Sections',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+          const Text(
+            'Sections',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(height: 10),
           _buildSectionTile(context, Icons.person, 'Personal Details',
               '/personal-detail', id),
           _buildSectionTile(
@@ -94,7 +93,7 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
               FormHelper.showSimpleAlertDialog(
                 context,
                 Config.appName,
-                "Error generating Resume! please try again",
+                "Error generating Resume! Please try again",
                 "OK",
                 () {
                   Navigator.pop(context);

@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with UserProfileMixin {
   final Color primaryColor = HexColor('#283B71');
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -31,33 +32,38 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Welcome, $username',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor,
-                ),
-              ),
-              SizedBox(height: 40),
-              Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _profileUI(Icons.description, 'Profiles', '/profiles'),
-                  SizedBox(width: 20),
+                  Text(
+                    'Welcome, $username',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
+                    ),
+                  ),
                   SizedBox(height: 40),
-                  _profileUI(Icons.remove_red_eye, 'View Resumes', '/resumes'),
+                  Wrap(
+                    spacing: 20, // Horizontal spacing between items
+                    runSpacing: 20, // Vertical spacing between items
+                    alignment: WrapAlignment.center,
+                    children: [
+                      _profileUI(Icons.description, 'Profiles', '/profiles'),
+                      _profileUI(
+                          Icons.remove_red_eye, 'View Resumes', '/resumes'),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -194,9 +194,11 @@ class PDFPreviewCard extends StatelessWidget {
   final PDFData pdfData;
   final VoidCallback onDownload;
 
-  const PDFPreviewCard(
-      {Key? key, required this.pdfData, required this.onDownload})
-      : super(key: key);
+  const PDFPreviewCard({
+    Key? key,
+    required this.pdfData,
+    required this.onDownload,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -229,10 +231,13 @@ class PDFPreviewCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  pdfData.fileName,
-                  style: TextStyle(fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
+                Flexible(
+                  child: Text(
+                    pdfData.fileName,
+                    style: TextStyle(fontSize: 12),
+                    overflow: TextOverflow.ellipsis, // Prevents text overflow
+                    maxLines: 1, // Ensures text stays on one line
+                  ),
                 ),
                 IconButton(
                   icon: Icon(Icons.download_rounded),
