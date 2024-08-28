@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
         '/objective': (context) => const ObjectivePage(),
         '/objectives': (context) => const ObjectivesPage(),
 
-        '/downloads': (constext) => PDFPreviewPage()
+        '/resumes': (constext) => PDFPreviewPage()
       },
     );
   }

@@ -1,20 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 import 'package:resumecraft/config.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
 class PDFPreviewPage extends StatefulWidget {
+  const PDFPreviewPage({Key? key}) : super(key: key);
+
   @override
   _PDFPreviewPageState createState() => _PDFPreviewPageState();
 }
 
 class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
-  List<String> _localPdfPaths = [];
+  List<PDFData> _localPdfPaths = [];
   bool _isLoading = true;
   bool _isProfileLoaded = false;
 
@@ -28,24 +30,23 @@ class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
     await loadUserProfile();
     setState(() {
       _isProfileLoaded = true; // Mark profile as loaded
-      loadUserProfile();
     });
     _downloadPdfs();
   }
 
-  // '${Config.getPdfs}$pdfUrl'
   Future<void> _downloadPdfs() async {
     try {
-      List<String> paths = [];
+      List<PDFData> pdfDataList = [];
       for (String pdfUrl in resume) {
+        String fileName = path.basename(pdfUrl); // Extract the file name
         String localPath = await _downloadFile('${Config.getPdfs}$pdfUrl');
         if (localPath.isNotEmpty) {
-          paths.add(localPath);
+          pdfDataList.add(PDFData(localPath: localPath, fileName: fileName));
         }
       }
-      if (paths.isNotEmpty) {
+      if (pdfDataList.isNotEmpty) {
         setState(() {
-          _localPdfPaths = paths;
+          _localPdfPaths = pdfDataList;
           _isLoading = false;
         });
       } else {
@@ -114,7 +115,7 @@ class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
                   icon: Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                title: Text('Downloads', style: TextStyle(color: Colors.white)),
+                title: Text('Resumes', style: TextStyle(color: Colors.white)),
               ),
               _isLoading
                   ? Expanded(
@@ -135,7 +136,12 @@ class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
                                   itemCount: _localPdfPaths.length,
                                   itemBuilder: (context, index) {
                                     return PDFPreviewCard(
-                                        pdfPath: _localPdfPaths[index]);
+                                      pdfData: _localPdfPaths[index],
+                                      onDownload: () => _downloadSelectedPdf(
+                                          context,
+                                          _localPdfPaths[index].localPath,
+                                          _localPdfPaths[index].fileName),
+                                    );
                                   },
                                 );
                               },
@@ -147,11 +153,50 @@ class _PDFPreviewPageState extends State<PDFPreviewPage> with UserProfileMixin {
       ),
     );
   }
+
+  Future<void> _downloadSelectedPdf(
+      BuildContext context, String filePath, String fileName) async {
+    try {
+      final directory = await getExternalStorageDirectory();
+      final downloadsDir = Directory(path.join(directory!.path, 'Download'));
+
+      if (!await downloadsDir.exists()) {
+        await downloadsDir.create(recursive: true);
+      }
+
+      final newFilePath = path.join(downloadsDir.path, fileName);
+      final file = File(filePath);
+      final newFile = await file.copy(newFilePath);
+
+      print('PDF downloaded to: $newFilePath');
+
+      // Optionally, show a confirmation dialog or a toast
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Downloaded to $newFilePath')),
+      );
+    } catch (e) {
+      print('Error downloading PDF: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to download PDF')),
+      );
+    }
+  }
+}
+
+class PDFData {
+  final String localPath;
+  final String fileName;
+
+  PDFData({required this.localPath, required this.fileName});
 }
 
 class PDFPreviewCard extends StatelessWidget {
-  final String pdfPath;
-  const PDFPreviewCard({Key? key, required this.pdfPath}) : super(key: key);
+  final PDFData pdfData;
+  final VoidCallback onDownload;
+
+  const PDFPreviewCard(
+      {Key? key, required this.pdfData, required this.onDownload})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +210,7 @@ class PDFPreviewCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
               child: PDFView(
-                filePath: pdfPath,
+                filePath: pdfData.localPath,
                 enableSwipe: true,
                 swipeHorizontal: true,
                 autoSpacing: false,
@@ -181,10 +226,19 @@ class PDFPreviewCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.all(8),
-            child: Text(
-              'CV_${DateTime.now().millisecondsSinceEpoch}.pdf',
-              style: TextStyle(fontSize: 12),
-              overflow: TextOverflow.ellipsis,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  pdfData.fileName,
+                  style: TextStyle(fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                IconButton(
+                  icon: Icon(Icons.download_rounded),
+                  onPressed: onDownload,
+                ),
+              ],
             ),
           ),
         ],
