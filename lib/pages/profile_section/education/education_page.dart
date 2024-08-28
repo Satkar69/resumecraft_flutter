@@ -3,7 +3,7 @@ import 'package:resumecraft/config.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/api_services/education_api_service.dart';
 import 'package:resumecraft/utils/mixins/education/education_mixin.dart';
 import 'package:resumecraft/models/profile_section/education/write/education_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -120,7 +120,7 @@ class _EducationPageState extends State<EducationPage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return null;
+                  return "GPA cannot be empty";
                 }
                 if (double.tryParse(onValidateVal) == null ||
                     double.parse(onValidateVal) < 1.0 ||
@@ -221,7 +221,7 @@ class _EducationPageState extends State<EducationPage>
                               "education detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -243,7 +243,7 @@ class _EducationPageState extends State<EducationPage>
                               context, Config.appName, "Education Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           print(

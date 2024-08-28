@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/api_services/education_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 import 'package:resumecraft/models/profile_section/education/read/educations_model.dart';
 

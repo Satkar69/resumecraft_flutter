@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/skill_api_service.dart';
+import 'package:resumecraft/api_services/skill_api_service.dart';
 import 'package:resumecraft/utils/mixins/skill/skill_mixin.dart';
 import 'package:resumecraft/models/profile_section/skills/write/skill_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -89,7 +89,7 @@ class _SkillPageState extends State<SkillPage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Skill Percentage cannot be empty';
+                  return "Skills Percentage cannot be empty";
                 }
                 if (int.tryParse(onValidateVal) == null ||
                     int.parse(onValidateVal) < 0 ||
@@ -139,7 +139,7 @@ class _SkillPageState extends State<SkillPage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "skill detail edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -160,7 +160,7 @@ class _SkillPageState extends State<SkillPage>
                               context, Config.appName, "Skill Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           print(

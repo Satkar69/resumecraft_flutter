@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resumecraft/services/skill_api_service.dart';
+import 'package:resumecraft/api_services/skill_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 import 'package:resumecraft/models/profile_section/skills/read/skill_model.dart';
 

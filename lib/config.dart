@@ -3,11 +3,23 @@ class Config {
   // static const String apiUrl = "http://localhost:3000/api/"; // for web
   // static const String apiUrl =
   //     "10.0.0.7:4000/api/"; // for android emulator (not working for some reason)
-  static const String apiUrl =
-      "http://192.168.1.65:3000/api/"; // for physical device || andriod emulator
 
   // 192.168.18.9
-  // 192.168.1.65
+  // 192.168.1.65---my
+  // 192.168.1.3
+  // 192.168.1.2
+
+  //local
+  static const String apiUrl =
+      "http://192.168.1.65:3000/api/"; // for physical device || andriod emulator
+  static const String getProfileImage =
+      'http://192.168.1.65:3000/public/images/';
+  static const String getPdfs = 'http://192.168.1.65:3000/public';
+
+  //hosted
+  // static const String apiUrl = "https://resumecraft-backend.vercel.app/api/";
+  // static const String getProfileImage =
+  //     "https://resumecraft-backend.vercel.app/public/images/";
 
   // ===================== public Routes ===========================
   static const String login = "auth/login";
@@ -21,6 +33,8 @@ class Config {
   static const String createPersonalDetail = 'userdetail/create-userdetail';
   static const String personalDetailByID =
       'userdetail/'; // RUD--> read, update, delete
+  static const String uploadProfileImage = 'userdetail/upload-image/';
+  static const String generateResume = 'userdetail/generate-resume/';
 
   static const String createEducation = 'education/create-edu';
   static const String educationsByPersonalDetail =

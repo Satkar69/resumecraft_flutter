@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/objective_api_service.dart';
+import 'package:resumecraft/api_services/objective_api_service.dart';
 import 'package:resumecraft/utils/mixins/Objective/objective_mixin.dart';
 import 'package:resumecraft/models/profile_section/objective/write/objective_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -108,7 +108,7 @@ class _ObjectivePageState extends State<ObjectivePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Objective edited!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -127,11 +127,10 @@ class _ObjectivePageState extends State<ObjectivePage>
                         });
                         if (response.statusCode == 201) {
                           FormHelper.showSimpleAlertDialog(
-                              context, Config.appName, "Personal Saved!", "OK",
+                              context, Config.appName, "Objective Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, '/profiles');
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

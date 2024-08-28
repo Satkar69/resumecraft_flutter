@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/experience_api_service.dart';
+import 'package:resumecraft/api_services/experience_api_service.dart';
 import 'package:resumecraft/utils/mixins/experience/experience_mixin.dart';
 import 'package:resumecraft/models/profile_section/experience/write/experience_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -68,7 +68,7 @@ class _ExperiencePageState extends State<ExperiencePage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'FullName cannot be empty';
+                  return 'Company Name cannot be empty';
                 }
                 return null;
               },
@@ -118,7 +118,7 @@ class _ExperiencePageState extends State<ExperiencePage>
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Details cannot be empty';
+                  return "Details cannot be empty";
                 }
                 return null;
               },
@@ -215,7 +215,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                               "experience detail edited!",
                               "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -236,7 +236,7 @@ class _ExperiencePageState extends State<ExperiencePage>
                           FormHelper.showSimpleAlertDialog(context,
                               Config.appName, "Experience Saved!", "OK", () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           print(

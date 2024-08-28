@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/project_api_service.dart';
+import 'package:resumecraft/api_services/project_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
@@ -26,7 +26,6 @@ class ProjectsPageState extends State<ProjectsPage>
     if (personalDetailID != null) {
       setPersonalDetailID(personalDetailID);
     }
-    loadProjects();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Projects', style: TextStyle(color: Colors.white)),
@@ -64,8 +63,8 @@ class ProjectsPageState extends State<ProjectsPage>
                           _showConfirmDeleteDialog(project.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/project',
                           arguments: {
@@ -73,6 +72,11 @@ class ProjectsPageState extends State<ProjectsPage>
                             'personalDetailID': personalDetailID
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadProjects();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -100,12 +104,17 @@ class ProjectsPageState extends State<ProjectsPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(
                     context,
                     '/project',
                     arguments: {'personalDetailID': personalDetailID},
                   );
+                  if (result == true) {
+                    setState(() {
+                      loadProjects();
+                    });
+                  }
                 },
               ),
             ),
@@ -149,6 +158,9 @@ class ProjectsPageState extends State<ProjectsPage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      setState(() {
+                        loadProjects();
+                      });
                     } else {
                       _showResultDialog("Unable to delete this project");
                     }

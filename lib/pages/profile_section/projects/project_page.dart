@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-import 'package:resumecraft/services/project_api_service.dart';
+import 'package:resumecraft/api_services/project_api_service.dart';
 import 'package:resumecraft/utils/mixins/project/project_mixin.dart';
 import 'package:resumecraft/models/profile_section/projects/write/project_request_model.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
@@ -162,7 +162,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Project edited!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(
@@ -183,7 +183,7 @@ class _ProjectPageState extends State<ProjectPage>
                               context, Config.appName, "Personal Saved!", "OK",
                               () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, true);
                           });
                         } else {
                           FormHelper.showSimpleAlertDialog(

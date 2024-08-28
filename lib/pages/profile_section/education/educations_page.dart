@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resumecraft/models/delete/delete_model.dart';
-import 'package:resumecraft/services/education_api_service.dart';
+import 'package:resumecraft/api_services/education_api_service.dart';
 import 'package:resumecraft/utils/mixins/user/user_mixin.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
@@ -27,7 +27,6 @@ class EducationsPageState extends State<EducationsPage>
       setPersonalDetailID(personalDetailID);
     }
 
-    loadEducations();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Educations', style: TextStyle(color: Colors.white)),
@@ -64,8 +63,8 @@ class EducationsPageState extends State<EducationsPage>
                           _showConfirmDeleteDialog(education.id!);
                         },
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(
+                      onTap: () async {
+                        final result = await Navigator.pushNamed(
                           context,
                           '/education',
                           arguments: {
@@ -73,6 +72,11 @@ class EducationsPageState extends State<EducationsPage>
                             'personalDetailID': personalDetailID
                           },
                         );
+                        if (result == true) {
+                          setState(() {
+                            loadEducations();
+                          });
+                        }
                       },
                     ),
                   ),
@@ -100,12 +104,17 @@ class EducationsPageState extends State<EducationsPage>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(
+                onPressed: () async {
+                  final result = await Navigator.pushNamed(
                     context,
                     '/education',
                     arguments: {'personalDetailID': personalDetailID},
                   );
+                  if (result == true) {
+                    setState(() {
+                      loadEducations();
+                    });
+                  }
                 },
               ),
             ),
@@ -149,6 +158,9 @@ class EducationsPageState extends State<EducationsPage>
                   if (mounted) {
                     if (response.statusCode == 200) {
                       _showResultDialog(response.message!);
+                      setState(() {
+                        loadEducations();
+                      });
                     } else {
                       _showResultDialog("Unable to delete this education");
                     }

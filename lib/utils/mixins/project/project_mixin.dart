@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resumecraft/services/project_api_service.dart';
+import 'package:resumecraft/api_services/project_api_service.dart';
 import 'package:resumecraft/utils/shared_prefs/user_shared_prefs.dart';
 import 'package:resumecraft/models/profile_section/projects/read/project_model.dart';
 
