@@ -81,7 +81,7 @@ class _ProfileSectionPageState extends State<ProfileSectionPage>
               FormHelper.showSimpleAlertDialog(
                 context,
                 Config.appName,
-                "Resume generated! You can check it in the downloads",
+                "Resume generated! You can view your resumes in the home page",
                 "OK",
                 () {
                   Navigator.pop(context);

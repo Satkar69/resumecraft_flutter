@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> with UserProfileMixin {
                   _profileUI(Icons.description, 'Profiles', '/profiles'),
                   SizedBox(width: 20),
                   SizedBox(height: 40),
-                  _profileUI(Icons.download, 'Downloads', '/downloads'),
+                  _profileUI(Icons.remove_red_eye, 'View Resumes', '/resumes'),
                 ],
               ),
             ],
