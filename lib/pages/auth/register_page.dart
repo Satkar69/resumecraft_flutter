@@ -185,8 +185,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   setState(() {
                     isApicallProcess = false;
                   });
-                  DialogHelper.displayDialog(
-                      context, "An error occurred. Please try again.");
+                  DialogHelper.displayDialog(context,
+                      "Username or Email already exists. Please create a new one.");
                 }
               }
             },

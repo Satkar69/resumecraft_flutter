@@ -160,14 +160,14 @@ class _LoginPageState extends State<LoginPage> {
                         context, '/home', (route) => false);
                   } else {
                     DialogHelper.displayDialog(
-                        context, "Invalid username/password");
+                        context, "Invalid username or password");
                   }
                 } catch (e) {
                   setState(() {
                     isApicallProcess = false;
                   });
                   DialogHelper.displayDialog(
-                      context, "An error occurred. Please try again.");
+                      context, "Invalid username or password");
                 }
               }
             },
